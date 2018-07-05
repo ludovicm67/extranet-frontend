@@ -16,12 +16,3 @@ const Root = (
 
 ReactDOM.render(Root, document.getElementById('root'));
 registerServiceWorker();
-
-
-
-// let unsubscribe = store.subscribe(() => console.log(store.getState()));
-
-// store.dispatch(login('johnDoe', 'pass'));
-// store.dispatch(logout());
-
-// unsubscribe();

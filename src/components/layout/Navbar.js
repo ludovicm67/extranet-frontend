@@ -1,7 +1,9 @@
-import React from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import store from '../../store';
+
 
 const NavBar = () => {
   return (
@@ -9,7 +11,7 @@ const NavBar = () => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="title" color="inherit">
-            Test
+            {store.getState().auth.auth.service}
           </Typography>
         </Toolbar>
       </AppBar>

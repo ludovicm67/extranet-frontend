@@ -3,13 +3,12 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
 // actions
-export const login = (_email, _password) => {
-  const token = 'azehajzegkjfjhsbh';
-
+export const login = ({token, service}) => {
   return {
     type: LOGIN,
     payload: {
       token,
+      service,
     }
   }
 };
