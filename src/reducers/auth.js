@@ -3,7 +3,7 @@ import { LOGIN, LOGOUT } from '../actions/auth';
 // the initial store state, at the boot of the app
 const initialState = {
   auth: {
-    token: null,
+    token: localStorage.getItem('token'),
   },
 };
 
@@ -12,10 +12,12 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case LOGIN:
     case LOGOUT: {
+      const token = action.payload.token;
+      localStorage.setItem('token', token);
       return {
         ...state,
         auth: {
-          token: action.payload.token,
+          token,
         }
       }
     }
