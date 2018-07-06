@@ -13,10 +13,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Snackbar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {
   root: {
     padding: 50,
+    textAlign: 'center',
   },
   formControl: {
     marginBottom: '20px',
@@ -67,10 +69,7 @@ class Login extends Component {
       if (!res.data.success) {
         this.setState({ open: true });
       } else {
-        store.dispatch(login({
-          token: res.data.access_token,
-          service: res.data.service,
-        }));
+        store.dispatch(login(res.data.access_token));
       }
     })
     .catch(() => {
@@ -91,7 +90,7 @@ class Login extends Component {
   render() {
     return (
       <div style={styles.root}>
-        <p>Veuillez vous connecter pour accéder aux différentes ressources.</p>
+        <Typography>Veuillez vous connecter pour accéder aux différentes ressources.</Typography>
         <FormControl fullWidth style={styles.formControl}>
           <InputLabel htmlFor="login-password">Adresse mail</InputLabel>
           <Input

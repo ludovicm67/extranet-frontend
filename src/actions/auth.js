@@ -3,12 +3,11 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
 // actions
-export const login = ({token, service}) => {
+export const login = (token) => {
   return {
     type: LOGIN,
     payload: {
       token,
-      service,
     }
   }
 };

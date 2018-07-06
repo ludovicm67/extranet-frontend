@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
-import Dashboard from './components/Dashboard';
+import Layout from './components/Layout';
 import Login from './components/Login';
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
 import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper';
@@ -28,7 +27,7 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path="/login" component={userIsNotAuthenticated(Login)} />
-            <Route path="/" component={userIsAuthenticated(Dashboard)} />
+            <Route path="/" component={userIsAuthenticated(Layout)} />
           </Switch>
         </Router>
       </div>

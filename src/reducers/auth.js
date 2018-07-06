@@ -4,7 +4,6 @@ import { LOGIN, LOGOUT } from '../actions/auth';
 const initialState = {
   auth: {
     token: localStorage.getItem('token'),
-    service: 'Extranet',
   },
 };
 
@@ -14,11 +13,6 @@ export default (state = initialState, action) => {
     case LOGIN:
     case LOGOUT: {
       const token = action.payload.token;
-      let service = state.auth.service;
-      if (action.payload.service) {
-        service = action.payload.service;
-      }
-
       if (token === null) {
         localStorage.removeItem('token');
       } else {
@@ -28,7 +22,6 @@ export default (state = initialState, action) => {
         ...state,
         auth: {
           token,
-          service,
         }
       }
     }
