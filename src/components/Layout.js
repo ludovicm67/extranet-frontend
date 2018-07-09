@@ -25,6 +25,8 @@ import Updates from './updates';
 import { logout } from '../actions/auth';
 import store from '../store';
 import constants from '../constants';
+
+// eslint-disable-next-line
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
 const drawerWidth = 240;
