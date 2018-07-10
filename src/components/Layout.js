@@ -22,6 +22,7 @@ import UpdatesIcon from '@material-ui/icons/Update';
 import DomainIcon from '@material-ui/icons/Domain';
 import PeopleIcon from '@material-ui/icons/People';
 
+import Users from './users';
 import Clients from './clients';
 import Roles from './roles';
 import Updates from './updates';
@@ -140,7 +141,7 @@ class Layout extends React.Component {
           </ListItem>
           <ListItem
             component={Link}
-            to="/"
+            to="/users"
             button
             onClick={() => this.setState({ mobileOpen: false })}
           >
@@ -220,6 +221,7 @@ class Layout extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
             <Switch>
+              <Route path="/users" component={Users} />
               <Route path="/clients" component={Clients} />
               <Route path="/roles" component={Roles} />
               <Route path="/updates" component={Updates} />
