@@ -1,5 +1,3 @@
-
-
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -15,14 +13,14 @@ import store from '../../store';
 import constants from '../../constants';
 import { logout } from '../../actions/auth';
 
-class Roles extends Component {
+class Clients extends Component {
   state = {
     data: [],
   };
 
   componentDidMount() {
     axios.get(`
-      ${constants.API_ENDPOINT}/roles?token=${store.getState().auth.auth.token}
+      ${constants.API_ENDPOINT}/clients?token=${store.getState().auth.auth.token}
     `).then((res) => {
         if (res.data.success) {
           this.setState({ data: res.data.data });
@@ -34,12 +32,12 @@ class Roles extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          Liste des rôles
+          Liste des clients
           <Button variant="contained" color="primary">
             Ajouter
          </Button>
         </Typography>
-        <Typography>Page listant les différents rôles</Typography>
+        <Typography>Page listant les différents clients ({this.state.data.length})</Typography>
         <Paper>
           <Table>
             <TableHead>
@@ -67,4 +65,4 @@ class Roles extends Component {
   };
 }
 
-export default Roles;
+export default Clients;

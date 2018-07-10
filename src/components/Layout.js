@@ -19,7 +19,10 @@ import LogoutIcon from '@material-ui/icons/PowerSettingsNew';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import LockIcon from '@material-ui/icons/Lock';
 import UpdatesIcon from '@material-ui/icons/Update';
+import DomainIcon from '@material-ui/icons/Domain';
+import PeopleIcon from '@material-ui/icons/People';
 
+import Clients from './clients';
 import Roles from './roles';
 import Updates from './updates';
 
@@ -104,6 +107,28 @@ class Layout extends React.Component {
           </ListItem>
           <ListItem
             component={Link}
+            to="/clients"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <DomainIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Clients" />
+          </ListItem>
+          <ListItem
+            component={Link}
+            to="/"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Contacts" />
+          </ListItem>
+          <ListItem
+            component={Link}
             to="/roles"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -112,6 +137,17 @@ class Layout extends React.Component {
               <LockIcon />
             </ListItemIcon>
             <ListItemText inset primary="Rôles" />
+          </ListItem>
+          <ListItem
+            component={Link}
+            to="/"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Utilisateurs" />
           </ListItem>
           <ListItem
             component={Link}
@@ -184,6 +220,7 @@ class Layout extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
             <Switch>
+              <Route path="/clients" component={Clients} />
               <Route path="/roles" component={Roles} />
               <Route path="/updates" component={Updates} />
             </Switch>
