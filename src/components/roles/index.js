@@ -13,6 +13,12 @@ import store from '../../store';
 import constants from '../../constants';
 import { logout } from '../../actions/auth';
 
+const styles = {
+  intro: {
+    paddingBottom: '50px',
+  },
+};
+
 class Roles extends Component {
   state = {
     data: [],
@@ -37,7 +43,7 @@ class Roles extends Component {
             Ajouter
          </Button>
         </Typography>
-        <Typography>Page listant les différents rôles</Typography>
+        <Typography style={styles.intro}>Page listant les différents rôles ({this.state.data.length})</Typography>
         <Paper>
           <Table>
             <TableHead>

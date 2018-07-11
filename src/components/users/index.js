@@ -13,6 +13,12 @@ import store from '../../store';
 import constants from '../../constants';
 import { logout } from '../../actions/auth';
 
+const styles = {
+  intro: {
+    paddingBottom: '50px',
+  },
+};
+
 class Users extends Component {
   state = {
     data: [],
@@ -37,7 +43,7 @@ class Users extends Component {
             Ajouter
          </Button>
         </Typography>
-        <Typography>Page listant les différents utilisateurs</Typography>
+        <Typography style={styles.intro}>Page listant les différents utilisateurs ({this.state.data.length})</Typography>
         <Paper>
           <Table>
             <TableHead>
