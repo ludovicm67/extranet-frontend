@@ -6,8 +6,6 @@ import registerServiceWorker from './registerServiceWorker';
 import store from './store';
 import { Provider } from 'react-redux';
 
-console.log('initial state: ' + JSON.stringify(store.getState()));
-
 const Root = (
   <Provider store={store}>
     <App />
