@@ -1,4 +1,4 @@
-const navPort = parseInt(window.location.port);
+const navPort = parseInt(window.location.port, 10);
 let apiPort = '';
 if (navPort && navPort !== 0 && navPort !== 80 && navPort !== 443) {
   apiPort = ':8000';

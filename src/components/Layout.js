@@ -39,10 +39,11 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     zIndex: 1,
-    overflow: 'hidden',
+    overflow: 'auto',
     position: 'relative',
     display: 'flex',
     width: '100%',
+    minHeight: '100vh',
   },
   appBar: {
     position: 'fixed',
