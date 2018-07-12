@@ -8,10 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import axios from 'axios';
-import store from '../../store';
-import constants from '../../constants';
-import { logout } from '../../actions/auth';
+import { getApi } from '../../utils';
 
 const styles = {
   intro: {
@@ -25,13 +22,11 @@ class Clients extends Component {
   };
 
   componentDidMount() {
-    axios.get(`
-      ${constants.API_ENDPOINT}/clients?token=${store.getState().auth.auth.token}
-    `).then((res) => {
-        if (res.data.success) {
-          this.setState({ data: res.data.data });
-        }
-      }).catch(() => store.dispatch(logout()));
+    getApi('sellsy_clients').then(res => {
+      this.setState({
+        data: res,
+      });
+    });
   }
 
   render() {

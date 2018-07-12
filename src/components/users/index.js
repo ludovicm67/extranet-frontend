@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Icon from '@material-ui/core/Icon';
 
 import axios from 'axios';
 import store from '../../store';
@@ -48,26 +49,33 @@ class Users extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Prénom</TableCell>
                 <TableCell>Nom</TableCell>
                 <TableCell>Adresse mail</TableCell>
+                <TableCell>Rôle</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.state.data.map(n => {
+                let role = 'Aucun';
+                if (n.is_admin === 1) {
+                  role = (<strong>Super administrateur</strong>);
+                }
+
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      {n.firstname}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {n.lastname}
+                      {n.firstname} {n.lastname}
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {n.email}
                     </TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell component="th" scope="row">
+                      {role}
+                    </TableCell>
+                    <TableCell>
+                      <Icon>edit</Icon>
+                    </TableCell>
                   </TableRow>
                 );
               })}

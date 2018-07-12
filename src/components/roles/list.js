@@ -7,11 +7,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
 
-import axios from 'axios';
-import store from '../../store';
-import constants from '../../constants';
-import { logout } from '../../actions/auth';
+import { getApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -26,13 +25,11 @@ class RolesList extends Component {
   };
 
   componentDidMount() {
-    axios.get(`
-      ${constants.API_ENDPOINT}/roles?token=${store.getState().auth.auth.token}
-    `).then((res) => {
-        if (res.data.success) {
-          this.setState({ data: res.data.data });
-        }
-      }).catch(() => store.dispatch(logout()));
+    getApi('roles').then(res => {
+      this.setState({
+        data: res,
+      });
+    });
   }
 
   render() {
@@ -60,7 +57,11 @@ class RolesList extends Component {
                     <TableCell component="th" scope="row">
                       {n.name}
                     </TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell>
+                      <IconButton component={Link} to={`/roles/${n.id}/edit`}>
+                        <Icon>edit</Icon>
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 );
               })}
