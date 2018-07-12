@@ -26,6 +26,7 @@ import Users from './users';
 import Clients from './clients';
 import Roles from './roles';
 import Updates from './updates';
+import Dashboard from './Dashboard';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -225,6 +226,7 @@ class Layout extends React.Component {
               <Route path="/clients" component={Clients} />
               <Route path="/roles" component={Roles} />
               <Route path="/updates" component={Updates} />
+              <Route path="/" component={Dashboard} />
             </Switch>
         </main>
       </div>
