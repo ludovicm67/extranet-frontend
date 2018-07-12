@@ -24,9 +24,7 @@ class RolesNew extends Component {
   handleSubmit() {
     postApi('roles', {
       name: this.state.name,
-    }).then(res => {
-      console.log(res.data);
-    });
+    }).then(() => this.props.history.push('/roles'));
   }
 
   handleChange = prop => event => {

@@ -1,43 +1,66 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
-import axios from 'axios';
-import store from '../../store';
-import constants from '../../constants';
-import { logout } from '../../actions/auth';
+import { getApi, putApi } from '../../utils';
 
 const styles = {
   intro: {
     paddingBottom: '50px',
   },
+  submit: {
+    marginTop: '42px',
+  },
 };
 
 class RolesEdit extends Component {
   state = {
-    data: [],
+    id: this.props.match.params.roleId,
+    name: '',
   };
 
-  handleSubmit() {
-    axios.get(`
-      ${constants.API_ENDPOINT}/roles?token=${store.getState().auth.auth.token}
-    `).then((res) => {
-        if (res.data.success) {
-          this.setState({ data: res.data.data });
-        }
-      }).catch(() => store.dispatch(logout()));
+  componentDidMount() {
+    getApi(`roles/${this.state.id}`).then(res => {
+      this.setState({
+        name: res.name,
+      });
+    });
   }
+
+  handleSubmit() {
+    putApi(`roles/${this.state.id}`, {
+      name: this.state.name,
+    }).then(() => this.props.history.push('/roles'));
+  }
+
+  handleChange = prop => event => {
+    this.setState({
+      [prop]: event.target.value
+    });
+  };
 
   render() {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          Liste des rôles
-          <Button variant="contained" color="primary">
-            Ajouter
-         </Button>
+          Modifier un rôle
         </Typography>
-        <Typography style={styles.intro}>Page listant les différents rôles ({this.state.data.length})</Typography>
+        <Typography style={styles.intro}>Modifiez ici les informations concernant le rôle</Typography>
+        <FormControl fullWidth style={styles.formControl}>
+          <InputLabel htmlFor="role-name">Nom du rôle</InputLabel>
+          <Input
+            id="role-name"
+            type="text"
+            value={this.state.name}
+            onChange={this.handleChange('name')}
+          />
+        </FormControl>
+        <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
+          Modifier
+        </Button>
       </div>
     );
   };

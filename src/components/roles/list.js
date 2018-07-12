@@ -14,6 +14,9 @@ import { getApi, deleteApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
+  right: {
+    float: 'right',
+  },
   intro: {
     paddingBottom: '50px',
   },
@@ -24,7 +27,7 @@ class RolesList extends Component {
     data: [],
   };
 
-  componentDidMount() {
+  fetchList() {
     getApi('roles').then(res => {
       this.setState({
         data: res,
@@ -32,18 +35,31 @@ class RolesList extends Component {
     });
   }
 
+  componentDidMount() {
+    this.fetchList();
+  }
+
   handleDelete(ressource) {
-    deleteApi(ressource);
+    deleteApi(ressource).then(() => {
+      this.fetchList();
+    });
   }
 
   render() {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          Liste des rôles
-          <Button component={Link} to="/roles/new" variant="contained" color="primary">
+          <Button
+            component={Link}
+            to="/roles/new"
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>add</Icon>
             Ajouter
           </Button>
+          Liste des rôles
         </Typography>
         <Typography style={styles.intro}>Page listant les différents rôles ({this.state.data.length})</Typography>
         <Paper>
