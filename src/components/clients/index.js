@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -35,9 +34,6 @@ class Clients extends Component {
       <div>
         <Typography variant="display1" gutterBottom>
           Liste des clients
-          <Button variant="contained" color="primary">
-            Ajouter
-         </Button>
         </Typography>
         <Typography style={styles.intro}>Page listant les différents clients ({this.state.data.length})</Typography>
         <Paper>
@@ -45,7 +41,6 @@ class Clients extends Component {
             <TableHead>
               <TableRow>
                 <TableCell>Nom</TableCell>
-                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -55,7 +50,6 @@ class Clients extends Component {
                     <TableCell component="th" scope="row">
                       <Link to={`/clients/${n.id}`}>{n.name}</Link>
                     </TableCell>
-                    <TableCell>Actions</TableCell>
                   </TableRow>
                 );
               })}
