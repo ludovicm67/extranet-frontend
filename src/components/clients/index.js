@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import { getApi } from '../../utils';
+import { Link } from 'react-router-dom';
 
 const styles = {
   intro: {
@@ -52,7 +53,7 @@ class Clients extends Component {
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      {n.name}
+                      <Link to={`/clients/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>Actions</TableCell>
                   </TableRow>

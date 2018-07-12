@@ -9,10 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 
-import axios from 'axios';
-import store from '../../store';
-import constants from '../../constants';
-import { logout } from '../../actions/auth';
+import { getApi } from '../../utils';
+import { Link } from 'react-router-dom';
 
 const styles = {
   intro: {
@@ -26,13 +24,11 @@ class Users extends Component {
   };
 
   componentDidMount() {
-    axios.get(`
-      ${constants.API_ENDPOINT}/users?token=${store.getState().auth.auth.token}
-    `).then((res) => {
-        if (res.data.success) {
-          this.setState({ data: res.data.data });
-        }
-      }).catch(() => store.dispatch(logout()));
+    getApi('users').then(res => {
+      this.setState({
+        data: res,
+      });
+    });
   }
 
   render() {
@@ -65,7 +61,7 @@ class Users extends Component {
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      {n.firstname} {n.lastname}
+                      <Link to={`/users/${n.id}`}>{n.firstname} {n.lastname}</Link>
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {n.email}

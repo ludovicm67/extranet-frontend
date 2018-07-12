@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi } from '../../utils';
+import { getApi, deleteApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -30,6 +30,10 @@ class RolesList extends Component {
         data: res,
       });
     });
+  }
+
+  handleDelete(ressource) {
+    deleteApi(ressource);
   }
 
   render() {
@@ -55,11 +59,14 @@ class RolesList extends Component {
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      {n.name}
+                      <Link to={`/roles/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
                       <IconButton component={Link} to={`/roles/${n.id}/edit`}>
                         <Icon>edit</Icon>
+                      </IconButton>
+                      <IconButton onClick={this.handleDelete.bind(this, `roles/${n.id}`)}>
+                        <Icon>delete</Icon>
                       </IconButton>
                     </TableCell>
                   </TableRow>

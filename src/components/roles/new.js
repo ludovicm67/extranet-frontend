@@ -5,10 +5,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 
-import axios from 'axios';
-import store from '../../store';
-import constants from '../../constants';
-import { logout } from '../../actions/auth';
+import { postApi } from '../../utils';
 
 const styles = {
   intro: {
@@ -25,13 +22,11 @@ class RolesNew extends Component {
   };
 
   handleSubmit() {
-    axios.get(`
-      ${constants.API_ENDPOINT}/roles?token=${store.getState().auth.auth.token}
-    `).then((res) => {
-        if (res.data.success) {
-          this.setState({ data: res.data.data });
-        }
-      }).catch(() => store.dispatch(logout()));
+    postApi('roles', {
+      name: this.state.name,
+    }).then(res => {
+      console.log(res.data);
+    });
   }
 
   handleChange = prop => event => {
@@ -56,7 +51,7 @@ class RolesNew extends Component {
             onChange={this.handleChange('name')}
           />
         </FormControl>
-        <Button variant="contained" color="primary" style={styles.submit}>
+        <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Créer
         </Button>
       </div>
