@@ -85,7 +85,7 @@ class UsersList extends Component {
                       <Link to={`/users/${n.id}`}>{n.firstname} {n.lastname}</Link>
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {n.email}
+                      <a href={`mailto:${n.email}`}>{n.email}</a>
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {role}

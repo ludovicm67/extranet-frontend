@@ -173,7 +173,6 @@ class UsersNew extends Component {
               id: "select-role",
               simpleValue: true,
               options: this.state.roles,
-              autocomplete: "false",
             }
           }}
         />
@@ -217,7 +216,6 @@ class UsersNew extends Component {
               id: "select-default-page",
               simpleValue: true,
               options: this.state.defaultPages,
-              autocomplete: "false",
             }
           }}
         />
