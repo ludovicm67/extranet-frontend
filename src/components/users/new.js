@@ -139,6 +139,7 @@ class UsersNew extends Component {
             type="text"
             value={this.state.lastname}
             onChange={this.handleChange('lastname')}
+            autoComplete="new-password"
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
@@ -148,6 +149,7 @@ class UsersNew extends Component {
             type="text"
             value={this.state.firstname}
             onChange={this.handleChange('firstname')}
+            autoComplete="new-password"
           />
         </FormControl>
         <TextField
@@ -158,6 +160,7 @@ class UsersNew extends Component {
           placeholder="Choisissez le rôle de l'utilisateur..."
           name="select-role"
           label="Rôle"
+          autoComplete="new-password"
           InputLabelProps={{
             shrink: true
           }}
@@ -181,6 +184,7 @@ class UsersNew extends Component {
             type="email"
             value={this.state.email}
             onChange={this.handleChange('email')}
+            autoComplete="new-password"
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
@@ -190,6 +194,7 @@ class UsersNew extends Component {
             type="password"
             value={this.state.password}
             onChange={this.handleChange('password')}
+            autoComplete="new-password"
         />
         </FormControl>
         <TextField
@@ -200,6 +205,7 @@ class UsersNew extends Component {
           placeholder="Choisissez la page par défaut..."
           name="select-default-page"
           label="Page par défaut"
+          autoComplete="new-password"
           InputLabelProps={{
             shrink: true
           }}
