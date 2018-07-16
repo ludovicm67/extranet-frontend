@@ -104,10 +104,11 @@ class ClientsShow extends Component {
     let orders = null;
     if (this.state.data.orders.length > 0) {
       const ordersMap = this.state.data.orders.map(n => {
+        if (!n.subject) n.subject = '';
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>{n.subject}</Typography>
+              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, '')}</Typography>
               <Typography className={classes.secondaryHeading}>Montant restant...</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
@@ -129,15 +130,53 @@ class ClientsShow extends Component {
     let subscriptions = null;
     if (this.state.data.subscriptions.length > 0) {
       const subscriptionsMap = this.state.data.subscriptions.map(n => {
+        if (!n.subject) n.subject = '';
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-subs-${n.id}`} onChange={this.handleExpanded(`panel-subs-${n.id}`)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>{n.subject}</Typography>
-              <Typography className={classes.secondaryHeading}>Montant restant...</Typography>
+              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, '')}</Typography>
+              <Typography className={classes.secondaryHeading} style={{color: n.step_hex}}>
+                {n.formatted_dueAmount} TTC
+              </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <Typography>
-                Plus de détails à venir ici...
+              <Typography component="ul" className={classes.simpleList}>
+                <li>
+                  <strong>Date : </strong>
+                  {n.displayedDate}
+                </li>
+                <li>
+                  <strong>Sujet : </strong>
+                  {n.subject.replace(/<[^>]+>/g, '')}
+                </li>
+                <li>
+                  <strong>Statut : </strong>
+                  <span style={{ color: n.step_hex }}>{n.step_label}</span>
+                </li>
+                <li>
+                  <strong>Montant total HT : </strong>
+                  {n.formatted_totalAmountTaxesFree} HT
+                </li>
+                <li>
+                  <strong>Montant total TTC : </strong>
+                  {n.formatted_totalAmount} TTC
+                </li>
+                <li>
+                  <strong>Reste à payer : </strong>
+                  {n.formatted_dueAmount} TTC
+                </li>
+                <li>
+                  <strong>Contact : </strong>
+                  {n.contactName}
+                </li>
+                {n.publicLinkShort ? (
+                  <li>
+                    <strong>Lien vers la facture : </strong>
+                    <a href={n.publicLinkShort} target="_blank">
+                      {n.publicLinkShort}
+                    </a>
+                  </li>
+                ) : null}
               </Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
