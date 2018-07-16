@@ -94,8 +94,10 @@ class Layout extends React.Component {
     const drawer = (
       <div>
         <div className={classes.toolbar} />
-        <Divider />
-        <List>
+        <List style={{
+          marginTop: '-8px',
+        }}>
+          <Divider />
           <ListItem
             component={Link}
             to="/"
@@ -107,6 +109,7 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Tableau de bord" />
           </ListItem>
+          <Divider />
           <ListItem
             component={Link}
             to="/clients"
@@ -118,6 +121,7 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Clients" />
           </ListItem>
+          <Divider />
           <ListItem
             component={Link}
             to="/"
@@ -129,6 +133,7 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Contacts" />
           </ListItem>
+          <Divider />
           <ListItem
             component={Link}
             to="/roles"
@@ -151,6 +156,7 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Utilisateurs" />
           </ListItem>
+          <Divider />
           <ListItem
             component={Link}
             to="/updates"
@@ -162,15 +168,15 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Mises à jour" />
           </ListItem>
+          <Divider />
           <ListItem button onClick={this.handleLogout}>
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
             <ListItemText inset primary="Déconnexion" />
           </ListItem>
+          <Divider />
         </List>
-        <Divider />
-        <List></List>
       </div>
     );
 
