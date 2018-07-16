@@ -13,7 +13,7 @@ import { getApi } from '../../utils';
 
 const styles = theme => ({
   intro: {
-    paddingBottom: '50px',
+    paddingBottom: '10px',
   },
   contactCards: {
     display: 'flex',
@@ -111,7 +111,7 @@ class ClientsShow extends Component {
       });
       contacts = (
         <div>
-          <Typography variant="headline">Contacts</Typography>
+          <Typography variant="headline" className={classes.partTitle}>Contacts</Typography>
           <div className={classes.contactCards}>{contactsMap}</div>
         </div>
       );
