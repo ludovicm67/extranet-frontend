@@ -111,11 +111,25 @@ class ClientsShow extends Component {
     if (this.state.data.orders.length > 0) {
       const ordersMap = this.state.data.orders.map(n => {
         if (!n.subject) n.subject = '';
+        const remainingOrderAmount = n.invoices.reduce((p, c) => {
+          return p - parseFloat(c.totalAmountTaxesFree);
+        }, parseFloat(n.totalAmountTaxesFree));
+        const remainingDueAmount = n.invoices.reduce((p, c) => {
+          return p + parseFloat(c.dueAmount);
+        }, .0);
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, '')}</Typography>
-              <Typography className={classes.secondaryHeading}>Montant restant...</Typography>
+              <Typography className={classes.secondaryHeading} style={{ color: n.step_hex }}>
+                {remainingOrderAmount.toLocaleString(undefined, {minimumFractionDigits: 2})} {n.currencysymbol} HT
+                {remainingDueAmount > .0 ? (
+                  <span>
+                    + {remainingDueAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })} {n.currencysymbol} TTC
+                    en attente de paiement
+                  </span>
+                ) : null}
+              </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography>
