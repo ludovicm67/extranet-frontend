@@ -59,10 +59,16 @@ class ClientsShow extends Component {
   };
 
   componentDidMount() {
-    getApi(`sellsy_clients/${this.props.match.params.clientId}`).then(res => {
-      this.setState({
-        data: res,
-      });
+    getApi(`sellsy_clients/${this.props.match.params.clientId}`, {
+      notFound: true,
+    }).then(res => {
+      if (res.notFound) {
+        this.props.history.push('/clients');
+      } else {
+        this.setState({
+          data: res,
+        });
+      }
     });
   }
 
