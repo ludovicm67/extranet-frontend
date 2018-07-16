@@ -121,13 +121,16 @@ class ClientsShow extends Component {
     if (this.state.data.orders.length > 0) {
       const ordersMap = this.state.data.orders.map(n => {
         if (!n.subject) n.subject = '';
-        const remainingOrderAmount = n.invoices.reduce((p, c) => {
+        let remainingOrderAmount = n.invoices.reduce((p, c) => {
           return p - parseFloat(c.totalAmountTaxesFree);
         }, parseFloat(n.totalAmountTaxesFree));
-        const remainingDueAmount = n.invoices.reduce((p, c) => {
+        let remainingDueAmount = n.invoices.reduce((p, c) => {
           return p + parseFloat(c.dueAmount);
         }, .0);
 
+        // just to prevent strange behaviors
+        if (remainingOrderAmount < 0) remainingOrderAmount = 0;
+        if (remainingDueAmount < 0) remainingDueAmount = 0;
 
         let invoices = null;
         if (n.invoices.length > 0) {
@@ -190,14 +193,11 @@ class ClientsShow extends Component {
           });
           invoices = (
             <div>
-              <Typography variant="subheading" className={classes.partTitle}>Factures associées</Typography>
+              <Typography variant="subheading" className={classes.partTitle}><strong>Factures associées :</strong></Typography>
               {invoicesMap}
             </div>
           );
         }
-
-
-
 
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
