@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { getApi } from '../../utils';
 
@@ -8,10 +12,23 @@ const styles = {
   intro: {
     paddingBottom: '50px',
   },
+  partTitle: {
+    marginTop: 36,
+  },
+  heading: {
+    fontSize: 15,
+    flexBasis: '50%',
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: 15,
+    color: '#0000008a',
+  },
 };
 
 class ClientsShow extends Component {
   state = {
+    expanded: null,
     data: {
       id: '',
       name: '',
@@ -28,6 +45,13 @@ class ClientsShow extends Component {
       });
     });
   }
+
+  handleExpanded = panel => (event, expanded) => {
+    this.setState({
+      expanded: expanded ? panel : false,
+    });
+  };
+
 
   render() {
     let contacts = null;
@@ -51,16 +75,24 @@ class ClientsShow extends Component {
     if (this.state.data.orders.length > 0) {
       const ordersMap = this.state.data.orders.map(n => {
         return (
-          <p key={n.id}>
-            {n.subject}
-          </p>
+          <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography style={styles.heading}>{n.subject}</Typography>
+              <Typography style={styles.secondaryHeading}>Montant restant...</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Typography>
+                Plus de détails à venir ici...
+              </Typography>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
         );
       });
       orders = (
-        <Paper>
-          <Typography variant="headline">Commandes</Typography>
+        <div>
+          <Typography variant="headline" style={styles.partTitle}>Commandes</Typography>
           {ordersMap}
-        </Paper>
+        </div>
       );
     }
 
@@ -68,16 +100,24 @@ class ClientsShow extends Component {
     if (this.state.data.subscriptions.length > 0) {
       const subscriptionsMap = this.state.data.subscriptions.map(n => {
         return (
-          <p key={n.id}>
-            {n.subject}
-          </p>
+          <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-subs-${n.id}`} onChange={this.handleExpanded(`panel-subs-${n.id}`)}>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography style={styles.heading}>{n.subject}</Typography>
+              <Typography style={styles.secondaryHeading}>Montant restant...</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Typography>
+                Plus de détails à venir ici...
+              </Typography>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
         );
       });
       subscriptions = (
-        <Paper>
-          <Typography variant="headline">Factures liées aux abonnements</Typography>
+        <div>
+          <Typography variant="headline" style={styles.partTitle}>Factures liées aux abonnements</Typography>
           {subscriptionsMap}
-        </Paper>
+        </div>
       );
     }
 
