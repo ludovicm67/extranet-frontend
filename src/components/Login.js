@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { login } from '../actions/auth';
+import { login, setUserData } from '../actions/auth';
 import store from '../store';
 import axios from 'axios';
 import constants from '../constants';
+import { getApi } from '../utils';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -70,6 +71,9 @@ class Login extends Component {
         this.setState({ open: true });
       } else {
         store.dispatch(login(res.data.access_token));
+        getApi('users/me').then(res => {
+          store.dispatch(setUserData(res));
+        });
       }
     })
     .catch(() => {

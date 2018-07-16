@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 
+import store from '../store';
+
 class Dashboard extends Component {
   render() {
+    const user = store.getState().auth.auth.userData;
+
     return (
       <div>
         <Typography variant="display1" gutterBottom>
@@ -10,6 +14,7 @@ class Dashboard extends Component {
         </Typography>
 
         <Typography>
+          Bienvenue {user.firstname} !
           Vous êtes bien connectés à l'extranet.
         </Typography>
         <Typography>

@@ -88,6 +88,12 @@ class Layout extends React.Component {
          });
   }
 
+  componentDidMount() {
+    if (store.getState().auth.auth.userData.id <= 0) {
+      setTimeout(() => this.props.history.push('/login'), 200);
+    }
+  }
+
   render() {
     const { classes, theme } = this.props;
 

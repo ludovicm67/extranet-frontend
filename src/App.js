@@ -4,6 +4,13 @@ import Layout from './components/Layout';
 import Login from './components/Login';
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
 import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper';
+import { setUserData } from './actions/auth';
+import store from './store';
+import { getApi } from './utils';
+
+getApi('users/me').then(res => {
+  store.dispatch(setUserData(res));
+});
 
 const locationHelper = locationHelperBuilder({});
 
