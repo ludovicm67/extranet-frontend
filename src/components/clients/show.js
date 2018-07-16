@@ -33,7 +33,7 @@ const styles = theme => ({
   },
   heading: {
     fontSize: 15,
-    flexBasis: '50%',
+    flexBasis: '55%',
     flexShrink: 0,
   },
   secondaryHeading: {
@@ -44,11 +44,15 @@ const styles = theme => ({
     listStyle: 'none',
     padding: 0,
   },
+  expansionPanelDetails: {
+    display: 'block',
+  },
 });
 
 class ClientsShow extends Component {
   state = {
     expanded: null,
+    invoiceExpanded: null,
     data: {
       id: '',
       name: '',
@@ -75,6 +79,12 @@ class ClientsShow extends Component {
   handleExpanded = panel => (event, expanded) => {
     this.setState({
       expanded: expanded ? panel : false,
+    });
+  };
+
+  handleInvoiceExpanded = panel => (event, invoiceExpanded) => {
+    this.setState({
+      invoiceExpanded: invoiceExpanded ? panel : false,
     });
   };
 
@@ -117,6 +127,78 @@ class ClientsShow extends Component {
         const remainingDueAmount = n.invoices.reduce((p, c) => {
           return p + parseFloat(c.dueAmount);
         }, .0);
+
+
+        let invoices = null;
+        if (n.invoices.length > 0) {
+          const invoicesMap = n.invoices.map(n => {
+            if (!n.subject) n.subject = '';
+            return (
+              <ExpansionPanel
+                key={n.id}
+                expanded={this.state.invoiceExpanded === `panel-invoice-${n.id}`}
+                onChange={this.handleInvoiceExpanded(`panel-invoice-${n.id}`)}
+              >
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, '')}</Typography>
+                  <Typography className={classes.secondaryHeading} style={{ color: n.step_hex }}>
+                    {n.formatted_dueAmount} TTC
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <Typography component="ul" className={classes.simpleList}>
+                    <li>
+                      <strong>Date : </strong>
+                      {n.displayedDate}
+                    </li>
+                    <li>
+                      <strong>Sujet : </strong>
+                      {n.subject.replace(/<[^>]+>/g, '')}
+                    </li>
+                    <li>
+                      <strong>Statut : </strong>
+                      <span style={{ color: n.step_hex }}>{n.step_label}</span>
+                    </li>
+                    <li>
+                      <strong>Montant total HT : </strong>
+                      {n.formatted_totalAmountTaxesFree} HT
+                    </li>
+                    <li>
+                      <strong>Montant total TTC : </strong>
+                      {n.formatted_totalAmount} TTC
+                    </li>
+                    <li>
+                      <strong>Reste à payer : </strong>
+                      {n.formatted_dueAmount} TTC
+                    </li>
+                    <li>
+                      <strong>Contact : </strong>
+                      {n.contactName}
+                    </li>
+                    {n.publicLinkShort ? (
+                      <li>
+                        <strong>Lien vers la facture : </strong>
+                        <a href={n.publicLinkShort} target="_blank">
+                          {n.publicLinkShort}
+                        </a>
+                      </li>
+                    ) : null}
+                  </Typography>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            );
+          });
+          invoices = (
+            <div>
+              <Typography variant="subheading" className={classes.partTitle}>Factures associées</Typography>
+              {invoicesMap}
+            </div>
+          );
+        }
+
+
+
+
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -131,10 +213,46 @@ class ClientsShow extends Component {
                 ) : null}
               </Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography>
-                Plus de détails à venir ici...
+            <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+              <Typography component="ul" className={classes.simpleList}>
+                <li>
+                  <strong>Date : </strong>
+                  {n.displayedDate}
+                </li>
+                <li>
+                  <strong>Client : </strong>
+                  {n.thirdname}
+                </li>
+                <li>
+                  <strong>Sujet : </strong>
+                  {n.subject.replace(/<[^>]+>/g, '')}
+                </li>
+                <li>
+                  <strong>Statut : </strong>
+                  <span style={{ color: n.step_hex }}>{n.step_label}</span>
+                </li>
+                <li>
+                  <strong>Montant total HT : </strong>
+                  {n.formatted_totalAmountTaxesFree} HT
+                </li>
+                <li>
+                  <strong>Montant total TTC : </strong>
+                  {n.formatted_totalAmount} TTC
+                </li>
+                <li>
+                  <strong>Contact : </strong>
+                  {n.contactName}
+                </li>
+                {n.publicLinkShort ? (
+                  <li>
+                    <strong>Lien vers le bon de commande : </strong>
+                    <a href={n.publicLinkShort} target="_blank">
+                      {n.publicLinkShort}
+                    </a>
+                  </li>
+                ) : null}
               </Typography>
+              {invoices}
             </ExpansionPanelDetails>
           </ExpansionPanel>
         );
