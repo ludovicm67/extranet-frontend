@@ -40,6 +40,10 @@ const styles = theme => ({
     fontSize: 15,
     color: '#0000008a',
   },
+  simpleList: {
+    listStyle: 'none',
+    padding: 0,
+  },
 });
 
 class ClientsShow extends Component {
@@ -68,7 +72,6 @@ class ClientsShow extends Component {
     });
   };
 
-
   render() {
     const { classes } = this.props;
     let contacts = null;
@@ -80,9 +83,11 @@ class ClientsShow extends Component {
               <Typography gutterBottom variant="headline" component="h2">
                 {n.fullName}
               </Typography>
-              <Typography component="p">
-                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                across all continents except Antarctica
+              <Typography component="ul" className={classes.simpleList}>
+                {n.position ? (<li>{n.position}</li>) : null}
+                {n.email ? (<li><a href={`mailto:${n.email}`}>{n.email}</a></li>) : null}
+                {n.tel ? (<li><a href={`tel:${n.tel}`}>{n.tel}</a></li>) : null}
+                {n.mobile ? (<li><a href={`tel:${n.mobile}`}>{n.mobile}</a></li>) : null}
               </Typography>
             </CardContent>
           </Card>
