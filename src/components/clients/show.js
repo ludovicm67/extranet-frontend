@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 import { getApi } from '../../utils';
 
-const styles = {
+const styles = theme => ({
   intro: {
     paddingBottom: '50px',
+  },
+  contactCards: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignContent: 'flex-start',
+  },
+  contactCard: {
+    width: 'calc(50% - 10px)',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    marginTop: '15px',
   },
   partTitle: {
     marginTop: 36,
@@ -24,7 +40,7 @@ const styles = {
     fontSize: 15,
     color: '#0000008a',
   },
-};
+});
 
 class ClientsShow extends Component {
   state = {
@@ -54,20 +70,29 @@ class ClientsShow extends Component {
 
 
   render() {
+    const { classes } = this.props;
     let contacts = null;
     if (this.state.data.contacts.length > 0) {
       const contactsMap = this.state.data.contacts.map(n => {
         return (
-          <p key={n.id}>
-            {n.name}
-          </p>
+          <Card key={n.id} className={classes.contactCard}>
+            <CardContent>
+              <Typography gutterBottom variant="headline" component="h2">
+                {n.fullName}
+              </Typography>
+              <Typography component="p">
+                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                across all continents except Antarctica
+              </Typography>
+            </CardContent>
+          </Card>
         );
       });
       contacts = (
-        <Paper>
+        <div>
           <Typography variant="headline">Contacts</Typography>
-          {contactsMap}
-        </Paper>
+          <div className={classes.contactCards}>{contactsMap}</div>
+        </div>
       );
     }
 
@@ -77,8 +102,8 @@ class ClientsShow extends Component {
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography style={styles.heading}>{n.subject}</Typography>
-              <Typography style={styles.secondaryHeading}>Montant restant...</Typography>
+              <Typography className={classes.heading}>{n.subject}</Typography>
+              <Typography className={classes.secondaryHeading}>Montant restant...</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography>
@@ -90,7 +115,7 @@ class ClientsShow extends Component {
       });
       orders = (
         <div>
-          <Typography variant="headline" style={styles.partTitle}>Commandes</Typography>
+          <Typography variant="headline" className={classes.partTitle}>Commandes</Typography>
           {ordersMap}
         </div>
       );
@@ -102,8 +127,8 @@ class ClientsShow extends Component {
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-subs-${n.id}`} onChange={this.handleExpanded(`panel-subs-${n.id}`)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography style={styles.heading}>{n.subject}</Typography>
-              <Typography style={styles.secondaryHeading}>Montant restant...</Typography>
+              <Typography className={classes.heading}>{n.subject}</Typography>
+              <Typography className={classes.secondaryHeading}>Montant restant...</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Typography>
@@ -115,7 +140,7 @@ class ClientsShow extends Component {
       });
       subscriptions = (
         <div>
-          <Typography variant="headline" style={styles.partTitle}>Factures liées aux abonnements</Typography>
+          <Typography variant="headline" className={classes.partTitle}>Factures liées aux abonnements</Typography>
           {subscriptionsMap}
         </div>
       );
@@ -126,7 +151,7 @@ class ClientsShow extends Component {
         <Typography variant="display1" gutterBottom>
           {this.state.data.name}
         </Typography>
-        <Typography style={styles.intro}>Affichage de quelques informations à propos de ce client</Typography>
+        <Typography className={classes.intro}>Affichage de quelques informations à propos de ce client</Typography>
         {contacts}
         {orders}
         {subscriptions}
@@ -135,4 +160,8 @@ class ClientsShow extends Component {
   };
 }
 
-export default ClientsShow;
+ClientsShow.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles, { withTheme: true })(ClientsShow);
