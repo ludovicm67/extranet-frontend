@@ -21,6 +21,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import UpdatesIcon from '@material-ui/icons/Update';
 import DomainIcon from '@material-ui/icons/Domain';
 import PeopleIcon from '@material-ui/icons/People';
+import AccountIcon from '@material-ui/icons/AccountCircle';
 
 import Users from './users';
 import Clients from './clients';
@@ -163,6 +164,17 @@ class Layout extends React.Component {
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText inset primary="Utilisateurs" />
+          </ListItem>
+          <ListItem
+            component={Link}
+            to="/users/me"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <AccountIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Mon compte" />
           </ListItem>
           <Divider />
           <ListItem

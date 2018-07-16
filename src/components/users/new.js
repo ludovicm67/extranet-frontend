@@ -109,7 +109,7 @@ class UsersNew extends Component {
       role_id: this.state.roleId,
       email: this.state.email,
       password: this.state.password,
-      defaultPage: this.state.defaultPage,
+      default_page: this.state.defaultPage,
     }).then(() => this.props.history.push('/users'));
   }
 
@@ -211,6 +211,7 @@ class UsersNew extends Component {
           InputProps={{
             inputComponent: Select,
             inputProps: {
+              creatable: true,
               multi: false,
               instanceId: "select-default-page",
               id: "select-default-page",

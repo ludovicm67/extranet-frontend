@@ -7,7 +7,8 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from '@material-ui/core/FormControl';
 import Select from '../layout/Select';
 
-import { getApi, putApi } from '../../utils';
+import { putApi } from '../../utils';
+import store from '../../store';
 
 const styles = {
   intro: {
@@ -70,58 +71,35 @@ class UsersMe extends Component {
         value: '/contracts',
       },
     ],
-    roles: [],
     firstname: '',
     lastname: '',
-    roleId: 0,
     email: '',
     password: '',
     defaultPage: '/',
   };
 
   componentDidMount() {
-    getApi('roles').then(res => {
-      const roles = [
-        {
-          label: 'Aucun rôle',
-          value: 0,
-        }
-      ];
-      roles.push(...res.map(e => {
-        return {
-          label: e.name,
-          value: e.id,
-        };
-      }));
-      roles.push({
-        label: 'Super Administrateur',
-        value: -1,
-      });
-      this.setState({
-        roles,
-      });
-    });
-    getApi(`users/${this.state.id}`).then(res => {
-      this.setState({
-        firstname: res.firstname || '',
-        lastname: res.lastname || '',
-        roleId: (res.is_admin === 1 ? -1 : res.role_id) || 0,
-        email: res.email || '',
-        password: '',
-        defaultPage: res.default_page || '/',
-      });
+    const user = store.getState().auth.auth.userData;
+
+    this.setState({
+      firstname: user.firstname || '',
+      lastname: user.lastname || '',
+      roleId: (user.is_admin === 1 ? -1 : user.role_id) || 0,
+      email: user.email || '',
+      password: '',
+      defaultPage: user.default_page || '/',
     });
   }
 
   handleSubmit() {
-    putApi(`users/${this.state.id}`, {
+    putApi(`users/me`, {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
       role_id: this.state.roleId,
       email: this.state.email,
       password: this.state.password,
-      defaultPage: this.state.defaultPage,
-    }).then(() => this.props.history.push('/users'));
+      default_page: this.state.defaultPage,
+    }).then(() => this.forceUpdate());
   }
 
   handleChange = prop => event => {
@@ -140,9 +118,9 @@ class UsersMe extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          Modifier un utilisateur
+          Modifier mes informations
         </Typography>
-        <Typography style={styles.intro}>Entrez ici les informations concernant l'utilisateur</Typography>
+        <Typography style={styles.intro}>Modifiez ici les informations concernant votre compte utilisateur</Typography>
         <FormControl fullWidth style={styles.formControl}>
           <InputLabel htmlFor="user-lastname">Nom</InputLabel>
           <Input
@@ -163,30 +141,6 @@ class UsersMe extends Component {
             autoComplete="new-password"
           />
         </FormControl>
-        <TextField
-          style={styles.formControl}
-          fullWidth
-          value={this.state.roleId}
-          onChange={this.handleChange('roleId')}
-          placeholder="Choisissez le rôle de l'utilisateur..."
-          name="select-role"
-          label="Rôle"
-          autoComplete="new-password"
-          InputLabelProps={{
-            shrink: true
-          }}
-          InputProps={{
-            inputComponent: Select,
-            inputProps: {
-              creatable: true,
-              multi: false,
-              instanceId: "select-role",
-              id: "select-role",
-              simpleValue: true,
-              options: this.state.roles,
-            }
-          }}
-        />
         <FormControl fullWidth style={styles.formControl}>
           <InputLabel htmlFor="user-email">Adresse mail</InputLabel>
           <Input
@@ -222,6 +176,7 @@ class UsersMe extends Component {
           InputProps={{
             inputComponent: Select,
             inputProps: {
+              creatable: true,
               multi: false,
               instanceId: "select-default-page",
               id: "select-default-page",
