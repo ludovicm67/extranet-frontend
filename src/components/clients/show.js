@@ -16,6 +16,8 @@ class ClientsShow extends Component {
       id: '',
       name: '',
       contacts: [],
+      orders: [],
+      subscriptions: [],
     },
   };
 
@@ -38,10 +40,44 @@ class ClientsShow extends Component {
         );
       });
       contacts = (
-        <div>
+        <Paper>
           <Typography variant="headline">Contacts</Typography>
           {contactsMap}
-        </div>
+        </Paper>
+      );
+    }
+
+    let orders = null;
+    if (this.state.data.orders.length > 0) {
+      const ordersMap = this.state.data.orders.map(n => {
+        return (
+          <p key={n.id}>
+            {n.subject}
+          </p>
+        );
+      });
+      orders = (
+        <Paper>
+          <Typography variant="headline">Commandes</Typography>
+          {ordersMap}
+        </Paper>
+      );
+    }
+
+    let subscriptions = null;
+    if (this.state.data.subscriptions.length > 0) {
+      const subscriptionsMap = this.state.data.subscriptions.map(n => {
+        return (
+          <p key={n.id}>
+            {n.subject}
+          </p>
+        );
+      });
+      subscriptions = (
+        <Paper>
+          <Typography variant="headline">Factures liées aux abonnements</Typography>
+          {subscriptionsMap}
+        </Paper>
       );
     }
 
@@ -51,9 +87,9 @@ class ClientsShow extends Component {
           {this.state.data.name}
         </Typography>
         <Typography style={styles.intro}>Affichage de quelques informations à propos de ce client</Typography>
-        <Paper>
-          {contacts}
-        </Paper>
+        {contacts}
+        {orders}
+        {subscriptions}
       </div>
     );
   };
