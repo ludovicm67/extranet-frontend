@@ -90,7 +90,9 @@ class Layout extends React.Component {
 
   componentDidMount() {
     if (store.getState().auth.auth.userData.id <= 0) {
-      setTimeout(() => this.props.history.push('/login'), 200);
+      setTimeout(() => {
+        this.props.history.push(`/login?redirect=${window.location.pathname}`)
+      }, 20);
     }
   }
 
