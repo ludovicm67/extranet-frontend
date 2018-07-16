@@ -9,6 +9,7 @@ import Select from '../layout/Select';
 
 import { putApi } from '../../utils';
 import store from '../../store';
+import { setUserData } from '../../actions/auth';
 
 const styles = {
   intro: {
@@ -99,7 +100,10 @@ class UsersMe extends Component {
       email: this.state.email,
       password: this.state.password,
       default_page: this.state.defaultPage,
-    }).then(() => this.forceUpdate());
+    }).then((res) => {
+      store.dispatch(setUserData(res));
+      this.forceUpdate();
+    });
   }
 
   handleChange = prop => event => {
