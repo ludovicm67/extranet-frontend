@@ -76,9 +76,14 @@ class UsersList extends Component {
             </TableHead>
             <TableBody>
               {this.state.data.map(n => {
-                let role = 'Aucun';
+                let role = null;
                 if (n.is_admin === 1) {
                   role = (<strong>Super administrateur</strong>);
+                } else if (n.role && n.role.name) {
+                  role = n.role.name;
+                }
+                if (!role || role === 'null') {
+                  role = 'Aucun';
                 }
 
                 return (

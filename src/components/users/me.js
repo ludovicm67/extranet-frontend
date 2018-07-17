@@ -111,7 +111,7 @@ class UsersMe extends Component {
       lastname: this.state.lastname,
       email: this.state.email,
       password: this.state.password,
-      default_page: this.state.defaultPage,
+      default_page: this.state.defaultPage || '/',
     }, {
       errored: true,
     }).then((res) => {

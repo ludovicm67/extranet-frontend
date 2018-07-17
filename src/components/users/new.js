@@ -106,10 +106,10 @@ class UsersNew extends Component {
     postApi('users', {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
-      role_id: this.state.roleId,
+      role_id: this.state.roleId || 0,
       email: this.state.email,
       password: this.state.password,
-      default_page: this.state.defaultPage,
+      default_page: this.state.defaultPage || '/',
     }).then(() => this.props.history.push('/users'));
   }
 
