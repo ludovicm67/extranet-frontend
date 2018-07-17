@@ -7,6 +7,7 @@ import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper';
 import { setUserData } from './actions/auth';
 import store from './store';
 import { getApi } from './utils';
+import PasswordReset from './components/PasswordReset';
 
 getApi('users/me').then(res => {
   store.dispatch(setUserData(res));
@@ -34,6 +35,7 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path="/login" component={userIsNotAuthenticated(Login)} />
+            <Route exact path="/password/reset" component={userIsNotAuthenticated(PasswordReset)} />
             <Route path="/" component={userIsAuthenticated(Layout)} />
           </Switch>
         </Router>

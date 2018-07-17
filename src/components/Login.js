@@ -16,6 +16,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 
+import { Link } from 'react-router-dom';
+
 const styles = {
   root: {
     padding: 50,
@@ -23,6 +25,9 @@ const styles = {
   },
   formControl: {
     marginBottom: '20px',
+  },
+  btn: {
+    marginRight: 10,
   },
 };
 
@@ -125,6 +130,7 @@ class Login extends Component {
             }
           />
         </FormControl>
+        <Link to="/password/reset" style={styles.btn}>Mot de passe perdu ?</Link>
         <Button
           variant="contained"
           color="primary"
