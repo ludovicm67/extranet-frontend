@@ -22,6 +22,11 @@ import UpdatesIcon from '@material-ui/icons/Update';
 import DomainIcon from '@material-ui/icons/Domain';
 import PeopleIcon from '@material-ui/icons/People';
 import AccountIcon from '@material-ui/icons/AccountCircle';
+import WorkIcon from '@material-ui/icons/Work';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+import RecentActorsIcon from '@material-ui/icons/RecentActors';
+import ContactsIcon from '@material-ui/icons/Contacts';
+import DownloadIcon from '@material-ui/icons/VerticalAlignBottom';
 
 import Users from './users';
 import Clients from './clients';
@@ -138,9 +143,65 @@ class Layout extends React.Component {
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
+              <WorkIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Projets" />
+          </ListItem>
+          <ListItem
+            component={Link}
+            to="/"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <BookmarkIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Tags" />
+          </ListItem>
+          <ListItem
+            component={Link}
+            to="/"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <RecentActorsIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Types d'identifiants" />
+          </ListItem>
+          <Divider />
+          <ListItem
+            component={Link}
+            to="/"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText inset primary="Contacts" />
+          </ListItem>
+          <ListItem
+            component={Link}
+            to="/"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <ContactsIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Types" />
+          </ListItem>
+          <ListItem
+            component={Link}
+            to="/"
+            button
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <DownloadIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Exporter" />
           </ListItem>
           <Divider />
           <ListItem
