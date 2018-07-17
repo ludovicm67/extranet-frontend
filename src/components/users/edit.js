@@ -8,6 +8,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '../layout/Select';
 
 import { getApi, putApi } from '../../utils';
+import store from '../../store';
+import { setUserData } from '../../actions/auth';
 
 const styles = {
   intro: {
@@ -102,7 +104,21 @@ class UsersEdit extends Component {
       });
     });
     getApi(`users/${this.state.id}`).then(res => {
+      const defaultPage = res.default_page;
+      const filterPages = this.state.defaultPages.filter(e => {
+        return e.value === defaultPage;
+      });
+
+      let defaultPages = this.state.defaultPages;
+      if (filterPages.length <= 0) {
+        defaultPages.push({
+          label: defaultPage,
+          value: defaultPage,
+        });
+      }
+
       this.setState({
+        defaultPages,
         firstname: res.firstname || '',
         lastname: res.lastname || '',
         roleId: (res.is_admin === 1 ? -1 : res.role_id) || 0,
@@ -121,7 +137,12 @@ class UsersEdit extends Component {
       email: this.state.email,
       password: this.state.password,
       default_page: this.state.defaultPage,
-    }).then(() => this.props.history.push('/users'));
+    }).then(res => {
+      if (res.isMe) {
+        store.dispatch(setUserData(res));
+      }
+      this.props.history.push('/users');
+    });
   }
 
   handleChange = prop => event => {
@@ -198,7 +219,7 @@ class UsersEdit extends Component {
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="user-password">Mot de passe (laisser vide pour ne pas le changer)</InputLabel>
+          <InputLabel htmlFor="user-password">Mot de passe (vide = inchangé)</InputLabel>
           <Input
             id="user-password"
             type="password"

@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { getApi, deleteApi } from '../../utils';
 import { Link } from 'react-router-dom';
+import store from '../../store';
 
 const styles = {
   right: {
@@ -46,6 +47,7 @@ class UsersList extends Component {
   }
 
   render() {
+    const user = store.getState().auth.auth.userData;
     return (
       <div>
         <Typography variant="display1" gutterBottom>
@@ -94,7 +96,10 @@ class UsersList extends Component {
                       <IconButton component={Link} to={`/users/${n.id}/edit`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `users/${n.id}`)}>
+                      <IconButton
+                        onClick={this.handleDelete.bind(this, `users/${n.id}`)}
+                        disabled={n.id === user.id}
+                      >
                         <Icon>delete</Icon>
                       </IconButton>
                     </TableCell>

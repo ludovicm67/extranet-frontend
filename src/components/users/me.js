@@ -177,7 +177,7 @@ class UsersMe extends Component {
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="user-password">Mot de passe (laisser vide pour ne pas le changer)</InputLabel>
+          <InputLabel htmlFor="user-password">Mot de passe (vide = inchangé)</InputLabel>
           <Input
             id="user-password"
             type="password"
