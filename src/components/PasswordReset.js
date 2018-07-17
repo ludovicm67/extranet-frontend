@@ -103,7 +103,7 @@ class PasswordReset extends Component {
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="login-token">Token (laisser vide pour demander un token)</InputLabel>
+          <InputLabel htmlFor="login-token">Token</InputLabel>
           <Input
             id="login-token"
             type="text"
@@ -114,7 +114,7 @@ class PasswordReset extends Component {
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="login-password">Entrez ici votre nouveau mot de passe</InputLabel>
+          <InputLabel htmlFor="login-password">Nouveau mot de passe</InputLabel>
           <Input
             id="login-password"
             type="password"
