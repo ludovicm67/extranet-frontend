@@ -27,7 +27,10 @@ const styles = {
 class PasswordReset extends Component {
   state = {
     open: false,
+    message: 'aaa',
     email: '',
+    token: '',
+    password: '',
   };
 
   constructor(props) {
@@ -49,14 +52,22 @@ class PasswordReset extends Component {
     }
     const formData = new FormData();
     formData.append('email', this.state.email);
+    formData.append('token', this.state.token);
+    formData.append('password', this.state.password);
 
     axios.post(`${constants.API_ENDPOINT}/password/reset`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
-    .finally(() => {
-      this.setState({ open: true });
+    .catch(e => e.response || e)
+    .then((res) => {
+      res = res.data;
+      if (res.success) {
+        this.setState({ open: true, message: res.message });
+      } else {
+        this.setState({ open: true, message: res.errors[0] });
+      }
     });
   };
 
@@ -73,15 +84,44 @@ class PasswordReset extends Component {
   render() {
     return (
       <div style={styles.root}>
-        <Typography>Entrez votre adresse mail ci-dessous. Un mail vous permettant de définir un nouveau mot de passe vous sera envoyé.</Typography>
+        <Typography>
+          Pour définr un nouveau mot de passe, vous devez procéder de la manière suivante :
+        </Typography>
+        <Typography>1. Remplir le champ «Adresse mail» et envoyer le formulaire</Typography>
+        <Typography>2. Un email avec un token sera envoyé (valable 1 heure)</Typography>
+        <Typography>3. Complétez le champ «token» avec celui reçu par mail et définissez un nouveau mot de passe, puis validez.</Typography>
+        <Typography>4. Vous pourrez ensuite aller vous connecter avec votre nouveau mot de passe.</Typography>
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="login-password">Adresse mail</InputLabel>
+          <InputLabel htmlFor="login-email">Adresse mail</InputLabel>
           <Input
             id="login-email"
             type="email"
             value={this.state.email}
             onChange={this.handleChange('email')}
             onKeyPress={this.handleKeyPress}
+            autoComplete="new-password"
+          />
+        </FormControl>
+        <FormControl fullWidth style={styles.formControl}>
+          <InputLabel htmlFor="login-token">Token (laisser vide pour demander un token)</InputLabel>
+          <Input
+            id="login-token"
+            type="text"
+            value={this.state.token}
+            onChange={this.handleChange('token')}
+            onKeyPress={this.handleKeyPress}
+            autoComplete="new-password"
+          />
+        </FormControl>
+        <FormControl fullWidth style={styles.formControl}>
+          <InputLabel htmlFor="login-password">Entrez ici votre nouveau mot de passe</InputLabel>
+          <Input
+            id="login-password"
+            type="password"
+            value={this.state.password}
+            onChange={this.handleChange('password')}
+            onKeyPress={this.handleKeyPress}
+            autoComplete="new-password"
           />
         </FormControl>
         <Link to="/login" style={styles.btn}>Me connecter</Link>
@@ -100,7 +140,7 @@ class PasswordReset extends Component {
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">Un mail vous a été envoyé avec un lien pour définir un nouveau mot de passe pour votre compte, dans le cas où votre adresse mail est bien dans notre base.</span>}
+          message={<span id="message-id">{this.state.message}</span>}
         />
       </div>
     );
