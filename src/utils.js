@@ -80,9 +80,11 @@ export const putApi = (location, data = {}, defaultReturn = []) => {
 }
 
 export const deleteApi = (location, defaultReturn = []) => {
-  const request = axios.delete(`
+  const formData = new FormData();
+  formData.append('_method', 'DELETE');
+  const request = axios.post(`
     ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `).then(res => {
+  `, formData).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
