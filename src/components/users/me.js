@@ -82,10 +82,23 @@ class UsersMe extends Component {
   componentDidMount() {
     const user = store.getState().auth.auth.userData;
 
+    const defaultPage = user.default_page;
+    const filterPages = this.state.defaultPages.filter(e => {
+      return e.value === defaultPage;
+    });
+
+    let defaultPages = this.state.defaultPages;
+    if (filterPages.length <= 0) {
+      defaultPages.push({
+        label: defaultPage,
+        value: defaultPage,
+      });
+    }
+
     this.setState({
+      defaultPages,
       firstname: user.firstname || '',
       lastname: user.lastname || '',
-      roleId: (user.is_admin === 1 ? -1 : user.role_id) || 0,
       email: user.email || '',
       password: '',
       defaultPage: user.default_page || '/',
@@ -96,13 +109,21 @@ class UsersMe extends Component {
     putApi(`users/me`, {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
-      role_id: this.state.roleId,
       email: this.state.email,
       password: this.state.password,
       default_page: this.state.defaultPage,
+    }, {
+      errored: true,
     }).then((res) => {
+      if (res.errored) return;
       store.dispatch(setUserData(res));
-      this.forceUpdate();
+      this.setState({
+        firstname: res.firstname || '',
+        lastname: res.lastname || '',
+        email: res.email || '',
+        password: '',
+        defaultPage: res.default_page || '/',
+      });
     });
   }
 
