@@ -107,7 +107,7 @@ class Login extends Component {
       <div style={styles.root}>
         <Typography style={styles.text}>Veuillez vous connecter pour accéder aux différentes ressources.</Typography>
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="login-password">Adresse mail</InputLabel>
+          <InputLabel htmlFor="login-email">Adresse mail</InputLabel>
           <Input
             id="login-email"
             type="email"
