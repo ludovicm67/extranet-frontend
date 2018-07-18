@@ -47,7 +47,6 @@ class ContactsList extends Component {
   }
 
   render() {
-    const contact = store.getState().auth.auth.contactData;
     return (
       <div>
         <Typography variant="display1" gutterBottom>
@@ -85,7 +84,6 @@ class ContactsList extends Component {
                       </IconButton>
                       <IconButton
                         onClick={this.handleDelete.bind(this, `contacts/${n.id}`)}
-                        disabled={n.id === contact.id}
                       >
                         <Icon>delete</Icon>
                       </IconButton>

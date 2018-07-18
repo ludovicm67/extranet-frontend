@@ -147,7 +147,6 @@ class ContactsNew extends Component {
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
-
         <TextField
           id="contact-other"
           label="Autres informations"
