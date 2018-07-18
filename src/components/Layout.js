@@ -33,6 +33,7 @@ import Clients from './clients';
 import Roles from './roles';
 import Types from './types';
 import Identifiers from './identifiers';
+import Tags from './tags';
 import Updates from './updates';
 import Dashboard from './Dashboard';
 
@@ -151,7 +152,7 @@ class Layout extends React.Component {
           </ListItem>
           <ListItem
             component={Link}
-            to="/"
+            to="/tags"
             button
             onClick={() => this.setState({ mobileOpen: false })}
           >
@@ -316,6 +317,7 @@ class Layout extends React.Component {
               <Route path="/roles" component={Roles} />
               <Route path="/types" component={Types} />
               <Route path="/identifiers" component={Identifiers} />
+              <Route path="/tags" component={Tags} />
               <Route path="/updates" component={Updates} />
               <Route path="/" component={Dashboard} />
             </Switch>
