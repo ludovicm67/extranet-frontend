@@ -23,121 +23,55 @@ const styles = {
 
 class ContactsEdit extends Component {
   state = {
-    id: this.props.match.params.userId,
-    defaultPages: [
-      {
-        label: 'Tableau de bord',
-        value: '/',
-      },
-      {
-        label: 'Clients',
-        value: '/clients',
-      },
-      {
-        label: 'Projets',
-        value: '/projects',
-      },
-      {
-        label: 'Interlocuteurs',
-        value: '/contacts',
-      },
-      {
-        label: 'Utilisateurs',
-        value: '/users',
-      },
-      {
-        label: 'Rôles',
-        value: '/roles',
-      },
-      {
-        label: 'Calendrier',
-        value: '/calendar',
-      },
-      {
-        label: 'Mon calendrier',
-        value: '/calendar?me=1',
-      },
-      {
-        label: 'Congés',
-        value: '/leave',
-      },
-      {
-        label: 'Notes de frais',
-        value: '/expenses',
-      },
-      {
-        label: 'Contrats',
-        value: '/contracts',
-      },
-    ],
-    roles: [],
-    firstname: '',
-    lastname: '',
-    roleId: 0,
-    email: '',
-    password: '',
-    defaultPage: '/',
+    id: this.props.match.params.contactId,
+    types: [],
+    name: '',
+    typeId: '',
+    mail: '',
+    phone: '',
+    address: '',
+    other: '',
   };
 
   componentDidMount() {
-    getApi('roles').then(res => {
-      const roles = [
+    getApi('types').then(res => {
+      const types = [
         {
-          label: 'Aucun rôle',
+          label: 'Aucun type',
           value: 0,
         }
       ];
-      roles.push(...res.map(e => {
+      types.push(...res.map(e => {
         return {
           label: e.name,
           value: e.id,
         };
       }));
-      roles.push({
-        label: 'Super Administrateur',
-        value: -1,
-      });
       this.setState({
-        roles,
+        types,
       });
     });
-    getApi(`users/${this.state.id}`).then(res => {
-      const defaultPage = res.default_page;
-      const filterPages = this.state.defaultPages.filter(e => {
-        return e.value === defaultPage;
-      });
-
-      let defaultPages = this.state.defaultPages;
-      if (filterPages.length <= 0) {
-        defaultPages.push({
-          label: defaultPage,
-          value: defaultPage,
-        });
-      }
-
+    getApi(`contacts/${this.state.id}`).then(res => {
       this.setState({
-        defaultPages,
-        firstname: res.firstname || '',
-        lastname: res.lastname || '',
-        roleId: (res.is_admin === 1 ? -1 : res.role_id) || 0,
-        email: res.email || '',
-        password: '',
-        defaultPage: res.default_page || '/',
+        name: res.name,
+        typeId: res.type_id || 0,
+        mail: res.mail,
+        phone: res.phone,
+        address: res.address,
+        other: res.other,
       });
     });
   }
 
   handleSubmit() {
-    putApi(`users/${this.state.id}`, {
-      firstname: this.state.firstname,
-      lastname: this.state.lastname,
-      role_id: this.state.roleId || 0,
-      email: this.state.email,
-      password: this.state.password,
-      default_page: this.state.defaultPage || '/',
-    }).then(res => {
-      this.props.history.push('/users');
-    });
+    putApi(`contacts/${this.state.id}`, {
+      name: this.state.name,
+      type_id: this.state.typeId || 0,
+      mail: this.state.mail,
+      phone: this.state.phone,
+      address: this.state.address,
+      other: this.state.other,
+    }).then(() => this.props.history.push('/contacts'));
   }
 
   handleChange = prop => event => {
@@ -156,37 +90,27 @@ class ContactsEdit extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          Modifier un utilisateur
+          Modifier un contact
         </Typography>
-        <Typography style={styles.intro}>Entrez ici les informations concernant l'utilisateur</Typography>
+        <Typography style={styles.intro}>Entrez ici les informations concernant le contact</Typography>
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="user-lastname">Nom</InputLabel>
+          <InputLabel htmlFor="contact-name">Nom</InputLabel>
           <Input
-            id="user-lastname"
+            id="contact-name"
             type="text"
-            value={this.state.lastname}
-            onChange={this.handleChange('lastname')}
-            autoComplete="new-password"
-          />
-        </FormControl>
-        <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="user-firstname">Prénom</InputLabel>
-          <Input
-            id="user-firstname"
-            type="text"
-            value={this.state.firstname}
-            onChange={this.handleChange('firstname')}
+            value={this.state.name}
+            onChange={this.handleChange('name')}
             autoComplete="new-password"
           />
         </FormControl>
         <TextField
           style={styles.formControl}
           fullWidth
-          value={this.state.roleId}
-          onChange={this.handleChange('roleId')}
-          placeholder="Choisissez le rôle de l'utilisateur..."
-          name="select-role"
-          label="Rôle"
+          value={this.state.typeId}
+          onChange={this.handleChange('typeId')}
+          placeholder="Choisissez le type de contact..."
+          name="select-type"
+          label="Type de contact"
           autoComplete="new-password"
           InputLabelProps={{
             shrink: true
@@ -196,57 +120,55 @@ class ContactsEdit extends Component {
             inputProps: {
               creatable: true,
               multi: false,
-              instanceId: "select-role",
-              id: "select-role",
+              instanceId: "select-type",
+              id: "select-type",
               simpleValue: true,
-              options: this.state.roles,
+              options: this.state.types,
             }
           }}
         />
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="user-email">Adresse mail</InputLabel>
+          <InputLabel htmlFor="contact-mail">Adresse mail</InputLabel>
           <Input
-            id="user-email"
+            id="contact-mail"
             type="email"
-            value={this.state.email}
-            onChange={this.handleChange('email')}
+            value={this.state.mail}
+            onChange={this.handleChange('mail')}
             autoComplete="new-password"
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="user-password">Mot de passe (vide = inchangé)</InputLabel>
+          <InputLabel htmlFor="contact-phone">Téléphone</InputLabel>
           <Input
-            id="user-password"
-            type="password"
-            value={this.state.password}
-            onChange={this.handleChange('password')}
+            id="contact-phone"
+            type="tel"
+            value={this.state.phone}
+            onChange={this.handleChange('phone')}
             autoComplete="new-password"
           />
         </FormControl>
-        <TextField
-          style={styles.formControl}
-          fullWidth
-          value={this.state.defaultPage}
-          onChange={this.handleChange('defaultPage')}
-          placeholder="Choisissez la page par défaut..."
-          name="select-default-page"
-          label="Page par défaut"
-          autoComplete="new-password"
-          InputLabelProps={{
-            shrink: true
-          }}
-          InputProps={{
-            inputComponent: Select,
-            inputProps: {
-              creatable: true,
-              multi: false,
-              instanceId: "select-default-page",
-              id: "select-default-page",
-              simpleValue: true,
-              options: this.state.defaultPages,
-            }
-          }}
-        />
+        <FormControl fullWidth style={styles.formControl}>
+          <InputLabel htmlFor="contact-address">Adresse</InputLabel>
+          <Input
+            id="contact-address"
+            type="text"
+            value={this.state.address}
+            onChange={this.handleChange('address')}
+            autoComplete="new-password"
+          />
+        </FormControl>
+        <FormControl fullWidth style={styles.formControl}>
+          <TextField
+            id="contact-other"
+            label="Autres informations"
+            multiline
+            rowsMax="10"
+            value={this.state.other}
+            onChange={this.handleChange('other')}
+            margin="normal"
+          />
+        </FormControl>
+
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Modifier
         </Button>
