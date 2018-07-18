@@ -29,6 +29,9 @@ const styles = {
   btn: {
     marginRight: 10,
   },
+  text: {
+    fontSize: 16,
+  },
 };
 
 class Login extends Component {
@@ -102,7 +105,7 @@ class Login extends Component {
   render() {
     return (
       <div style={styles.root}>
-        <Typography>Veuillez vous connecter pour accéder aux différentes ressources.</Typography>
+        <Typography style={styles.text}>Veuillez vous connecter pour accéder aux différentes ressources.</Typography>
         <FormControl fullWidth style={styles.formControl}>
           <InputLabel htmlFor="login-password">Adresse mail</InputLabel>
           <Input
