@@ -9,9 +9,12 @@ import store from './store';
 import { getApi } from './utils';
 import PasswordReset from './components/PasswordReset';
 
-getApi('users/me').then(res => {
-  store.dispatch(setUserData(res));
-});
+// don't try to init user data if no token is defined
+if (store.getState().auth.auth.token !== null) {
+  getApi('users/me').then(res => {
+    store.dispatch(setUserData(res));
+  });
+}
 
 const locationHelper = locationHelperBuilder({});
 

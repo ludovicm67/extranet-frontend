@@ -41,6 +41,9 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
+    if (window.location.search === '?redirect=/login') {
+      this.props.history.push('/login?redirect=/');
+    }
     this.handleLogin = this.handleLogin.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
