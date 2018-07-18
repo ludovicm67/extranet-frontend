@@ -12,7 +12,6 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { getApi, deleteApi } from '../../utils';
 import { Link } from 'react-router-dom';
-import store from '../../store';
 
 const styles = {
   right: {
