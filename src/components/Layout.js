@@ -30,6 +30,7 @@ import DownloadIcon from '@material-ui/icons/VerticalAlignBottom';
 
 import Users from './users';
 import Clients from './clients';
+import Contacts from './contacts';
 import Roles from './roles';
 import Types from './types';
 import Identifiers from './identifiers';
@@ -175,7 +176,7 @@ class Layout extends React.Component {
           <Divider />
           <ListItem
             component={Link}
-            to="/"
+            to="/contacts"
             button
             onClick={() => this.setState({ mobileOpen: false })}
           >
@@ -314,6 +315,7 @@ class Layout extends React.Component {
             <Switch>
               <Route path="/users" component={Users} />
               <Route path="/clients" component={Clients} />
+              <Route path="/contacts" component={Contacts} />
               <Route path="/roles" component={Roles} />
               <Route path="/types" component={Types} />
               <Route path="/identifiers" component={Identifiers} />

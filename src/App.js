@@ -34,7 +34,7 @@ const userIsNotAuthenticated = connectedRouterRedirect({
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <main className="App">
         <Router>
           <Switch>
             <Route exact path="/login" component={userIsNotAuthenticated(Login)} />
@@ -42,7 +42,7 @@ class App extends Component {
             <Route path="/" component={userIsAuthenticated(Layout)} />
           </Switch>
         </Router>
-      </div>
+      </main>
     );
   }
 }
