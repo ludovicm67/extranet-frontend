@@ -59,9 +59,9 @@ class ProjectsList extends Component {
             <Icon>add</Icon>
             Ajouter
           </Button>
-          Liste des rôles
+          Liste des projets
         </Typography>
-        <Typography style={styles.intro}>Page listant les différents rôles ({this.state.data.length})</Typography>
+        <Typography style={styles.intro}>Page listant les différents projets ({this.state.data.length})</Typography>
         <Paper>
           <Table>
             <TableHead>
