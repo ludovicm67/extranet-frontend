@@ -9,13 +9,6 @@ import store from './store';
 import { getApi } from './utils';
 import PasswordReset from './components/PasswordReset';
 
-// don't try to init user data if no token is defined
-if (store.getState().auth.auth.token !== null) {
-  getApi('users/me').then(res => {
-    store.dispatch(setUserData(res));
-  });
-}
-
 const locationHelper = locationHelperBuilder({});
 
 const userIsAuthenticated = connectedRouterRedirect({
@@ -32,6 +25,21 @@ const userIsNotAuthenticated = connectedRouterRedirect({
 });
 
 class App extends Component {
+  componentWillMount() {
+    // don't try to init user data if no token is defined
+    if (store.getState().auth.auth.token !== null) {
+      if (window.location.search.startsWith('?redirect=/login')) {
+        window.location.href = '/login?redirect=/';
+      }
+      getApi('users/me').then(res => {
+        if (window.location.search.startsWith('?redirect=/login')) {
+          window.location.href = '/login?redirect=/';
+        }
+        store.dispatch(setUserData(res));
+      });
+    }
+  }
+
   render() {
     return (
       <main className="App">
