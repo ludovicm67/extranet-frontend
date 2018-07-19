@@ -6,7 +6,9 @@ let apiPrefix = 'api.';
 if (navPort && navPort !== 0 && navPort !== 80 && navPort !== 443) {
   apiPort = ':8000';
 }
-if (apiHostname.startsWith('192.168') || apiHostname.startsWith('127.')) {
+if (apiHostname.startsWith('192.168')
+  || apiHostname.startsWith('127.')
+  || apiHostname === 'localhost') {
   apiPrefix = '';
 }
 
