@@ -43,7 +43,7 @@ import { logout } from '../actions/auth';
 import store from '../store';
 import constants from '../constants';
 
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -118,7 +118,7 @@ class Layout extends React.Component {
         }}>
           <Divider />
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -130,7 +130,7 @@ class Layout extends React.Component {
           </ListItem>
           <Divider />
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/clients"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -142,7 +142,7 @@ class Layout extends React.Component {
           </ListItem>
           <Divider />
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/projects"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -153,7 +153,7 @@ class Layout extends React.Component {
             <ListItemText inset primary="Projets" />
           </ListItem>
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/tags"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -164,7 +164,7 @@ class Layout extends React.Component {
             <ListItemText inset primary="Tags" />
           </ListItem>
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/identifiers"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -176,7 +176,7 @@ class Layout extends React.Component {
           </ListItem>
           <Divider />
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/contacts"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -187,7 +187,7 @@ class Layout extends React.Component {
             <ListItemText inset primary="Contacts" />
           </ListItem>
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/types"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -198,7 +198,7 @@ class Layout extends React.Component {
             <ListItemText inset primary="Types" />
           </ListItem>
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -210,7 +210,7 @@ class Layout extends React.Component {
           </ListItem>
           <Divider />
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/roles"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -221,7 +221,7 @@ class Layout extends React.Component {
             <ListItemText inset primary="Rôles" />
           </ListItem>
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/users"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -232,7 +232,7 @@ class Layout extends React.Component {
             <ListItemText inset primary="Utilisateurs" />
           </ListItem>
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/users/me"
             button
             onClick={() => this.setState({ mobileOpen: false })}
@@ -244,7 +244,7 @@ class Layout extends React.Component {
           </ListItem>
           <Divider />
           <ListItem
-            component={Link}
+            component={NavLink}
             to="/updates"
             button
             onClick={() => this.setState({mobileOpen: false})}
