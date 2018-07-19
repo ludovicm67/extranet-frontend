@@ -37,6 +37,7 @@ import Identifiers from './identifiers';
 import Tags from './tags';
 import Updates from './updates';
 import Dashboard from './Dashboard';
+import Projects from './projects';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -142,7 +143,7 @@ class Layout extends React.Component {
           <Divider />
           <ListItem
             component={Link}
-            to="/"
+            to="/projects"
             button
             onClick={() => this.setState({ mobileOpen: false })}
           >
@@ -321,6 +322,7 @@ class Layout extends React.Component {
               <Route path="/identifiers" component={Identifiers} />
               <Route path="/tags" component={Tags} />
               <Route path="/updates" component={Updates} />
+              <Route path="/projects" component={Projects} />
               <Route path="/" component={Dashboard} />
             </Switch>
         </main>
