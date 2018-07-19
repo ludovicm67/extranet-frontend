@@ -9,3 +9,7 @@ a {
   color: #000;
   text-decoration: none;
 }
+
+.activeNavLink {
+  background: rgba(0, 0, 0, 0.08) !important;
+}

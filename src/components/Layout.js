@@ -121,6 +121,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -133,6 +135,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/clients"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -145,6 +149,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/projects"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -156,6 +162,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/tags"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -167,6 +175,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/identifiers"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -179,6 +189,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/contacts"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -190,6 +202,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/types"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -201,6 +215,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -213,6 +229,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/roles"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -224,6 +242,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/users"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -235,6 +255,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/users/me"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({ mobileOpen: false })}
           >
             <ListItemIcon>
@@ -247,6 +269,8 @@ class Layout extends React.Component {
             component={NavLink}
             to="/updates"
             button
+            activeClassName="activeNavLink"
+            exact
             onClick={() => this.setState({mobileOpen: false})}
           >
             <ListItemIcon>
