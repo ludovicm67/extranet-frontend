@@ -51,6 +51,9 @@ class ProjectsNew extends Component {
 
   componentDidMount() {
     getApi('clients').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       const clients = [
         {
           label: 'Aucun client',
@@ -67,6 +70,10 @@ class ProjectsNew extends Component {
         clients,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   render() {

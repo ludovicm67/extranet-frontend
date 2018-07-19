@@ -29,6 +29,9 @@ class ProjectsList extends Component {
 
   fetchList() {
     getApi('projects').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         data: res,
       });
@@ -37,6 +40,10 @@ class ProjectsList extends Component {
 
   componentDidMount() {
     this.fetchList();
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleDelete(ressource) {

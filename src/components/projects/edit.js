@@ -24,10 +24,17 @@ class ProjectsEdit extends Component {
 
   componentDidMount() {
     getApi(`projects/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         name: res.name,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {
