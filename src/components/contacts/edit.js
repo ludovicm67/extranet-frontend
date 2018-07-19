@@ -35,6 +35,9 @@ class ContactsEdit extends Component {
 
   componentDidMount() {
     getApi('types').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       const types = [
         {
           label: 'Aucun type',
@@ -52,6 +55,9 @@ class ContactsEdit extends Component {
       });
     });
     getApi(`contacts/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         name: res.name,
         typeId: res.type_id || 0,
@@ -61,6 +67,10 @@ class ContactsEdit extends Component {
         other: res.other,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

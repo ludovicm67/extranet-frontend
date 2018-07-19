@@ -29,6 +29,9 @@ class ContactsList extends Component {
 
   fetchList() {
     getApi('contacts').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         data: res,
       });
@@ -37,6 +40,10 @@ class ContactsList extends Component {
 
   componentDidMount() {
     this.fetchList();
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleDelete(ressource) {

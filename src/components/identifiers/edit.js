@@ -24,10 +24,17 @@ class IdentifiersEdit extends Component {
 
   componentDidMount() {
     getApi(`identifiers/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         name: res.name,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

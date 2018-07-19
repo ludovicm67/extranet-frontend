@@ -29,6 +29,9 @@ class TypesList extends Component {
 
   fetchList() {
     getApi('types').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         data: res,
       });
@@ -37,6 +40,10 @@ class TypesList extends Component {
 
   componentDidMount() {
     this.fetchList();
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleDelete(ressource) {

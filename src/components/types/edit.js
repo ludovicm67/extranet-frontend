@@ -24,10 +24,17 @@ class TypesEdit extends Component {
 
   componentDidMount() {
     getApi(`types/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         name: res.name,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

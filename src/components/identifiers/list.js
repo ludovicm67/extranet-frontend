@@ -29,6 +29,9 @@ class IdentifiersList extends Component {
 
   fetchList() {
     getApi('identifiers').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         data: res,
       });
@@ -37,6 +40,10 @@ class IdentifiersList extends Component {
 
   componentDidMount() {
     this.fetchList();
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleDelete(ressource) {

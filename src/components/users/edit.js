@@ -83,6 +83,9 @@ class UsersEdit extends Component {
 
   componentDidMount() {
     getApi('roles').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       const roles = [
         {
           label: 'Aucun rôle',
@@ -104,6 +107,9 @@ class UsersEdit extends Component {
       });
     });
     getApi(`users/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       const defaultPage = res.default_page;
       const filterPages = this.state.defaultPages.filter(e => {
         return e.value === defaultPage;
@@ -127,6 +133,10 @@ class UsersEdit extends Component {
         defaultPage: res.default_page || '/',
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

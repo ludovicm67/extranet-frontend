@@ -34,6 +34,9 @@ class ContactsNew extends Component {
 
   componentDidMount() {
     getApi('types').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       const types = [
         {
           label: 'Aucun type',
@@ -50,6 +53,10 @@ class ContactsNew extends Component {
         types,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

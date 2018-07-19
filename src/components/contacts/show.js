@@ -29,6 +29,9 @@ class ContactShow extends Component {
 
   componentDidMount() {
     getApi(`contacts/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         name: res.name || '',
         mail: res.mail || '',
@@ -36,6 +39,10 @@ class ContactShow extends Component {
         type: (res.type && res.type.name) || 'Aucun',
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   render() {

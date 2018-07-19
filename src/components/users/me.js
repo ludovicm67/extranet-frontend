@@ -80,6 +80,9 @@ class UsersMe extends Component {
   };
 
   componentDidMount() {
+    if (this.isUnmounted) {
+      return;
+    }
     const user = store.getState().auth.auth.userData;
 
     const defaultPage = user.default_page;
@@ -103,6 +106,10 @@ class UsersMe extends Component {
       password: '',
       defaultPage: user.default_page || '/',
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

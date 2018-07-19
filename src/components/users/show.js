@@ -28,6 +28,9 @@ class UsersShow extends Component {
 
   componentDidMount() {
     getApi(`users/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         firstname: res.firstname || '',
         lastname: res.lastname || '',
@@ -37,6 +40,10 @@ class UsersShow extends Component {
         password: '',
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   render() {

@@ -66,6 +66,9 @@ class ClientsShow extends Component {
     getApi(`sellsy_clients/${this.props.match.params.clientId}`, {
       notFound: true,
     }).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       if (res.notFound) {
         this.props.history.push('/clients');
       } else {
@@ -74,6 +77,10 @@ class ClientsShow extends Component {
         });
       }
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleExpanded = panel => (event, expanded) => {

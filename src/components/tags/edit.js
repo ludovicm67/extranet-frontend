@@ -24,10 +24,17 @@ class TagsEdit extends Component {
 
   componentDidMount() {
     getApi(`tags/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         name: res.name,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

@@ -24,10 +24,17 @@ class RolesEdit extends Component {
 
   componentDidMount() {
     getApi(`roles/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         name: res.name,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

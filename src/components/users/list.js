@@ -30,6 +30,9 @@ class UsersList extends Component {
 
   fetchList() {
     getApi('users').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         data: res,
       });
@@ -38,6 +41,10 @@ class UsersList extends Component {
 
   componentDidMount() {
     this.fetchList();
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleDelete(ressource) {

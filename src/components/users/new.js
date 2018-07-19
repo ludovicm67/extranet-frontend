@@ -80,6 +80,9 @@ class UsersNew extends Component {
 
   componentDidMount() {
     getApi('roles').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       const roles = [
         {
           label: 'Aucun rôle',
@@ -100,6 +103,10 @@ class UsersNew extends Component {
         roles,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleSubmit() {

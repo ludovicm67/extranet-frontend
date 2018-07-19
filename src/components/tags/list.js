@@ -29,6 +29,9 @@ class TagsList extends Component {
 
   fetchList() {
     getApi('tags').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         data: res,
       });
@@ -37,6 +40,10 @@ class TagsList extends Component {
 
   componentDidMount() {
     this.fetchList();
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   handleDelete(ressource) {

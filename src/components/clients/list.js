@@ -23,10 +23,17 @@ class ClientsList extends Component {
 
   componentDidMount() {
     getApi('sellsy_clients').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       this.setState({
         data: res,
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   render() {
