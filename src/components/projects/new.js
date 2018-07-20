@@ -43,9 +43,12 @@ class ProjectsNew extends Component {
       name: this.state.name,
       domain: this.state.domain,
       client: this.state.client || '',
-      contact: this.state.contact || '',
-      order: this.state.order || '',
-      user: [1, 2, 3],//this.state.user || '',
+      contact: this.state.contact
+        ? this.state.contact.split(',').map(i => i.trim()) : '',
+      order: this.state.order
+        ? this.state.order.split(',').map(i => i.trim()) : '',
+      user: this.state.user
+        ? this.state.user.split(',').map(i => i.trim()) : '',
       next_action: this.state.next_action,
       end_at: this.formatDate(this.state.end_at),
     }).then(() => this.props.history.push('/projects'));
