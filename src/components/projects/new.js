@@ -7,6 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '../layout/Select';
 import Icon from '@material-ui/core/Icon';
+import Paper from '@material-ui/core/Paper';
 import { DatePicker } from 'material-ui-pickers';
 
 import { getApi, postApi } from '../../utils';
@@ -23,6 +24,11 @@ const styles = {
   },
   right: {
     float: 'right',
+  },
+  paper: {
+    display: 'block',
+    marginTop: 30,
+    padding: 22,
   },
 };
 
@@ -172,6 +178,24 @@ class ProjectsNew extends Component {
         name: '',
         value: '',
       }]
+    });
+  }
+
+  handleUpdateArray = (mainprop, key, prop) => event => {
+    let main = this.state[mainprop];
+    main[key][prop] = event.target.value;
+    this.setState({
+      [mainprop]: main,
+    });
+  }
+
+  handleDeleteArray = (mainprop, key) => {
+    const main = this.state[mainprop].filter((_v, k) => {
+      return k !== key;
+    });
+
+    this.setState({
+      [mainprop]: main,
     });
   }
 
@@ -358,7 +382,46 @@ class ProjectsNew extends Component {
           </Button>
           Urls
         </Typography>
-        {JSON.stringify(this.state.url)}
+
+        {this.state.url.map((val, key) => {
+          return <Paper key={key} style={styles.paper}>
+            <Button
+              size="small"
+              onClick={this.handleDeleteArray.bind(this, 'url', key)}
+            >
+              <Icon>keyboard_arrow_up</Icon>
+            </Button>
+            <Button
+              size="small"
+              onClick={this.handleDeleteArray.bind(this, 'url', key)}
+            >
+              <Icon>keyboard_arrow_down</Icon>
+            </Button>
+            <Button
+              size="small"
+              style={styles.right}
+              onClick={this.handleDeleteArray.bind(this, 'url', key)}
+            >
+              <Icon>delete</Icon>
+            </Button>
+            <FormControl fullWidth style={styles.formControl}>
+              <TextField
+                id={`project-url-${key}-name`}
+                label="Nom"
+                value={val.name}
+                margin="normal"
+                onChange={this.handleUpdateArray('url', key, 'name')}
+              />
+              <TextField
+                id={`project-url-${key}-value`}
+                label="Url"
+                value={val.value}
+                margin="normal"
+                onChange={this.handleUpdateArray('url', key, 'value')}
+              />
+            </FormControl>
+          </Paper>
+        })}
 
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Créer
