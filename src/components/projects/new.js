@@ -35,7 +35,7 @@ class ProjectsNew extends Component {
       name: this.state.name,
       domain: this.state.domain,
       next_action: this.state.next_action,
-      end_at: this.state.end_at,
+      end_at: this.formatDate(this.state.end_at),
     }).then(() => this.props.history.push('/projects'));
   }
 
@@ -74,6 +74,17 @@ class ProjectsNew extends Component {
 
   componentWillUnmount() {
     this.isUnmounted = true;
+  }
+
+  formatDate(date) {
+    if (!date) return '';
+
+    let year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString();
+    let day = date.getDate().toString();
+
+    return year + '-' + (month[1] ? month : '0' + month[0])
+           + '-' + (day[1] ? day : '0' + day[0]);
   }
 
   render() {
