@@ -5,16 +5,20 @@ import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Select from '../layout/Select';
 import { DatePicker } from 'material-ui-pickers';
 
 import { getApi, postApi } from '../../utils';
 
 const styles = {
   intro: {
-    paddingBottom: '50px',
+    paddingBottom: 20,
   },
   submit: {
     marginTop: '42px',
+  },
+  formControl: {
+    marginTop: 20,
   },
 };
 
@@ -26,6 +30,10 @@ class ProjectsNew extends Component {
     users: [],
     name: '',
     domain: '',
+    client: null,
+    contact: null,
+    order: null,
+    user: null,
     next_action: '',
     end_at: null,
   };
@@ -34,15 +42,25 @@ class ProjectsNew extends Component {
     postApi('projects', {
       name: this.state.name,
       domain: this.state.domain,
+      client: this.state.client || '',
+      contact: this.state.contact || '',
+      order: this.state.order || '',
+      user: [1, 2, 3],//this.state.user || '',
       next_action: this.state.next_action,
       end_at: this.formatDate(this.state.end_at),
     }).then(() => this.props.history.push('/projects'));
   }
 
   handleChange = prop => event => {
-    this.setState({
-      [prop]: event.target.value,
-    });
+    if (event && event.target && event.target.value !== undefined) {
+      this.setState({
+        [prop]: event.target.value,
+      });
+    } else {
+      this.setState({
+        [prop]: event,
+      });
+    }
   };
 
   handleDateChange = (date) => {
@@ -54,12 +72,7 @@ class ProjectsNew extends Component {
       if (this.isUnmounted) {
         return;
       }
-      const clients = [
-        {
-          label: 'Aucun client',
-          value: 0,
-        }
-      ];
+      const clients = [];
       clients.push(...res.map(e => {
         return {
           label: e.name,
@@ -92,7 +105,7 @@ class ProjectsNew extends Component {
       const orders = [];
       orders.push(...res.map(e => {
         return {
-          label: e.subject.replace(/<[^>]+>/g, ' '),
+          label: `${e.thirdname} :: ${e.subject.replace(/<[^>]+>/g, ' ')}`,
           value: e.id,
         };
       }));
@@ -157,10 +170,104 @@ class ProjectsNew extends Component {
             onChange={this.handleChange('domain')}
           />
         </FormControl>
-        <p>Un client parmi : {JSON.stringify(this.state.clients)}</p>
-        <p>n interlocuteurs parmi : {JSON.stringify(this.state.contacts)}</p>
-        <p>n commandes parmi : {JSON.stringify(this.state.orders)}</p>
-        <p>n utilisateurs affectés parmi : {JSON.stringify(this.state.users)}</p>
+
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.client}
+          onChange={this.handleChange('client')}
+          placeholder="Choisissez un client..."
+          name="select-client"
+          label="Client principal"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              creatable: false,
+              multi: false,
+              instanceId: "select-client",
+              id: "select-client",
+              simpleValue: true,
+              options: this.state.clients,
+            }
+          }}
+        />
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.contact}
+          onChange={this.handleChange('contact')}
+          placeholder="Choisissez un ou plusieurs interlocuteurs..."
+          name="select-contact"
+          label="Interlocuteurs"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              creatable: false,
+              multi: true,
+              instanceId: "select-contact",
+              id: "select-contact",
+              simpleValue: true,
+              options: this.state.contacts,
+            }
+          }}
+        />
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.order}
+          onChange={this.handleChange('order')}
+          placeholder="Choisissez une ou plusieurs commandes..."
+          name="select-order"
+          label="Commandes"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              creatable: false,
+              multi: true,
+              instanceId: "select-order",
+              id: "select-order",
+              simpleValue: true,
+              options: this.state.orders,
+            }
+          }}
+        />
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.user}
+          onChange={this.handleChange('user')}
+          placeholder="Choisissez un ou plusieurs utilisateurs..."
+          name="select-user"
+          label="Utilisateurs affectés"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              creatable: false,
+              multi: true,
+              instanceId: "select-user",
+              id: "select-user",
+              simpleValue: true,
+              options: this.state.users,
+            }
+          }}
+        />
+
         <FormControl fullWidth style={styles.formControl}>
           <TextField
             id="project-next_action"
@@ -192,9 +299,7 @@ class ProjectsNew extends Component {
             animateYearScrolling={false}
           />
         </FormControl>
-        <p>Prochainement : les tags !</p>
-        <p>Prochainement : les urls !</p>
-        <p>Prochainement, sur une page à part : les identifiants !</p>
+
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Créer
         </Button>

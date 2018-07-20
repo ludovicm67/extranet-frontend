@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 import store from './store';
 import constants from './constants';
 import { logout } from './actions/auth';
@@ -26,15 +27,9 @@ export const getApi = (location, defaultReturn = []) => {
 }
 
 export const postApi = (location, data = {}, defaultReturn = []) => {
-  const toFormData = object => Object.keys(object).reduce((formData, key) => {
-    formData.append(key, object[key]);
-    return formData;
-  }, new FormData());
-  const formData = toFormData(data);
-
   const request = axios.post(`
     ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, formData).then(res => {
+  `, qs.stringify(data)).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
@@ -54,16 +49,9 @@ export const postApi = (location, data = {}, defaultReturn = []) => {
 }
 
 export const putApi = (location, data = {}, defaultReturn = []) => {
-  const toFormData = object => Object.keys(object).reduce((formData, key) => {
-    formData.append(key, object[key]);
-    return formData;
-  }, new FormData());
-  const formData = toFormData(data);
-  formData.append('_method', 'PUT');
-
   const request = axios.post(`
     ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, formData).then(res => {
+  `, qs.stringify({ ...data, _method: 'PUT' })).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
@@ -83,11 +71,9 @@ export const putApi = (location, data = {}, defaultReturn = []) => {
 }
 
 export const deleteApi = (location, defaultReturn = []) => {
-  const formData = new FormData();
-  formData.append('_method', 'DELETE');
   const request = axios.post(`
     ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, formData).then(res => {
+  `, qs.stringify({ _method: 'DELETE' })).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
