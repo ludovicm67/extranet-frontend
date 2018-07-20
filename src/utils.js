@@ -16,7 +16,8 @@ export const getApi = (location, defaultReturn = []) => {
       return res.data;
     }).catch((e) => {
       if (e && e.response && e.response.status && e.response.status === 401) {
-        store.dispatch(logout())
+        store.dispatch(logout());
+        window.location.href = '/login';
       }
       return defaultReturn;
     });
@@ -43,7 +44,8 @@ export const postApi = (location, data = {}, defaultReturn = []) => {
       return res.data;
     }).catch((e) => {
       if (e && e.response && e.response.status && e.response.status === 401) {
-        store.dispatch(logout())
+        store.dispatch(logout());
+        window.location.href = '/login';
       }
       return defaultReturn;
     });
@@ -71,7 +73,8 @@ export const putApi = (location, data = {}, defaultReturn = []) => {
       return res.data;
     }).catch((e) => {
       if (e && e.response && e.response.status && e.response.status === 401) {
-        store.dispatch(logout())
+        store.dispatch(logout());
+        window.location.href = '/login';
       }
       return defaultReturn;
     });
@@ -94,7 +97,8 @@ export const deleteApi = (location, defaultReturn = []) => {
       return res.data;
     }).catch((e) => {
       if (e && e.response && e.response.status && e.response.status === 401) {
-        store.dispatch(logout())
+        store.dispatch(logout());
+        window.location.href = '/login';
       }
       return defaultReturn;
     });

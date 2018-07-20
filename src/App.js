@@ -1,54 +1,63 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './components/Login';
-import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
-import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper';
 import { setUserData } from './actions/auth';
 import store from './store';
 import { getApi } from './utils';
 import PasswordReset from './components/PasswordReset';
 
-const locationHelper = locationHelperBuilder({});
-
-const userIsAuthenticated = connectedRouterRedirect({
-  redirectPath: '/login',
-  authenticatedSelector: state => state.auth.auth.token !== null,
-  wrapperDisplayName: 'UserIsAuthenticated',
-});
-
-const userIsNotAuthenticated = connectedRouterRedirect({
-  redirectPath: (_state, ownProps) => locationHelper.getRedirectQueryParam(ownProps) || '/',
-  allowRedirectBack: false,
-  authenticatedSelector: state => state.auth.auth.token === null,
-  wrapperDisplayName: 'UserIsNotAuthenticated',
-});
-
 class App extends Component {
+
+  state = {
+    redirect: null,
+  };
+
   componentWillMount() {
+    const hasToken = store.getState().auth.auth.token !== null;
+    const pathName = window.location.pathname;
+    const isOnProtectedRoute = !pathName.startsWith('/login')
+      && !pathName.startsWith('/password/reset');
+
     // don't try to init user data if no token is defined
-    if (store.getState().auth.auth.token !== null) {
-      if (window.location.search.startsWith('?redirect=/login')) {
-        window.location.href = '/login?redirect=/';
+    if (hasToken) {
+      if (!isOnProtectedRoute && pathName !== '/') {
+        this.setState({
+          redirect: '/',
+        });
+      } else {
+        getApi('users/me').then(res => {
+          store.dispatch(setUserData(res));
+        });
       }
-      getApi('users/me').then(res => {
-        if (window.location.search.startsWith('?redirect=/login')) {
-          window.location.href = '/login?redirect=/';
-        }
-        store.dispatch(setUserData(res));
+    } else if (isOnProtectedRoute && pathName !== '/login') {
+      this.setState({
+        redirect: '/login',
       });
     }
+
   }
 
   render() {
+    const redirect = (this.state.redirect === null)
+      ? (
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/password/reset" component={PasswordReset} />
+          <Route path="/" component={Layout} />
+        </Switch>
+      ) : (
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/password/reset" component={PasswordReset} />
+          <Redirect to={this.state.redirect} />
+        </Switch>
+      );
+
     return (
       <main className="App">
         <Router>
-          <Switch>
-            <Route exact path="/login" component={userIsNotAuthenticated(Login)} />
-            <Route exact path="/password/reset" component={userIsNotAuthenticated(PasswordReset)} />
-            <Route path="/" component={userIsAuthenticated(Layout)} />
-          </Switch>
+          {redirect}
         </Router>
       </main>
     );

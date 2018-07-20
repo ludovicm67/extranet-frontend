@@ -44,9 +44,7 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    if (window.location.search === '?redirect=/login') {
-      this.props.history.push('/login?redirect=/');
-    }
+
     this.handleLogin = this.handleLogin.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -84,6 +82,7 @@ class Login extends Component {
         store.dispatch(login(res.data.access_token));
         getApi('users/me').then(res => {
           store.dispatch(setUserData(res));
+          this.props.history.push(res.default_page);
         });
       }
     })

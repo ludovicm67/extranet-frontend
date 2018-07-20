@@ -96,15 +96,8 @@ class Layout extends React.Component {
     axios.get(`${constants.API_ENDPOINT}/auth/logout?token=${store.getState().auth.auth.token}`)
          .finally(() => {
            store.dispatch(logout());
+           this.props.history.push('/login');
          });
-  }
-
-  componentDidMount() {
-    if (store.getState().auth.auth.userData.id <= 0) {
-      setTimeout(() => {
-        this.props.history.push(`/login?redirect=${window.location.pathname}`)
-      }, 20);
-    }
   }
 
   render() {
@@ -279,7 +272,7 @@ class Layout extends React.Component {
             <ListItemText inset primary="Mises à jour" />
           </ListItem>
           <Divider />
-          <ListItem button onClick={this.handleLogout}>
+          <ListItem button onClick={this.handleLogout.bind(this)}>
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
