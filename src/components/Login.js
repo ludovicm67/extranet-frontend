@@ -42,8 +42,31 @@ class Login extends Component {
     showPassword: false,
   };
 
+  handleBadReactBeahavior() {
+    const hasToken = store.getState().auth.auth.token !== null;
+    const userData = store.getState().auth.auth.userData;
+    if (hasToken && userData.id > 0) {
+      const redirPage =
+        !userData.default_page || userData.default_page.startsWith('/login')
+          ? '/' : userData.default_page;
+
+      window.location.href = redirPage;
+    }
+  }
+
   constructor(props) {
     super(props);
+
+    // a bit wtf, but handle react bad stuff and client bad network connection
+    window.setTimeout(this.handleBadReactBeahavior, 200);
+    window.setTimeout(this.handleBadReactBeahavior, 1000);
+    window.setTimeout(this.handleBadReactBeahavior, 2000);
+    window.setTimeout(this.handleBadReactBeahavior, 3000);
+    window.setTimeout(this.handleBadReactBeahavior, 5000);
+    window.setTimeout(this.handleBadReactBeahavior, 7500);
+    window.setTimeout(this.handleBadReactBeahavior, 10000);
+    window.setTimeout(this.handleBadReactBeahavior, 20000);
+    window.setTimeout(this.handleBadReactBeahavior, 30000);
 
     this.handleLogin = this.handleLogin.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -76,13 +99,24 @@ class Login extends Component {
       }
     })
     .then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
       if (!res.data.success) {
         this.setState({ open: true });
       } else {
         store.dispatch(login(res.data.access_token));
         getApi('users/me').then(res => {
           store.dispatch(setUserData(res));
-          this.props.history.push(res.default_page);
+          if (this.isUnmounted) {
+            return;
+          }
+
+          const redirPage =
+            !res.default_page || res.default_page.startsWith('/login')
+            ? '/' : res.default_page;
+
+          window.location.href = redirPage;
         });
       }
     })
@@ -99,6 +133,10 @@ class Login extends Component {
     if (event.key === 'Enter') {
       this.handleLogin();
     }
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   render() {

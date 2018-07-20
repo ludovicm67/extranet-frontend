@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import constants from '../constants';
+import store from '../store';
 
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
@@ -33,8 +34,33 @@ class PasswordReset extends Component {
     password: '',
   };
 
+  handleBadReactBeahavior() {
+    const hasToken = store.getState().auth.auth.token !== null;
+    const userData = store.getState().auth.auth.userData;
+    if (hasToken && userData.id > 0) {
+      const redirPage =
+        !userData.default_page || userData.default_page.startsWith('/login')
+          || userData.default_page.startsWith('/password/reset')
+          ? '/' : userData.default_page;
+
+      window.location.href = redirPage;
+    }
+  }
+
   constructor(props) {
     super(props);
+
+    // a bit wtf, but handle react bad stuff and client bad network connection
+    window.setTimeout(this.handleBadReactBeahavior, 200);
+    window.setTimeout(this.handleBadReactBeahavior, 1000);
+    window.setTimeout(this.handleBadReactBeahavior, 2000);
+    window.setTimeout(this.handleBadReactBeahavior, 3000);
+    window.setTimeout(this.handleBadReactBeahavior, 5000);
+    window.setTimeout(this.handleBadReactBeahavior, 7500);
+    window.setTimeout(this.handleBadReactBeahavior, 10000);
+    window.setTimeout(this.handleBadReactBeahavior, 20000);
+    window.setTimeout(this.handleBadReactBeahavior, 30000);
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);

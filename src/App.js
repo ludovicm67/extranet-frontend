@@ -21,15 +21,9 @@ class App extends Component {
 
     // don't try to init user data if no token is defined
     if (hasToken) {
-      if (!isOnProtectedRoute && pathName !== '/') {
-        this.setState({
-          redirect: '/',
-        });
-      } else {
-        getApi('users/me').then(res => {
-          store.dispatch(setUserData(res));
-        });
-      }
+      getApi('users/me').then(res => {
+        store.dispatch(setUserData(res));
+      });
     } else if (isOnProtectedRoute && pathName !== '/login') {
       this.setState({
         redirect: '/login',
@@ -51,6 +45,7 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/password/reset" component={PasswordReset} />
           <Redirect to={this.state.redirect} />
+          <Route path="/" component={Layout} />
         </Switch>
       );
 
