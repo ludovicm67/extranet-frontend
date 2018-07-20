@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '../layout/Select';
+import Icon from '@material-ui/core/Icon';
 import { DatePicker } from 'material-ui-pickers';
 
 import { getApi, postApi } from '../../utils';
@@ -20,6 +21,9 @@ const styles = {
   formControl: {
     marginTop: 20,
   },
+  right: {
+    float: 'right',
+  },
 };
 
 class ProjectsNew extends Component {
@@ -28,6 +32,7 @@ class ProjectsNew extends Component {
     contacts: [],
     orders: [],
     users: [],
+
     name: '',
     domain: '',
     client: null,
@@ -36,6 +41,8 @@ class ProjectsNew extends Component {
     user: null,
     next_action: '',
     end_at: null,
+    tag: [],
+    url: [],
   };
 
   handleSubmit() {
@@ -51,6 +58,8 @@ class ProjectsNew extends Component {
         ? this.state.user.split(',').map(i => i.trim()) : '',
       next_action: this.state.next_action,
       end_at: this.formatDate(this.state.end_at),
+      tag: this.state.tag,
+      url: this.state.url,
     }).then(() => this.props.history.push('/projects'));
   }
 
@@ -146,6 +155,24 @@ class ProjectsNew extends Component {
 
     return year + '-' + (month[1] ? month : '0' + month[0])
            + '-' + (day[1] ? day : '0' + day[0]);
+  }
+
+  handleAddTag() {
+    this.setState({
+      tag: [...this.state.tag, {
+        id: 0,
+        value: '',
+      }]
+    });
+  }
+
+  handleAddUrl() {
+    this.setState({
+      url: [...this.state.url, {
+        name: '',
+        value: '',
+      }]
+    });
   }
 
   render() {
@@ -302,6 +329,36 @@ class ProjectsNew extends Component {
             animateYearScrolling={false}
           />
         </FormControl>
+
+        <Typography variant="headline" style={styles.formControl}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            style={styles.right}
+            onClick={this.handleAddTag.bind(this)}
+          >
+            <Icon>add</Icon>
+            Ajouter
+          </Button>
+          Tags
+        </Typography>
+        {JSON.stringify(this.state.tag)}
+
+        <Typography variant="headline" style={styles.formControl}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            style={styles.right}
+            onClick={this.handleAddUrl.bind(this)}
+          >
+            <Icon>add</Icon>
+            Ajouter
+          </Button>
+          Urls
+        </Typography>
+        {JSON.stringify(this.state.url)}
 
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Créer
