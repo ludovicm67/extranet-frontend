@@ -150,7 +150,7 @@ class ClientsShow extends Component {
                 onChange={this.handleInvoiceExpanded(`panel-invoice-${n.id}`)}
               >
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, '')}</Typography>
+                  <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, ' ')}</Typography>
                   <Typography className={classes.secondaryHeading} style={{ color: n.step_hex }}>
                     {n.formatted_dueAmount} TTC
                   </Typography>
@@ -163,7 +163,7 @@ class ClientsShow extends Component {
                     </li>
                     <li>
                       <strong>Sujet : </strong>
-                      {n.subject.replace(/<[^>]+>/g, '')}
+                      {n.subject.replace(/<[^>]+>/g, ' ')}
                     </li>
                     <li>
                       <strong>Statut : </strong>
@@ -209,7 +209,7 @@ class ClientsShow extends Component {
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, '')}</Typography>
+              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, ' ')}</Typography>
               <Typography className={classes.secondaryHeading} style={{ color: n.step_hex }}>
                 {remainingOrderAmount.toLocaleString(undefined, {minimumFractionDigits: 2})} {n.currencysymbol} HT
                 {remainingDueAmount > .0 ? (
@@ -232,7 +232,7 @@ class ClientsShow extends Component {
                 </li>
                 <li>
                   <strong>Sujet : </strong>
-                  {n.subject.replace(/<[^>]+>/g, '')}
+                  {n.subject.replace(/<[^>]+>/g, ' ')}
                 </li>
                 <li>
                   <strong>Statut : </strong>
@@ -279,7 +279,7 @@ class ClientsShow extends Component {
         return (
           <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-subs-${n.id}`} onChange={this.handleExpanded(`panel-subs-${n.id}`)}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, '')}</Typography>
+              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, ' ')}</Typography>
               <Typography className={classes.secondaryHeading} style={{color: n.step_hex}}>
                 {n.formatted_dueAmount} TTC
               </Typography>
@@ -292,7 +292,7 @@ class ClientsShow extends Component {
                 </li>
                 <li>
                   <strong>Sujet : </strong>
-                  {n.subject.replace(/<[^>]+>/g, '')}
+                  {n.subject.replace(/<[^>]+>/g, ' ')}
                 </li>
                 <li>
                   <strong>Statut : </strong>

@@ -70,6 +70,51 @@ class ProjectsNew extends Component {
         clients,
       });
     });
+    getApi('sellsy_contacts').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const contacts = [];
+      contacts.push(...res.map(e => {
+        return {
+          label: e.fullName,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        contacts,
+      });
+    });
+    getApi('sellsy_orders').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const orders = [];
+      orders.push(...res.map(e => {
+        return {
+          label: e.subject.replace(/<[^>]+>/g, ' '),
+          value: e.id,
+        };
+      }));
+      this.setState({
+        orders,
+      });
+    });
+    getApi('users').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const users = [];
+      users.push(...res.map(e => {
+        return {
+          label: `${e.firstname} ${e.lastname} (${e.email})`,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        users,
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -112,6 +157,10 @@ class ProjectsNew extends Component {
             onChange={this.handleChange('domain')}
           />
         </FormControl>
+        <p>Un client parmi : {JSON.stringify(this.state.clients)}</p>
+        <p>n interlocuteurs parmi : {JSON.stringify(this.state.contacts)}</p>
+        <p>n commandes parmi : {JSON.stringify(this.state.orders)}</p>
+        <p>n utilisateurs affectés parmi : {JSON.stringify(this.state.users)}</p>
         <FormControl fullWidth style={styles.formControl}>
           <TextField
             id="project-next_action"
@@ -143,6 +192,9 @@ class ProjectsNew extends Component {
             animateYearScrolling={false}
           />
         </FormControl>
+        <p>Prochainement : les tags !</p>
+        <p>Prochainement : les urls !</p>
+        <p>Prochainement, sur une page à part : les identifiants !</p>
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Créer
         </Button>
