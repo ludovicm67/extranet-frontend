@@ -65,8 +65,8 @@ class ProjectsNew extends Component {
         ? this.state.user.split(',').map(i => i.trim()) : '',
       next_action: this.state.next_action,
       end_at: this.formatDate(this.state.end_at),
-      tag: this.state.tag,
-      url: this.state.url,
+      tags: this.state.tag,
+      urls: this.state.url,
     }).then(() => this.props.history.push('/projects'));
   }
 
@@ -117,14 +117,14 @@ class ProjectsNew extends Component {
         tags,
       });
     });
-    getApi('sellsy_contacts').then(res => {
+    getApi('contacts').then(res => {
       if (this.isUnmounted) {
         return;
       }
       const contacts = [];
       contacts.push(...res.map(e => {
         return {
-          label: e.fullName,
+          label: e.name,
           value: e.id,
         };
       }));
@@ -456,7 +456,7 @@ class ProjectsNew extends Component {
               />
               <TextField
                 id={`project-tag-${key}-value`}
-                label="Url"
+                label="Valeur du tag (peut être laissé vide)"
                 value={val.value}
                 margin="normal"
                 onChange={this.handleUpdateArray('tag', key, 'value')}
@@ -505,14 +505,14 @@ class ProjectsNew extends Component {
             <FormControl fullWidth style={styles.formControl}>
               <TextField
                 id={`project-url-${key}-name`}
-                label="Nom"
+                label="Nom de l'URL"
                 value={val.name}
                 margin="normal"
                 onChange={this.handleUpdateArray('url', key, 'name')}
               />
               <TextField
                 id={`project-url-${key}-value`}
-                label="Url"
+                label="URL"
                 value={val.value}
                 margin="normal"
                 onChange={this.handleUpdateArray('url', key, 'value')}
