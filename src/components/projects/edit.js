@@ -49,7 +49,7 @@ class ProjectsEdit extends Component {
     order: '',
     user: '',
     next_action: '',
-    end_at: '',
+    end_at: null,
     tag: [],
     url: [],
   };
@@ -111,7 +111,7 @@ class ProjectsEdit extends Component {
         order: orders,
         user: users,
         next_action: res.next_action || '',
-        end_at: parsedDate || '',
+        end_at: parsedDate || null,
         tag: tags,
         url: res.urls || [],
       });

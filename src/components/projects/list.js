@@ -24,6 +24,10 @@ const styles = {
   dateOld: {
     color: amber[500],
   },
+  smallCol: {
+    maxWidth: 30,
+    padding: 5,
+  },
 };
 
 class ProjectsList extends Component {
@@ -89,6 +93,7 @@ class ProjectsList extends Component {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell style={styles.smallCol}></TableCell>
                 <TableCell>Nom</TableCell>
                 <TableCell>Prochaine action à effectuer</TableCell>
                 <TableCell>Fin du projet souhaité</TableCell>
@@ -102,6 +107,11 @@ class ProjectsList extends Component {
                 const isPast = parsedDate < now;
                 return (
                   <TableRow key={n.id}>
+                    <TableCell style={styles.smallCol}>
+                      <IconButton component={Link} to={`/projects/${n.id}/edit`}>
+                        <Icon>star_border</Icon>
+                      </IconButton>
+                    </TableCell>
                     <TableCell component="th" scope="row">
                       <Link to={`/projects/${n.id}`}>{n.name}</Link>
                     </TableCell>
