@@ -35,6 +35,7 @@ const styles = {
 class ProjectsNew extends Component {
   state = {
     clients: [],
+    tags: [],
     contacts: [],
     orders: [],
     users: [],
@@ -99,6 +100,21 @@ class ProjectsNew extends Component {
       }));
       this.setState({
         clients,
+      });
+    });
+    getApi('tags').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const tags = [];
+      tags.push(...res.map(e => {
+        return {
+          label: e.name,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        tags,
       });
     });
     getApi('sellsy_contacts').then(res => {
@@ -166,7 +182,7 @@ class ProjectsNew extends Component {
   handleAddTag() {
     this.setState({
       tag: [...this.state.tag, {
-        id: 0,
+        id: '',
         value: '',
       }]
     });
@@ -182,8 +198,14 @@ class ProjectsNew extends Component {
   }
 
   handleUpdateArray = (mainprop, key, prop) => event => {
+    let newValue;
+    if (event && event.target && event.target.value !== undefined) {
+      newValue = event.target.value;
+    } else {
+      newValue = event;
+    }
     let main = this.state[mainprop];
-    main[key][prop] = event.target.value;
+    main[key][prop] = newValue;
     this.setState({
       [mainprop]: main,
     });
@@ -383,7 +405,65 @@ class ProjectsNew extends Component {
           </Button>
           Tags
         </Typography>
-        {JSON.stringify(this.state.tag)}
+
+        {this.state.tag.map((val, key) => {
+          return <Paper key={key} style={styles.paper}>
+            <Button
+              size="small"
+              disabled={key <= 0}
+              onClick={this.handleChangeOrder.bind(this, 'tag', key, 'up')}
+            >
+              <Icon>keyboard_arrow_up</Icon>
+            </Button>
+            <Button
+              disabled={key >= this.state.tag.length - 1}
+              size="small"
+              onClick={this.handleChangeOrder.bind(this, 'tag', key, 'down')}
+            >
+              <Icon>keyboard_arrow_down</Icon>
+            </Button>
+            <Button
+              size="small"
+              style={styles.right}
+              onClick={this.handleDeleteArray.bind(this, 'tag', key)}
+            >
+              <Icon>delete</Icon>
+            </Button>
+            <FormControl fullWidth style={styles.formControl}>
+              <TextField
+                style={styles.formControl}
+                fullWidth
+                value={val.id}
+                onChange={this.handleUpdateArray('tag', key, 'id')}
+                placeholder="Choisissez un tag..."
+                name={`project-tag-${key}-id`}
+                label="Tag"
+                autoComplete="new-password"
+                InputLabelProps={{
+                  shrink: true
+                }}
+                InputProps={{
+                  inputComponent: Select,
+                  inputProps: {
+                    creatable: true,
+                    multi: false,
+                    instanceId: `project-tag-${key}-id`,
+                    id: `project-tag-${key}-id`,
+                    simpleValue: true,
+                    options: this.state.tags,
+                  }
+                }}
+              />
+              <TextField
+                id={`project-tag-${key}-value`}
+                label="Url"
+                value={val.value}
+                margin="normal"
+                onChange={this.handleUpdateArray('tag', key, 'value')}
+              />
+            </FormControl>
+          </Paper>
+        })}
 
         <Typography variant="headline" style={styles.formControl}>
           <Button
