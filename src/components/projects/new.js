@@ -56,7 +56,7 @@ class ProjectsNew extends Component {
     postApi('projects', {
       name: this.state.name,
       domain: this.state.domain,
-      client: this.state.client || '',
+      client_id: this.state.client || '',
       contacts: this.state.contact
         ? this.state.contact.split(',').map(i => i.trim()) : '',
       orders: this.state.order

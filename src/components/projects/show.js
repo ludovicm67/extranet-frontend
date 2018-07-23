@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '../layout/Select';
 import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import { DatePicker } from 'material-ui-pickers';
 
-import { getApi, putApi } from '../../utils';
+import { getApi } from '../../utils';
 
 const styles = {
   intro: {
@@ -32,7 +30,7 @@ const styles = {
   },
 };
 
-class ProjectsEdit extends Component {
+class ProjectsShow extends Component {
   state = {
     id: this.props.match.params.projectId,
 
@@ -53,24 +51,6 @@ class ProjectsEdit extends Component {
     tag: [],
     url: [],
   };
-
-  handleSubmit() {
-    putApi(`projects/${this.state.id}`, {
-      name: this.state.name,
-      domain: this.state.domain,
-      client_id: this.state.client || '',
-      contacts: this.state.contact
-        ? this.state.contact.split(',').map(i => i.trim()) : '',
-      orders: this.state.order
-        ? this.state.order.split(',').map(i => i.trim()) : '',
-      users: this.state.user
-        ? this.state.user.split(',').map(i => i.trim()) : '',
-      next_action: this.state.next_action,
-      end_at: this.formatDate(this.state.end_at),
-      tags: this.state.tag,
-      urls: this.state.url,
-    }).then(() => this.props.history.push('/projects'));
-  }
 
   handleChange = prop => event => {
     if (event && event.target && event.target.value !== undefined) {
@@ -114,81 +94,6 @@ class ProjectsEdit extends Component {
         end_at: parsedDate || null,
         tag: tags,
         url: res.urls || [],
-      });
-    });
-    getApi('clients').then(res => {
-      if (this.isUnmounted) {
-        return;
-      }
-      const clients = [];
-      clients.push(...res.map(e => {
-        return {
-          label: e.name,
-          value: e.id,
-        };
-      }));
-      this.setState({
-        clients,
-      });
-    });
-    getApi('tags').then(res => {
-      if (this.isUnmounted) {
-        return;
-      }
-      const tags = [];
-      tags.push(...res.map(e => {
-        return {
-          label: e.name,
-          value: e.id,
-        };
-      }));
-      this.setState({
-        tags,
-      });
-    });
-    getApi('contacts').then(res => {
-      if (this.isUnmounted) {
-        return;
-      }
-      const contacts = [];
-      contacts.push(...res.map(e => {
-        return {
-          label: e.name,
-          value: e.id,
-        };
-      }));
-      this.setState({
-        contacts,
-      });
-    });
-    getApi('sellsy_orders').then(res => {
-      if (this.isUnmounted) {
-        return;
-      }
-      const orders = [];
-      orders.push(...res.map(e => {
-        return {
-          label: `${e.thirdname} :: ${e.subject.replace(/<[^>]+>/g, ' ')}`,
-          value: e.id,
-        };
-      }));
-      this.setState({
-        orders,
-      });
-    });
-    getApi('users').then(res => {
-      if (this.isUnmounted) {
-        return;
-      }
-      const users = [];
-      users.push(...res.map(e => {
-        return {
-          label: `${e.firstname} ${e.lastname} (${e.email})`,
-          value: e.id,
-        };
-      }));
-      this.setState({
-        users,
       });
     });
   }
@@ -268,27 +173,32 @@ class ProjectsEdit extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          Modifier le projet <em>{this.state.name}</em>
+          {this.state.name}
         </Typography>
-        <Typography style={styles.intro}>Ici vous pouvez modifier les informations concernant le projet</Typography>
-        <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="project-name">Nom du projet</InputLabel>
-          <Input
-            id="project-name"
-            type="text"
-            value={this.state.name}
-            onChange={this.handleChange('name')}
-          />
-        </FormControl>
-        <FormControl fullWidth style={styles.formControl}>
-          <InputLabel htmlFor="project-domain">Domaine principal</InputLabel>
-          <Input
-            id="project-domain"
-            type="text"
-            value={this.state.domain}
-            onChange={this.handleChange('domain')}
-          />
-        </FormControl>
+        <Typography style={styles.intro}>Affichages d'informations concernant le projet</Typography>
+
+        {this.state.domain &&
+          <Typography>
+            <strong>Domaine principal : </strong>
+            {this.state.domain}
+          </Typography>
+        }
+
+        {this.state.client &&
+          <Typography>
+            <strong>Client : </strong>
+            {this.state.client}
+          </Typography>
+        }
+
+        {this.state.next_action &&
+          <Typography>
+            <strong>Prochaine action à effectuer : </strong><br />
+            {this.state.next_action && this.state.next_action.split('\n').map((item, key) => {
+              return <span key={key}>{item}<br /></span>
+            })}
+          </Typography>
+        }
 
         <TextField
           style={styles.formControl}
@@ -549,13 +459,9 @@ class ProjectsEdit extends Component {
             </FormControl>
           </Paper>
         })}
-
-        <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
-          Modifier
-        </Button>
       </div>
     );
   };
 }
 
-export default ProjectsEdit;
+export default ProjectsShow;
