@@ -44,12 +44,12 @@ class ProjectsEdit extends Component {
 
     name: '',
     domain: '',
-    client: null,
-    contact: null,
-    order: null,
-    user: null,
+    client: '',
+    contact: '',
+    order: '',
+    user: '',
     next_action: '',
-    end_at: null,
+    end_at: '',
     tag: [],
     url: [],
   };
@@ -93,16 +93,26 @@ class ProjectsEdit extends Component {
       if (this.isUnmounted) {
         return;
       }
+      const parsedDate = res.end_at && new Date(Date.parse(res.end_at));
+
+      const contacts = (res.contacts) ? res.contacts.map(e => e.id).join(',') : '';
+      const orders = (res.orders) ? res.orders.map(e => e.id).join(',') : '';
+      const users = (res.users) ? res.users.map(e => e.id).join(',') : '';
+      const tags = (res.tags) ? res.tags.map(e => ({
+        id: e.pivot.tag_id,
+        value: e.pivot.value || '',
+      })) : [];
+
       this.setState({
         name: res.name || '',
         domain: res.domain || '',
-        client: res.client || null,
-        contact: res.contacts || null,
-        order: res.orders || null,
-        user: res.users || null,
+        client: res.client || '',
+        contact: contacts,
+        order: orders,
+        user: users,
         next_action: res.next_action || '',
-        end_at: res.end_at || null,
-        tag: res.tags || [],
+        end_at: parsedDate || '',
+        tag: tags,
         url: res.urls || [],
       });
     });
@@ -188,7 +198,7 @@ class ProjectsEdit extends Component {
   }
 
   formatDate(date) {
-    if (!date) return '';
+    if (!date || date === '') return '';
 
     let year = date.getFullYear().toString();
     let month = (date.getMonth() + 1).toString();
@@ -525,14 +535,14 @@ class ProjectsEdit extends Component {
               <TextField
                 id={`project-url-${key}-name`}
                 label="Nom de l'URL"
-                value={val.name}
+                value={val.name || ''}
                 margin="normal"
                 onChange={this.handleUpdateArray('url', key, 'name')}
               />
               <TextField
                 id={`project-url-${key}-value`}
                 label="URL"
-                value={val.value}
+                value={val.value || ''}
                 margin="normal"
                 onChange={this.handleUpdateArray('url', key, 'value')}
               />

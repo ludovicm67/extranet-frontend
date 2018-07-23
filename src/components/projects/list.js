@@ -57,7 +57,7 @@ class ProjectsList extends Component {
   }
 
   formatDate(date) {
-    if (!date) return '';
+    if (!date || date === '') return '';
 
     let year = date.getFullYear().toString();
     let month = (date.getMonth() + 1).toString();
