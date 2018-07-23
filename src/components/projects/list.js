@@ -11,7 +11,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import amber from '@material-ui/core/colors/amber';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, postApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -60,6 +60,42 @@ class ProjectsList extends Component {
     });
   }
 
+  handleFav(ressource, key) {
+    const data = this.state['data'].map((v, k) => {
+      if (k === key) {
+        return ({
+          ...v,
+          favorited: true,
+        });
+      }
+      return v;
+    });
+
+    postApi(`${ressource}/fav`);
+
+    this.setState({
+      data,
+    });
+  }
+
+  handleUnfav(ressource, key) {
+    const data = this.state['data'].map((v, k) => {
+      if (k === key) {
+        return ({
+          ...v,
+          favorited: false,
+        });
+      }
+      return v;
+    });
+
+    postApi(`${ressource}/unfav`);
+
+    this.setState({
+      data,
+    });
+  }
+
   formatDate(date) {
     if (!date || date === '') return '';
 
@@ -101,15 +137,21 @@ class ProjectsList extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.data.map(n => {
+              {this.state.data.map((n, key) => {
                 const parsedDate = new Date(Date.parse(n.end_at));
                 const now = new Date();
                 const isPast = parsedDate < now;
                 return (
                   <TableRow key={n.id}>
                     <TableCell style={styles.smallCol}>
-                      <IconButton component={Link} to={`/projects/${n.id}/edit`}>
-                        <Icon>star_border</Icon>
+                      <IconButton onClick={
+                        n.favorited
+                        ? this.handleUnfav.bind(this, `projects/${n.id}`, key)
+                        : this.handleFav.bind(this, `projects/${n.id}`, key)
+                      }>
+                        <Icon>
+                          {n.favorited ? 'star' : 'star_border'}
+                        </Icon>
                       </IconButton>
                     </TableCell>
                     <TableCell component="th" scope="row">
