@@ -56,11 +56,11 @@ class ProjectsNew extends Component {
       name: this.state.name,
       domain: this.state.domain,
       client: this.state.client || '',
-      contact: this.state.contact
+      contacts: this.state.contact
         ? this.state.contact.split(',').map(i => i.trim()) : '',
-      order: this.state.order
+      orders: this.state.order
         ? this.state.order.split(',').map(i => i.trim()) : '',
-      user: this.state.user
+      users: this.state.user
         ? this.state.user.split(',').map(i => i.trim()) : '',
       next_action: this.state.next_action,
       end_at: this.formatDate(this.state.end_at),
@@ -350,10 +350,12 @@ class ProjectsNew extends Component {
         <FormControl fullWidth style={styles.formControl}>
           <DatePicker
             keyboard
+            clearable={true}
             label="Fin du projet souhaité"
             cancelLabel="Annuler"
             invalidDateMessage="Format de date invalide"
             invalidLabel="Inconnu"
+            clearLabel="Vider"
             maxDateMessage="La date dépasse la date maximale"
             minDateMessage="La date ne doit pas être avant la date minimale"
             todayLabel="Aujourd'hui"
