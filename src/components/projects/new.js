@@ -199,6 +199,20 @@ class ProjectsNew extends Component {
     });
   }
 
+  handleChangeOrder = (mainprop, key, direction = 'up') => {
+    const directionCoef = (direction === 'down') ? 1 : -1;
+    let main = this.state[mainprop];
+
+    let t = main[key], c = key + directionCoef;
+    if (c < 0 || c >= main.length) return;
+    main[key] = main[c];
+    main[c] = t;
+
+    this.setState({
+      [mainprop]: main,
+    });
+  }
+
   render() {
     return (
       <div>
@@ -387,13 +401,15 @@ class ProjectsNew extends Component {
           return <Paper key={key} style={styles.paper}>
             <Button
               size="small"
-              onClick={this.handleDeleteArray.bind(this, 'url', key)}
-            >
+              disabled={key <= 0}
+              onClick={this.handleChangeOrder.bind(this, 'url', key, 'up')}
+              >
               <Icon>keyboard_arrow_up</Icon>
             </Button>
             <Button
+              disabled={key >= this.state.url.length - 1}
               size="small"
-              onClick={this.handleDeleteArray.bind(this, 'url', key)}
+              onClick={this.handleChangeOrder.bind(this, 'url', key, 'down')}
             >
               <Icon>keyboard_arrow_down</Icon>
             </Button>
