@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
+import amber from '@material-ui/core/colors/amber';
 
 import { getApi, deleteApi } from '../../utils';
 import { Link } from 'react-router-dom';
@@ -19,6 +20,9 @@ const styles = {
   },
   intro: {
     paddingBottom: '50px',
+  },
+  dateOld: {
+    color: amber[500],
   },
 };
 
@@ -52,6 +56,18 @@ class ProjectsList extends Component {
     });
   }
 
+  formatDate(date) {
+    if (!date) return '';
+
+    let year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString();
+    let day = date.getDate().toString();
+
+    return (day[1] ? day : '0' + day[0]) + '/'
+         + (month[1] ? month : '0' + month[0])
+         + '/' + year;
+  }
+
   render() {
     return (
       <div>
@@ -74,15 +90,28 @@ class ProjectsList extends Component {
             <TableHead>
               <TableRow>
                 <TableCell>Nom</TableCell>
+                <TableCell>Prochaine action à effectuer</TableCell>
+                <TableCell>Fin du projet souhaité</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.state.data.map(n => {
+                const parsedDate = new Date(Date.parse(n.end_at));
+                const now = new Date();
+                const isPast = parsedDate < now;
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
                       <Link to={`/projects/${n.id}`}>{n.name}</Link>
+                    </TableCell>
+                    <TableCell>
+                      {n.next_action && n.next_action.split('\n').map((item, key) => {
+                        return <span key={key}>{item}<br /></span>
+                      })}
+                    </TableCell>
+                    <TableCell style={(n.end_at && isPast) ? styles.dateOld : null}>
+                      {n.end_at && this.formatDate(parsedDate)}
                     </TableCell>
                     <TableCell>
                       <IconButton component={Link} to={`/projects/${n.id}/edit`}>
