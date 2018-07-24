@@ -39,6 +39,8 @@ import Updates from './updates';
 import Dashboard from './Dashboard';
 import Projects from './projects';
 
+import Test from './Test';
+
 import { logout } from '../actions/auth';
 import store from '../store';
 import constants from '../constants';
@@ -340,6 +342,7 @@ class Layout extends React.Component {
               <Route path="/tags" component={Tags} />
               <Route path="/updates" component={Updates} />
               <Route path="/projects" component={Projects} />
+              <Route path="/test" component={Test} />
               <Route path="/" component={Dashboard} />
             </Switch>
         </main>
