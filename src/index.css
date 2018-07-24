@@ -13,3 +13,15 @@ a {
 .activeNavLink {
   background: rgba(0, 0, 0, 0.08) !important;
 }
+
+.header-sticky {
+  top: 56px !important;
+}
+
+.rct-sidebar-header {
+  padding: 20px;
+}
+
+.rct-label-group, .rct-sidebar-header {
+  background: #3f51b5 !important;
+}

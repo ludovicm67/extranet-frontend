@@ -12,6 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -38,8 +39,7 @@ import Tags from './tags';
 import Updates from './updates';
 import Dashboard from './Dashboard';
 import Projects from './projects';
-
-import Test from './Test';
+import Teamview from './Teamview';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -124,6 +124,20 @@ class Layout extends React.Component {
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText inset primary="Tableau de bord" />
+          </ListItem>
+          <Divider />
+          <ListItem
+            component={NavLink}
+            to="/teamview"
+            button
+            activeClassName="activeNavLink"
+            exact
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <Icon>today</Icon>
+            </ListItemIcon>
+            <ListItemText inset primary="Vue d'équipe" />
           </ListItem>
           <Divider />
           <ListItem
@@ -342,7 +356,7 @@ class Layout extends React.Component {
               <Route path="/tags" component={Tags} />
               <Route path="/updates" component={Updates} />
               <Route path="/projects" component={Projects} />
-              <Route path="/test" component={Test} />
+              <Route path="/teamview" component={Teamview} />
               <Route path="/" component={Dashboard} />
             </Switch>
         </main>
