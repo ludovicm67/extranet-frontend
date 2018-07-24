@@ -418,6 +418,10 @@ atob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
 
+autolinker@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/autolinker/-/autolinker-1.7.0.tgz#6131619b53fb425588feb432d633ed0f9ca5e7c5"
+
 autoprefixer@7.1.6:
   version "7.1.6"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-7.1.6.tgz#fb933039f74af74a83e71225ce78d9fd58ba84d7"

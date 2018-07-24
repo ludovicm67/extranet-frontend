@@ -24,6 +24,8 @@ class ContactShow extends Component {
     name: '',
     mail: '',
     other: '',
+    phone: '',
+    address: '',
     type: 'Aucun',
   };
 
@@ -36,6 +38,8 @@ class ContactShow extends Component {
         name: res.name || '',
         mail: res.mail || '',
         other: res.other || '',
+        phone: res.phone || '',
+        address: res.address || '',
         type: (res.type && res.type.name) || 'Aucun',
       });
     });
@@ -57,14 +61,30 @@ class ContactShow extends Component {
           <strong>Type : </strong>
           {this.state.type}
         </Typography>
-        <Typography>
-          <strong>Adresse mail : </strong>
-          <a href={`mailto:${this.state.mail}`}>{this.state.mail}</a>
-        </Typography>
-        <Typography>
-          <strong>Autres informations : </strong>
-          {other}
-        </Typography>
+        {this.state.mail &&
+          <Typography>
+            <strong>Adresse mail : </strong>
+            <a href={`mailto:${this.state.mail}`}>{this.state.mail}</a>
+          </Typography>
+        }
+        {this.state.phone &&
+          <Typography>
+            <strong>Téléphone : </strong>
+            <a href={`tel:${this.state.phone}`}>{this.state.phone}</a>
+          </Typography>
+        }
+        {this.state.address &&
+          <Typography>
+            <strong>Adresse : </strong>
+            {this.state.address}
+          </Typography>
+        }
+        {this.state.other &&
+          <Typography>
+            <strong>Autres informations : </strong>
+            {other}
+          </Typography>
+        }
       </div>
     );
   };

@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '../layout/Select';
-import Icon from '@material-ui/core/Icon';
-import Paper from '@material-ui/core/Paper';
-import { DatePicker } from 'material-ui-pickers';
+import Chip from '@material-ui/core/Chip';
+import { Link } from 'react-router-dom';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import amber from '@material-ui/core/colors/amber';
 
 import { getApi } from '../../utils';
+import Autolinker from 'autolinker';
 
-const styles = {
+const styles = theme => ({
   intro: {
     paddingBottom: 20,
   },
@@ -28,28 +33,66 @@ const styles = {
     marginTop: 30,
     padding: 22,
   },
-};
+  tag: {
+    cursor: 'pointer',
+    marginTop: 0,
+    marginBottom: 20,
+    marginRight: 12,
+    marginLeft: 0,
+  },
+  contactCards: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignContent: 'flex-start',
+  },
+  contactCard: {
+    width: 'calc(50% - 10px)',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    marginTop: '15px',
+  },
+  partTitle: {
+    marginTop: 36,
+  },
+  heading: {
+    fontSize: 15,
+    flexBasis: '55%',
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: 15,
+    color: '#0000008a',
+  },
+  simpleList: {
+    listStyle: 'none',
+    padding: 0,
+  },
+  expansionPanelDetails: {
+    display: 'block',
+  },
+  dateOld: {
+    color: amber[500],
+  },
+});
 
 class ProjectsShow extends Component {
   state = {
     id: this.props.match.params.projectId,
+    expanded: null,
+    invoiceExpanded: null,
 
-    clients: [],
     tags: [],
-    contacts: [],
-    orders: [],
-    users: [],
-
     name: '',
     domain: '',
-    client: '',
-    contact: '',
-    order: '',
-    user: '',
+    client: null,
+    users: [],
+    orders: [],
+    contacts: [],
     next_action: '',
     end_at: null,
-    tag: [],
-    url: [],
+    urls: [],
   };
 
   handleChange = prop => event => {
@@ -75,25 +118,27 @@ class ProjectsShow extends Component {
       }
       const parsedDate = res.end_at && new Date(Date.parse(res.end_at));
 
-      const contacts = (res.contacts) ? res.contacts.map(e => e.id).join(',') : '';
-      const orders = (res.orders) ? res.orders.map(e => e.id).join(',') : '';
-      const users = (res.users) ? res.users.map(e => e.id).join(',') : '';
-      const tags = (res.tags) ? res.tags.map(e => ({
-        id: e.pivot.tag_id,
-        value: e.pivot.value || '',
-      })) : [];
+      const tags = (res.tags) ? res.tags.map(e => {
+        let value = e.pivot.value || '';
+        return {
+          id: e.pivot.tag_id,
+          name: e.name,
+          value,
+          url: `/tags/${e.pivot.tag_id}/${encodeURIComponent(value)}`,
+        }
+      }) : [];
 
       this.setState({
         name: res.name || '',
         domain: res.domain || '',
-        client: res.client_id || '',
-        contact: contacts,
-        order: orders,
-        user: users,
+        client: res.client || '',
+        contacts: res.contacts || [],
+        orders: res.orders || [],
+        users: res.users || [],
         next_action: res.next_action || '',
         end_at: parsedDate || null,
-        tag: tags,
-        url: res.urls || [],
+        tags,
+        urls: res.urls || [],
       });
     });
   }
@@ -109,359 +154,302 @@ class ProjectsShow extends Component {
     let month = (date.getMonth() + 1).toString();
     let day = date.getDate().toString();
 
-    return year + '-' + (month[1] ? month : '0' + month[0])
-      + '-' + (day[1] ? day : '0' + day[0]);
+    return (day[1] ? day : '0' + day[0]) + '/'
+      + (month[1] ? month : '0' + month[0])
+      + '/' + year;
   }
 
-  handleAddTag() {
+  handleExpanded = panel => (event, expanded) => {
     this.setState({
-      tag: [...this.state.tag, {
-        id: '',
-        value: '',
-      }]
+      expanded: expanded ? panel : false,
     });
-  }
+  };
 
-  handleAddUrl() {
+  handleInvoiceExpanded = panel => (event, invoiceExpanded) => {
     this.setState({
-      url: [...this.state.url, {
-        name: '',
-        value: '',
-      }]
+      invoiceExpanded: invoiceExpanded ? panel : false,
     });
-  }
-
-  handleUpdateArray = (mainprop, key, prop) => event => {
-    let newValue;
-    if (event && event.target && event.target.value !== undefined) {
-      newValue = event.target.value;
-    } else {
-      newValue = event;
-    }
-    let main = this.state[mainprop];
-    main[key][prop] = newValue;
-    this.setState({
-      [mainprop]: main,
-    });
-  }
-
-  handleDeleteArray = (mainprop, key) => {
-    const main = this.state[mainprop].filter((_v, k) => {
-      return k !== key;
-    });
-
-    this.setState({
-      [mainprop]: main,
-    });
-  }
-
-  handleChangeOrder = (mainprop, key, direction = 'up') => {
-    const directionCoef = (direction === 'down') ? 1 : -1;
-    let main = this.state[mainprop];
-
-    let t = main[key], c = key + directionCoef;
-    if (c < 0 || c >= main.length) return;
-    main[key] = main[c];
-    main[c] = t;
-
-    this.setState({
-      [mainprop]: main,
-    });
-  }
+  };
 
   render() {
+    const { classes } = this.props;
+
+
+    let contacts = null;
+    if (this.state.contacts.length > 0) {
+      const contactsMap = this.state.contacts.map(n => {
+        return (
+          <Card key={n.id} className={classes.contactCard}>
+            <CardContent>
+              <Typography gutterBottom variant="headline" component="h2">
+                <Link to={`/contacts/${n.id}`}>{n.name}</Link>
+              </Typography>
+              <Typography component="ul" className={classes.simpleList}>
+                {n.type ? (<li>{n.type.name}</li>) : null}
+                {n.mail ? (<li><a href={`mailto:${n.mail}`}>{n.mail}</a></li>) : null}
+                {n.phone ? (<li><a href={`tel:${n.phone}`}>{n.phone}</a></li>) : null}
+                {n.address ? (<li>{n.address}</li>) : null}
+                {n.other ? (<li>{n.other}</li>) : null}
+              </Typography>
+            </CardContent>
+          </Card>
+        );
+      });
+      contacts = (
+        <div>
+          <Typography variant="headline" className={classes.partTitle}>Contacts</Typography>
+          <div className={classes.contactCards}>{contactsMap}</div>
+        </div>
+      );
+    }
+
+
+    let orders = null;
+    if (this.state.orders.length > 0) {
+      const ordersMap = this.state.orders.map(n => {
+        if (!n.subject) n.subject = '';
+        let remainingOrderAmount = n.invoices.reduce((p, c) => {
+          return p - parseFloat(c.totalAmountTaxesFree);
+        }, parseFloat(n.totalAmountTaxesFree));
+        let remainingDueAmount = n.invoices.reduce((p, c) => {
+          return p + parseFloat(c.dueAmount);
+        }, .0);
+
+        // just to prevent strange behaviors
+        if (remainingOrderAmount < 0) remainingOrderAmount = 0;
+        if (remainingDueAmount < 0) remainingDueAmount = 0;
+
+        let invoices = null;
+        if (n.invoices.length > 0) {
+          const invoicesMap = n.invoices.map(n => {
+            if (!n.subject) n.subject = '';
+            return (
+              <ExpansionPanel
+                key={n.id}
+                expanded={this.state.invoiceExpanded === `panel-invoice-${n.id}`}
+                onChange={this.handleInvoiceExpanded(`panel-invoice-${n.id}`)}
+              >
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, ' ')}</Typography>
+                  <Typography className={classes.secondaryHeading} style={{ color: n.step_hex }}>
+                    {n.formatted_dueAmount} TTC
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <Typography component="ul" className={classes.simpleList}>
+                    <li>
+                      <strong>Date : </strong>
+                      {n.displayedDate}
+                    </li>
+                    <li>
+                      <strong>Sujet : </strong>
+                      {n.subject.replace(/<[^>]+>/g, ' ')}
+                    </li>
+                    <li>
+                      <strong>Statut : </strong>
+                      <span style={{ color: n.step_hex }}>{n.step_label}</span>
+                    </li>
+                    <li>
+                      <strong>Montant total HT : </strong>
+                      {n.formatted_totalAmountTaxesFree} HT
+                    </li>
+                    <li>
+                      <strong>Montant total TTC : </strong>
+                      {n.formatted_totalAmount} TTC
+                    </li>
+                    <li>
+                      <strong>Reste à payer : </strong>
+                      {n.formatted_dueAmount} TTC
+                    </li>
+                    <li>
+                      <strong>Contact : </strong>
+                      {n.contactName}
+                    </li>
+                    {n.publicLinkShort ? (
+                      <li>
+                        <strong>Lien vers la facture : </strong>
+                        <a href={n.publicLinkShort} target="_blank">
+                          {n.publicLinkShort}
+                        </a>
+                      </li>
+                    ) : null}
+                  </Typography>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            );
+          });
+          invoices = (
+            <div>
+              <Typography variant="subheading" className={classes.partTitle}><strong>Factures associées :</strong></Typography>
+              {invoicesMap}
+            </div>
+          );
+        }
+
+        return (
+          <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, ' ')}</Typography>
+              <Typography className={classes.secondaryHeading} style={{ color: n.step_hex }}>
+                {remainingOrderAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })} {n.currencysymbol} HT
+                {remainingDueAmount > .0 ? (
+                  <span>
+                    + {remainingDueAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })} {n.currencysymbol} TTC
+                    en attente de paiement
+                  </span>
+                ) : null}
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+              <Typography component="ul" className={classes.simpleList}>
+                <li>
+                  <strong>Date : </strong>
+                  {n.displayedDate}
+                </li>
+                <li>
+                  <strong>Client : </strong>
+                  {n.thirdname}
+                </li>
+                <li>
+                  <strong>Sujet : </strong>
+                  {n.subject.replace(/<[^>]+>/g, ' ')}
+                </li>
+                <li>
+                  <strong>Statut : </strong>
+                  <span style={{ color: n.step_hex }}>{n.step_label}</span>
+                </li>
+                <li>
+                  <strong>Montant total HT : </strong>
+                  {n.formatted_totalAmountTaxesFree} HT
+                </li>
+                <li>
+                  <strong>Montant total TTC : </strong>
+                  {n.formatted_totalAmount} TTC
+                </li>
+                <li>
+                  <strong>Contact : </strong>
+                  {n.contactName}
+                </li>
+                {n.publicLinkShort ? (
+                  <li>
+                    <strong>Lien vers le bon de commande : </strong>
+                    <a href={n.publicLinkShort} target="_blank">
+                      {n.publicLinkShort}
+                    </a>
+                  </li>
+                ) : null}
+              </Typography>
+              {invoices}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        );
+      });
+      orders = (
+        <div>
+          <Typography variant="headline" className={classes.partTitle}>Commandes</Typography>
+          {ordersMap}
+        </div>
+      );
+    }
+
+    const parsedDate = new Date(Date.parse(this.state.end_at));
+    const now = new Date();
+    const isPast = parsedDate < now;
+
     return (
       <div>
         <Typography variant="display1" gutterBottom>
           {this.state.name}
         </Typography>
-        <Typography style={styles.intro}>Affichages d'informations concernant le projet</Typography>
+        <Typography className={classes.intro}>Affichages d'informations concernant le projet</Typography>
+
+        {this.state.tags &&
+          this.state.tags.map((v, k) => {
+            let content = v.name;
+            if (v.value) content = `${content}: ${v.value}`;
+            return <Chip key={k} className={classes.tag} component={Link} to={v.url} label={content} />
+          })
+        }
 
         {this.state.domain &&
           <Typography>
             <strong>Domaine principal : </strong>
-            {this.state.domain}
+            <span dangerouslySetInnerHTML={{__html: Autolinker.link(this.state.domain)}} />
+          </Typography>
+        }
+
+        {this.state.end_at &&
+          <Typography className={isPast ? classes.dateOld : null}>
+            <strong>Fin de projet souhaité : </strong>
+            {this.formatDate(this.state.end_at)}
           </Typography>
         }
 
         {this.state.client &&
-          <Typography>
-            <strong>Client : </strong>
-            {this.state.client}
-          </Typography>
+          <div>
+            <Typography variant="headline" className={classes.formControl}>
+              Client principal
+            </Typography>
+            <Typography>
+            <strong>Le client principal de ce projet est : </strong>
+              <Link to={`/clients/${this.state.client.id}`}>{this.state.client.fullName}</Link>
+            </Typography>
+          </div>
+        }
+
+        {contacts}
+
+        {this.state.users &&
+          <div>
+            <Typography variant="headline" className={classes.formControl}>
+              Utilisateurs assignés
+            </Typography>
+            <Typography component="ul">
+              {this.state.users.map((item, key) => {
+                let name = `${item.firstname} ${item.lastname} (${item.email})`;
+                return (<li key={key}>
+                  <Link to={`/users/${item.id}`}>{name}</Link>
+                </li>)
+              })}
+            </Typography>
+          </div>
         }
 
         {this.state.next_action &&
-          <Typography>
-            <strong>Prochaine action à effectuer : </strong><br />
-            {this.state.next_action && this.state.next_action.split('\n').map((item, key) => {
-              return <span key={key}>{item}<br /></span>
-            })}
-          </Typography>
+          <div>
+            <Typography variant="headline" className={classes.formControl}>
+              Prochaine action à effectuer
+            </Typography>
+            <Typography>
+              {this.state.next_action && this.state.next_action.split('\n').map((item, key) => {
+                return <span key={key}>{item}<br /></span>
+              })}
+            </Typography>
+          </div>
         }
 
-        <TextField
-          style={styles.formControl}
-          fullWidth
-          value={this.state.client}
-          onChange={this.handleChange('client')}
-          placeholder="Choisissez un client..."
-          name="select-client"
-          label="Client principal"
-          autoComplete="new-password"
-          InputLabelProps={{
-            shrink: true
-          }}
-          InputProps={{
-            inputComponent: Select,
-            inputProps: {
-              creatable: false,
-              multi: false,
-              instanceId: "select-client",
-              id: "select-client",
-              simpleValue: true,
-              options: this.state.clients,
-            }
-          }}
-        />
-        <TextField
-          style={styles.formControl}
-          fullWidth
-          value={this.state.contact}
-          onChange={this.handleChange('contact')}
-          placeholder="Choisissez un ou plusieurs interlocuteurs..."
-          name="select-contact"
-          label="Interlocuteurs"
-          autoComplete="new-password"
-          InputLabelProps={{
-            shrink: true
-          }}
-          InputProps={{
-            inputComponent: Select,
-            inputProps: {
-              creatable: false,
-              multi: true,
-              instanceId: "select-contact",
-              id: "select-contact",
-              simpleValue: true,
-              options: this.state.contacts,
-            }
-          }}
-        />
-        <TextField
-          style={styles.formControl}
-          fullWidth
-          value={this.state.order}
-          onChange={this.handleChange('order')}
-          placeholder="Choisissez une ou plusieurs commandes..."
-          name="select-order"
-          label="Commandes"
-          autoComplete="new-password"
-          InputLabelProps={{
-            shrink: true
-          }}
-          InputProps={{
-            inputComponent: Select,
-            inputProps: {
-              creatable: false,
-              multi: true,
-              instanceId: "select-order",
-              id: "select-order",
-              simpleValue: true,
-              options: this.state.orders,
-            }
-          }}
-        />
-        <TextField
-          style={styles.formControl}
-          fullWidth
-          value={this.state.user}
-          onChange={this.handleChange('user')}
-          placeholder="Choisissez un ou plusieurs utilisateurs..."
-          name="select-user"
-          label="Utilisateurs affectés"
-          autoComplete="new-password"
-          InputLabelProps={{
-            shrink: true
-          }}
-          InputProps={{
-            inputComponent: Select,
-            inputProps: {
-              creatable: false,
-              multi: true,
-              instanceId: "select-user",
-              id: "select-user",
-              simpleValue: true,
-              options: this.state.users,
-            }
-          }}
-        />
+        {orders}
 
-        <FormControl fullWidth style={styles.formControl}>
-          <TextField
-            id="project-next_action"
-            label="Prochaine action à effectuer"
-            multiline
-            rowsMax="10"
-            value={this.state.next_action}
-            onChange={this.handleChange('next_action')}
-            margin="normal"
-          />
-        </FormControl>
-        <FormControl fullWidth style={styles.formControl}>
-          <DatePicker
-            keyboard
-            clearable={true}
-            label="Fin du projet souhaité"
-            cancelLabel="Annuler"
-            invalidDateMessage="Format de date invalide"
-            invalidLabel="Inconnu"
-            clearLabel="Vider"
-            maxDateMessage="La date dépasse la date maximale"
-            minDateMessage="La date ne doit pas être avant la date minimale"
-            todayLabel="Aujourd'hui"
-            showTodayButton={true}
-            format="DD/MM/YYYY"
-            placeholder="jj/mm/aaaa"
-            mask={value => (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])}
-            value={this.state.end_at}
-            onChange={this.handleDateChange}
-            disableOpenOnEnter
-            animateYearScrolling={false}
-          />
-        </FormControl>
-
-        <Typography variant="headline" style={styles.formControl}>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-            onClick={this.handleAddTag.bind(this)}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
-          Tags
-        </Typography>
-
-        {this.state.tag.map((val, key) => {
-          return <Paper key={key} style={styles.paper}>
-            <Button
-              size="small"
-              disabled={key <= 0}
-              onClick={this.handleChangeOrder.bind(this, 'tag', key, 'up')}
-            >
-              <Icon>keyboard_arrow_up</Icon>
-            </Button>
-            <Button
-              disabled={key >= this.state.tag.length - 1}
-              size="small"
-              onClick={this.handleChangeOrder.bind(this, 'tag', key, 'down')}
-            >
-              <Icon>keyboard_arrow_down</Icon>
-            </Button>
-            <Button
-              size="small"
-              style={styles.right}
-              onClick={this.handleDeleteArray.bind(this, 'tag', key)}
-            >
-              <Icon>delete</Icon>
-            </Button>
-            <FormControl fullWidth style={styles.formControl}>
-              <TextField
-                style={styles.formControl}
-                fullWidth
-                value={val.id}
-                onChange={this.handleUpdateArray('tag', key, 'id')}
-                placeholder="Choisissez un tag..."
-                name={`project-tag-${key}-id`}
-                label="Tag"
-                autoComplete="new-password"
-                InputLabelProps={{
-                  shrink: true
-                }}
-                InputProps={{
-                  inputComponent: Select,
-                  inputProps: {
-                    creatable: true,
-                    multi: false,
-                    instanceId: `project-tag-${key}-id`,
-                    id: `project-tag-${key}-id`,
-                    simpleValue: true,
-                    options: this.state.tags,
-                  }
-                }}
-              />
-              <TextField
-                id={`project-tag-${key}-value`}
-                label="Valeur du tag (peut être laissé vide)"
-                value={val.value}
-                margin="normal"
-                onChange={this.handleUpdateArray('tag', key, 'value')}
-              />
-            </FormControl>
-          </Paper>
-        })}
-
-        <Typography variant="headline" style={styles.formControl}>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-            onClick={this.handleAddUrl.bind(this)}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
-          Urls
-        </Typography>
-
-        {this.state.url.map((val, key) => {
-          return <Paper key={key} style={styles.paper}>
-            <Button
-              size="small"
-              disabled={key <= 0}
-              onClick={this.handleChangeOrder.bind(this, 'url', key, 'up')}
-            >
-              <Icon>keyboard_arrow_up</Icon>
-            </Button>
-            <Button
-              disabled={key >= this.state.url.length - 1}
-              size="small"
-              onClick={this.handleChangeOrder.bind(this, 'url', key, 'down')}
-            >
-              <Icon>keyboard_arrow_down</Icon>
-            </Button>
-            <Button
-              size="small"
-              style={styles.right}
-              onClick={this.handleDeleteArray.bind(this, 'url', key)}
-            >
-              <Icon>delete</Icon>
-            </Button>
-            <FormControl fullWidth style={styles.formControl}>
-              <TextField
-                id={`project-url-${key}-name`}
-                label="Nom de l'URL"
-                value={val.name || ''}
-                margin="normal"
-                onChange={this.handleUpdateArray('url', key, 'name')}
-              />
-              <TextField
-                id={`project-url-${key}-value`}
-                label="URL"
-                value={val.value || ''}
-                margin="normal"
-                onChange={this.handleUpdateArray('url', key, 'value')}
-              />
-            </FormControl>
-          </Paper>
-        })}
+        {this.state.urls &&
+          <div>
+            <Typography variant="headline" className={classes.formControl}>
+              URLs
+            </Typography>
+            <Typography component="ul">
+              {this.state.urls.map((item, key) => {
+                let name = item.name || 'URL';
+              return <li key={key}>{name} : <span dangerouslySetInnerHTML={{ __html: Autolinker.link(item.value) }} /></li>
+              })}
+            </Typography>
+          </div>
+        }
       </div>
     );
   };
 }
 
-export default ProjectsShow;
+ProjectsShow.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles, { withTheme: true })(ProjectsShow);
