@@ -5,47 +5,9 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { getApi } from '../utils';
 
 moment.locale('fr');
-
-const groups = [{ id: 1, title: 'group 1' }, { id: 2, title: 'group 2' },
-  { id: 3, title: 'group 1' }, { id: 4, title: 'group 2' },
-  { id: 5, title: 'group 1' }, { id: 6, title: 'group 2' },
-  { id: 7, title: 'group 1' }, { id: 8, title: 'group 2' },
-  { id: 9, title: 'group 1' }, { id: 19, title: 'group 2' },
-  { id: 33, title: 'group 1' }, { id: 34, title: 'group 2' },
-  { id: 35, title: 'group 1' }, { id: 36, title: 'group 2' },
-  { id: 37, title: 'group 1' }, { id: 38, title: 'group 2' },
-  { id: 39, title: 'group 1' }, { id: 49, title: 'group 2' },
-  { id: 11, title: 'group 1' }, { id: 12, title: 'group 2' },
-  { id: 13, title: 'group 1' }, { id: 14, title: 'group 2' }];
-
-const items = [
-  {
-    id: 1,
-    group: 1,
-    style: {
-      backgroundColor: 'red',
-    },
-    title: 'item 1',
-    start_time: moment(),
-    end_time: moment().add(1, 'day')
-  },
-  {
-    id: 2,
-    group: 2,
-    title: 'item 2',
-    start_time: moment().add(-0.5, 'day'),
-    end_time: moment().add(0.5, 'day')
-  },
-  {
-    id: 3,
-    group: 1,
-    title: 'item 3',
-    start_time: moment().add(2, 'day'),
-    end_time: moment().add(3, 'day')
-  }
-];
 
 const styles = theme => ({
   timelineContainer: {
@@ -70,15 +32,75 @@ const styles = theme => ({
 
 
 class Teamview extends Component {
+  state = {
+    groups: [
+      {
+        id: 0,
+        title: 'Chargement...',
+      }
+    ],
+    items: [
+      {
+        id: 1,
+        group: 1,
+        style: {
+          backgroundColor: 'red',
+        },
+        title: 'item 1',
+        start_time: moment(),
+        end_time: moment().add(1, 'day')
+      },
+      {
+        id: 2,
+        group: 2,
+        title: 'item 2',
+        start_time: moment().add(-0.5, 'day'),
+        end_time: moment().add(0.5, 'day')
+      },
+      {
+        id: 3,
+        group: 1,
+        title: 'item 3',
+        start_time: moment().add(2, 'day'),
+        end_time: moment().add(3, 'day')
+      }
+    ],
+  };
+
+  fetchList() {
+    getApi('users').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      this.setState({
+        groups: res.map(e => {
+          const lastname = e.lastname ? `${e.lastname[0]}.` : '';
+          return {
+            id: e.id,
+            title: `${e.firstname} ${lastname}`,
+        }}),
+      });
+    });
+  }
+
+  componentDidMount() {
+    this.fetchList();
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true;
+  }
+
   render() {
     const { classes, theme } = this.props;
+
     return (
       <div className={classes.timelineContainer}>
         <Timeline
           style={styles(theme).timeline}
           lineHeight={40}
-          groups={groups}
-          items={items}
+          groups={this.state.groups}
+          items={this.state.items}
           sidebarContent={<div>Vue d'équipe</div>}
           itemsSorted
           itemTouchSendsClick={false}

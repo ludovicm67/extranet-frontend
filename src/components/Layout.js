@@ -139,6 +139,58 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Vue d'équipe" />
           </ListItem>
+          <ListItem
+            component={NavLink}
+            to="/contracts"
+            button
+            activeClassName="activeNavLink"
+            exact
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <Icon>insert_drive_file</Icon>
+            </ListItemIcon>
+            <ListItemText inset primary="Contrats" />
+          </ListItem>
+          <ListItem
+            component={NavLink}
+            to="/requests"
+            button
+            activeClassName="activeNavLink"
+            exact
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <Icon>live_help</Icon>
+            </ListItemIcon>
+            <ListItemText inset primary="Demandes" />
+          </ListItem>
+          <ListItem
+            component={NavLink}
+            to="/leave"
+            button
+            activeClassName="activeNavLink"
+            exact
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <Icon>hotel</Icon>
+            </ListItemIcon>
+            <ListItemText inset primary="Demande de congés" />
+          </ListItem>
+          <ListItem
+            component={NavLink}
+            to="/expenses"
+            button
+            activeClassName="activeNavLink"
+            exact
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <Icon>local_taxi</Icon>
+            </ListItemIcon>
+            <ListItemText inset primary="Soumettre une note de frais" />
+          </ListItem>
           <Divider />
           <ListItem
             component={NavLink}
