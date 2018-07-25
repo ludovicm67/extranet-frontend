@@ -1,399 +1,204 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import Select from '../layout/Select';
+import { DatePicker } from 'material-ui-pickers';
 
-import { getApi } from '../../utils';
+import { getApi, postApi } from '../../utils';
 
-const styles = theme => ({
+const styles = {
   intro: {
-    paddingBottom: '10px',
+    paddingBottom: 20,
   },
-  contactCards: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    alignContent: 'flex-start',
+  submit: {
+    marginTop: '42px',
   },
-  projectCards: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    alignContent: 'flex-start',
+  formControl: {
+    marginTop: 20,
   },
-  contactCard: {
-    width: 'calc(50% - 10px)',
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
-    marginTop: '15px',
-  },
-  projectCard: {
-    width: 'calc(50% - 10px)',
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
-    marginTop: '15px',
-  },
-  partTitle: {
-    marginTop: 36,
-  },
-  heading: {
-    fontSize: 15,
-    flexBasis: '55%',
-    flexShrink: 0,
-  },
-  secondaryHeading: {
-    fontSize: 15,
-    color: '#0000008a',
-  },
-  simpleList: {
-    listStyle: 'none',
-    padding: 0,
-  },
-  expansionPanelDetails: {
-    display: 'block',
-  },
-});
+};
+
+const contractTypes = [
+  'CDI', 'CDD', 'Stage', 'Apprentissage', 'Contrat pro'
+];
 
 class ContractsNew extends Component {
   state = {
-    expanded: null,
-    invoiceExpanded: null,
-    data: {
-      id: '',
-      name: '',
-      contacts: [],
-      orders: [],
-      subscriptions: [],
-      projects: [],
-    },
+    name: '',
+    users: [],
+    types: contractTypes.map(e => ({
+      label: e,
+      value: e,
+    })),
+    user: null,
+    type: 'CDI',
+    start_at: new Date(),
+    end_at: null,
   };
 
+  formatDate(date) {
+    if (!date || date === '') return '';
+
+    let year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString();
+    let day = date.getDate().toString();
+
+    return year + '-' + (month[1] ? month : '0' + month[0])
+      + '-' + (day[1] ? day : '0' + day[0]);
+  }
+
+  handleSubmit() {
+    postApi('contracts', {
+      user_id: this.state.user,
+      type: this.state.type,
+      start_at: this.formatDate(this.state.start_at),
+      end_at: this.formatDate(this.state.end_at),
+    }).then(() => this.props.history.push('/contracts'));
+  }
+
+  handleChange = prop => event => {
+    if (event && event.target && event.target.value !== undefined) {
+      this.setState({
+        [prop]: event.target.value,
+      });
+    } else {
+      this.setState({
+        [prop]: event,
+      });
+    }
+  };
+
+  handleDateChange = (prop, date) => {
+    this.setState({ [prop]: date });
+  }
+
   componentDidMount() {
-    getApi(`sellsy_contracts/${this.props.match.params.contractId}`, {
-      notFound: true,
-    }).then(res => {
+    getApi('users').then(res => {
       if (this.isUnmounted) {
         return;
       }
-      if (res.notFound) {
-        this.props.history.push('/contracts');
-      } else {
-        this.setState({
-          data: res,
-        });
-      }
+      const users = [];
+      users.push(...res.map(e => {
+        return {
+          label: `${e.firstname} ${e.lastname} (${e.email})`,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        users,
+      });
     });
   }
-
-  componentWillUnmount() {
-    this.isUnmounted = true;
-  }
-
-  handleExpanded = panel => (event, expanded) => {
-    this.setState({
-      expanded: expanded ? panel : false,
-    });
-  };
-
-  handleInvoiceExpanded = panel => (event, invoiceExpanded) => {
-    this.setState({
-      invoiceExpanded: invoiceExpanded ? panel : false,
-    });
-  };
 
   render() {
-    const { classes } = this.props;
-
-    let contacts = null;
-    if (this.state.data.contacts.length > 0) {
-      const contactsMap = this.state.data.contacts.map(n => {
-        return (
-          <Card key={n.id} className={classes.contactCard}>
-            <CardContent>
-              <Typography gutterBottom variant="headline" component="h2">
-                {n.fullName}
-              </Typography>
-              <Typography component="ul" className={classes.simpleList}>
-                {n.position ? (<li>{n.position}</li>) : null}
-                {n.email ? (<li><a href={`mailto:${n.email}`}>{n.email}</a></li>) : null}
-                {n.tel ? (<li><a href={`tel:${n.tel}`}>{n.tel}</a></li>) : null}
-                {n.mobile ? (<li><a href={`tel:${n.mobile}`}>{n.mobile}</a></li>) : null}
-              </Typography>
-            </CardContent>
-          </Card>
-        );
-      });
-      contacts = (
-        <div>
-          <Typography variant="headline" className={classes.partTitle}>Contacts</Typography>
-          <div className={classes.contactCards}>{contactsMap}</div>
-        </div>
-      );
-    }
-
-    let projects = null;
-    if (this.state.data.projects.length > 0) {
-      const projectsMap = this.state.data.projects.map(n => {
-        return (
-          <Link to={`/projects/${n.id}`} key={n.id} className={classes.projectCard}>
-            <Card>
-              <CardContent>
-                <Typography gutterBottom variant="headline" component="h2">
-                  {n.name}
-                </Typography>
-                <Typography component="ul" className={classes.simpleList}>
-                  {n.domain ? (<li>{n.domain}</li>) : null}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Link>
-        );
-      });
-      projects = (
-        <div>
-          <Typography variant="headline" className={classes.partTitle}>Projets</Typography>
-          <div className={classes.projectCards}>{projectsMap}</div>
-        </div>
-      );
-    }
-
-    let orders = null;
-    if (this.state.data.orders.length > 0) {
-      const ordersMap = this.state.data.orders.map(n => {
-        if (!n.subject) n.subject = '';
-        let remainingOrderAmount = n.invoices.reduce((p, c) => {
-          return p - parseFloat(c.totalAmountTaxesFree);
-        }, parseFloat(n.totalAmountTaxesFree));
-        let remainingDueAmount = n.invoices.reduce((p, c) => {
-          return p + parseFloat(c.dueAmount);
-        }, .0);
-
-        // just to prevent strange behaviors
-        if (remainingOrderAmount < 0) remainingOrderAmount = 0;
-        if (remainingDueAmount < 0) remainingDueAmount = 0;
-
-        let invoices = null;
-        if (n.invoices.length > 0) {
-          const invoicesMap = n.invoices.map(n => {
-            if (!n.subject) n.subject = '';
-            return (
-              <ExpansionPanel
-                key={n.id}
-                expanded={this.state.invoiceExpanded === `panel-invoice-${n.id}`}
-                onChange={this.handleInvoiceExpanded(`panel-invoice-${n.id}`)}
-              >
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, ' ')}</Typography>
-                  <Typography className={classes.secondaryHeading} style={{ color: n.step_hex }}>
-                    {n.formatted_dueAmount} TTC
-                  </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  <Typography component="ul" className={classes.simpleList}>
-                    <li>
-                      <strong>Date : </strong>
-                      {n.displayedDate}
-                    </li>
-                    <li>
-                      <strong>Sujet : </strong>
-                      {n.subject.replace(/<[^>]+>/g, ' ')}
-                    </li>
-                    <li>
-                      <strong>Statut : </strong>
-                      <span style={{ color: n.step_hex }}>{n.step_label}</span>
-                    </li>
-                    <li>
-                      <strong>Montant total HT : </strong>
-                      {n.formatted_totalAmountTaxesFree} HT
-                    </li>
-                    <li>
-                      <strong>Montant total TTC : </strong>
-                      {n.formatted_totalAmount} TTC
-                    </li>
-                    <li>
-                      <strong>Reste à payer : </strong>
-                      {n.formatted_dueAmount} TTC
-                    </li>
-                    <li>
-                      <strong>Contact : </strong>
-                      {n.contactName}
-                    </li>
-                    {n.publicLinkShort ? (
-                      <li>
-                        <strong>Lien vers la facture : </strong>
-                        <a href={n.publicLinkShort} target="_blank">
-                          {n.publicLinkShort}
-                        </a>
-                      </li>
-                    ) : null}
-                  </Typography>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            );
-          });
-          invoices = (
-            <div>
-              <Typography variant="subheading" className={classes.partTitle}><strong>Factures associées :</strong></Typography>
-              {invoicesMap}
-            </div>
-          );
-        }
-
-        return (
-          <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-orders-${n.id}`} onChange={this.handleExpanded(`panel-orders-${n.id}`)}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, ' ')}</Typography>
-              <Typography className={classes.secondaryHeading} style={{ color: n.step_hex }}>
-                {remainingOrderAmount.toLocaleString(undefined, {minimumFractionDigits: 2})} {n.currencysymbol} HT
-                {remainingDueAmount > .0 ? (
-                  <span>
-                    + {remainingDueAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })} {n.currencysymbol} TTC
-                    en attente de paiement
-                  </span>
-                ) : null}
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.expansionPanelDetails}>
-              <Typography component="ul" className={classes.simpleList}>
-                <li>
-                  <strong>Date : </strong>
-                  {n.displayedDate}
-                </li>
-                <li>
-                  <strong>Contract : </strong>
-                  {n.thirdname}
-                </li>
-                <li>
-                  <strong>Sujet : </strong>
-                  {n.subject.replace(/<[^>]+>/g, ' ')}
-                </li>
-                <li>
-                  <strong>Statut : </strong>
-                  <span style={{ color: n.step_hex }}>{n.step_label}</span>
-                </li>
-                <li>
-                  <strong>Montant total HT : </strong>
-                  {n.formatted_totalAmountTaxesFree} HT
-                </li>
-                <li>
-                  <strong>Montant total TTC : </strong>
-                  {n.formatted_totalAmount} TTC
-                </li>
-                <li>
-                  <strong>Contact : </strong>
-                  {n.contactName}
-                </li>
-                {n.publicLinkShort ? (
-                  <li>
-                    <strong>Lien vers le bon de commande : </strong>
-                    <a href={n.publicLinkShort} target="_blank">
-                      {n.publicLinkShort}
-                    </a>
-                  </li>
-                ) : null}
-              </Typography>
-              {invoices}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        );
-      });
-      orders = (
-        <div>
-          <Typography variant="headline" className={classes.partTitle}>Commandes</Typography>
-          {ordersMap}
-        </div>
-      );
-    }
-
-    let subscriptions = null;
-    if (this.state.data.subscriptions.length > 0) {
-      const subscriptionsMap = this.state.data.subscriptions.map(n => {
-        if (!n.subject) n.subject = '';
-        return (
-          <ExpansionPanel key={n.id} expanded={this.state.expanded === `panel-subs-${n.id}`} onChange={this.handleExpanded(`panel-subs-${n.id}`)}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>{n.subject.replace(/<[^>]+>/g, ' ')}</Typography>
-              <Typography className={classes.secondaryHeading} style={{color: n.step_hex}}>
-                {n.formatted_dueAmount} TTC
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography component="ul" className={classes.simpleList}>
-                <li>
-                  <strong>Date : </strong>
-                  {n.displayedDate}
-                </li>
-                <li>
-                  <strong>Sujet : </strong>
-                  {n.subject.replace(/<[^>]+>/g, ' ')}
-                </li>
-                <li>
-                  <strong>Statut : </strong>
-                  <span style={{ color: n.step_hex }}>{n.step_label}</span>
-                </li>
-                <li>
-                  <strong>Montant total HT : </strong>
-                  {n.formatted_totalAmountTaxesFree} HT
-                </li>
-                <li>
-                  <strong>Montant total TTC : </strong>
-                  {n.formatted_totalAmount} TTC
-                </li>
-                <li>
-                  <strong>Reste à payer : </strong>
-                  {n.formatted_dueAmount} TTC
-                </li>
-                <li>
-                  <strong>Contact : </strong>
-                  {n.contactName}
-                </li>
-                {n.publicLinkShort ? (
-                  <li>
-                    <strong>Lien vers la facture : </strong>
-                    <a href={n.publicLinkShort} target="_blank">
-                      {n.publicLinkShort}
-                    </a>
-                  </li>
-                ) : null}
-              </Typography>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        );
-      });
-      subscriptions = (
-        <div>
-          <Typography variant="headline" className={classes.partTitle}>Factures liées aux abonnements</Typography>
-          {subscriptionsMap}
-        </div>
-      );
-    }
-
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          {this.state.data.name}
+          Créer un nouveau contrat
         </Typography>
-        <Typography className={classes.intro}>Affichage de quelques informations à propos de ce contract</Typography>
-        {contacts}
-        {projects}
-        {orders}
-        {subscriptions}
+        <Typography style={styles.intro}>Entrez ici les informations concernant le contrat</Typography>
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.user}
+          onChange={this.handleChange('user')}
+          placeholder="Choisissez un utilisateur..."
+          name="select-user"
+          label="Utilisateur"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              creatable: false,
+              multi: false,
+              instanceId: "select-user",
+              id: "select-user",
+              simpleValue: true,
+              options: this.state.users,
+            }
+          }}
+        />
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.type}
+          onChange={this.handleChange('type')}
+          placeholder="Choisissez un type.."
+          name="select-type"
+          label="Type de contrat"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              creatable: true,
+              multi: false,
+              instanceId: "select-type",
+              id: "select-type",
+              simpleValue: true,
+              options: this.state.types,
+            }
+          }}
+        />
+
+        <FormControl fullWidth style={styles.formControl}>
+          <DatePicker
+            keyboard
+            label="Début du contrat"
+            cancelLabel="Annuler"
+            invalidDateMessage="Format de date invalide"
+            invalidLabel="Inconnu"
+            clearLabel="Vider"
+            maxDateMessage="La date dépasse la date maximale"
+            minDateMessage="La date ne doit pas être avant la date minimale"
+            todayLabel="Aujourd'hui"
+            showTodayButton={true}
+            format="DD/MM/YYYY"
+            placeholder="jj/mm/aaaa"
+            mask={value => (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])}
+            value={this.state.start_at}
+            onChange={this.handleDateChange.bind(this, 'start_at')}
+            disableOpenOnEnter
+            animateYearScrolling={false}
+          />
+        </FormControl>
+
+        <FormControl fullWidth style={styles.formControl}>
+          <DatePicker
+            keyboard
+            clearable={true}
+            label="Fin du contrat (optionnel)"
+            cancelLabel="Annuler"
+            invalidDateMessage="Format de date invalide"
+            invalidLabel="Inconnu"
+            clearLabel="Vider"
+            maxDateMessage="La date dépasse la date maximale"
+            minDateMessage="La date ne doit pas être avant la date minimale"
+            todayLabel="Aujourd'hui"
+            showTodayButton={true}
+            format="DD/MM/YYYY"
+            placeholder="jj/mm/aaaa"
+            mask={value => (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])}
+            value={this.state.end_at}
+            onChange={this.handleDateChange.bind(this, 'end_at')}
+            disableOpenOnEnter
+            animateYearScrolling={false}
+          />
+        </FormControl>
+
+        <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
+          Créer
+        </Button>
       </div>
     );
   };
 }
 
-ContractsNew.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles, { withTheme: true })(ContractsNew);
+export default ContractsNew;
