@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi } from '../../utils';
+import { getApi, deleteApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -27,7 +27,7 @@ class ContractsList extends Component {
     data: [],
   };
 
-  componentDidMount() {
+  fetchList() {
     getApi('contracts').then(res => {
       if (this.isUnmounted) {
         return;
@@ -38,8 +38,30 @@ class ContractsList extends Component {
     });
   }
 
+  componentDidMount() {
+    this.fetchList();
+  }
+
   componentWillUnmount() {
     this.isUnmounted = true;
+  }
+
+  formatDate(date) {
+    if (!date || date === '') return '';
+
+    let year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString();
+    let day = date.getDate().toString();
+
+    return (day[1] ? day : '0' + day[0]) + '/'
+      + (month[1] ? month : '0' + month[0])
+      + '/' + year;
+  }
+
+  handleDelete(ressource) {
+    deleteApi(ressource).then(() => {
+      this.fetchList();
+    });
   }
 
   render() {
@@ -72,15 +94,35 @@ class ContractsList extends Component {
             </TableHead>
             <TableBody>
               {this.state.data.map(n => {
+                if (!n.user) return null;
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/contracts/${n.id}`}>{n.name}</Link>
+                      <Link to={`/users/${n.user.id}`}>
+                        {n.user.firstname} {n.user.lastname} ({n.user.email})
+                      </Link>
                     </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>{n.type}</TableCell>
+                    <TableCell>
+                      {(n.start_at
+                        && this.formatDate(new Date(Date.parse(n.start_at))))
+                        || '- - - - - - - - - -'
+                      }
+                    </TableCell>
+                    <TableCell>
+                      {(n.end_at
+                        && this.formatDate(new Date(Date.parse(n.end_at))))
+                        || '- - - - - - - - - -'
+                      }
+                    </TableCell>
+                    <TableCell>
+                      <IconButton component={Link} to={`/contracts/${n.id}/edit`}>
+                        <Icon>edit</Icon>
+                      </IconButton>
+                      <IconButton onClick={this.handleDelete.bind(this, `contracts/${n.id}`)}>
+                        <Icon>delete</Icon>
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 );
               })}
