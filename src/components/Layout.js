@@ -41,6 +41,7 @@ import Dashboard from './Dashboard';
 import Projects from './projects';
 import Teamview from './Teamview';
 import Contracts from './contracts';
+import Requests from './requests';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -165,32 +166,6 @@ class Layout extends React.Component {
               <Icon>live_help</Icon>
             </ListItemIcon>
             <ListItemText inset primary="Demandes" />
-          </ListItem>
-          <ListItem
-            component={NavLink}
-            to="/leave"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <Icon>hotel</Icon>
-            </ListItemIcon>
-            <ListItemText inset primary="Demande de congés" />
-          </ListItem>
-          <ListItem
-            component={NavLink}
-            to="/expenses"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <Icon>local_taxi</Icon>
-            </ListItemIcon>
-            <ListItemText inset primary="Soumettre une note de frais" />
           </ListItem>
           <Divider />
           <ListItem
@@ -411,6 +386,9 @@ class Layout extends React.Component {
               <Route path="/projects" component={Projects} />
               <Route path="/teamview" component={Teamview} />
               <Route path="/contracts" component={Contracts} />
+              <Route path="/leave" component={Requests} />
+              <Route path="/expenses" component={Requests} />
+              <Route path="/requests" component={Requests} />
               <Route path="/" component={Dashboard} />
             </Switch>
         </main>
