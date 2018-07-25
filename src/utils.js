@@ -35,6 +35,8 @@ export const getApi = (location, defaultReturn = []) => {
           if (!e) {
             store.dispatch(logout());
             window.location.href = '/login';
+          } else {
+            window.location.reload();
           }
         }).catch(_e => {
           store.dispatch(logout());
@@ -64,6 +66,8 @@ export const postApi = (location, data = {}, defaultReturn = []) => {
           if (!e) {
             store.dispatch(logout());
             window.location.href = '/login';
+          } else {
+            return postApi(location, data, defaultReturn);
           }
         }).catch(_e => {
           store.dispatch(logout());
@@ -93,6 +97,8 @@ export const putApi = (location, data = {}, defaultReturn = []) => {
           if (!e) {
             store.dispatch(logout());
             window.location.href = '/login';
+          } else {
+            return putApi(location, data, defaultReturn);
           }
         }).catch(_e => {
           store.dispatch(logout());
@@ -122,6 +128,8 @@ export const deleteApi = (location, defaultReturn = []) => {
           if (!e) {
             store.dispatch(logout());
             window.location.href = '/login';
+          } else {
+            return deleteApi(location, defaultReturn);
           }
         }).catch(_e => {
           store.dispatch(logout());
