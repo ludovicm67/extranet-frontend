@@ -40,6 +40,7 @@ import Updates from './updates';
 import Dashboard from './Dashboard';
 import Projects from './projects';
 import Teamview from './Teamview';
+import Contracts from './contracts';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -409,6 +410,7 @@ class Layout extends React.Component {
               <Route path="/updates" component={Updates} />
               <Route path="/projects" component={Projects} />
               <Route path="/teamview" component={Teamview} />
+              <Route path="/contracts" component={Contracts} />
               <Route path="/" component={Dashboard} />
             </Switch>
         </main>
