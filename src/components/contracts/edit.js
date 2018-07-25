@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Select from '../layout/Select';
 import { DatePicker } from 'material-ui-pickers';
 
-import { getApi, postApi } from '../../utils';
+import { getApi, putApi } from '../../utils';
 
 const styles = {
   intro: {
@@ -24,8 +24,9 @@ const contractTypes = [
   'CDI', 'CDD', 'Stage', 'Apprentissage', 'Contrat pro'
 ];
 
-class ContractsNew extends Component {
+class ContractsEdit extends Component {
   state = {
+    id: this.props.match.params.contractId,
     users: [],
     types: contractTypes.map(e => ({
       label: e,
@@ -49,7 +50,7 @@ class ContractsNew extends Component {
   }
 
   handleSubmit() {
-    postApi('contracts', {
+    putApi(`contracts/${this.state.id}`, {
       user_id: this.state.user,
       type: this.state.type,
       start_at: this.formatDate(this.state.start_at),
@@ -89,13 +90,35 @@ class ContractsNew extends Component {
         users,
       });
     });
+    getApi(`contracts/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const startAt = res.start_at && new Date(Date.parse(res.start_at));
+      const endAt = res.end_at && new Date(Date.parse(res.end_at));
+      const types = this.state.types;
+      if (!contractTypes.includes(res.type)) {
+        types.push({
+          label: res.type,
+          value: res.type,
+        });
+      }
+
+      this.setState({
+        user: res.user_id,
+        type: res.type,
+        types,
+        start_at: startAt || null,
+        end_at: endAt || null,
+      });
+    });
   }
 
   render() {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          Créer un nouveau contrat
+          Modifier un contrat
         </Typography>
         <Typography style={styles.intro}>Entrez ici les informations concernant le contrat</Typography>
         <TextField
@@ -193,11 +216,11 @@ class ContractsNew extends Component {
         </FormControl>
 
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
-          Créer
+          Modifier
         </Button>
       </div>
     );
   };
 }
 
-export default ContractsNew;
+export default ContractsEdit;
