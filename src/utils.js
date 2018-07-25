@@ -2,7 +2,21 @@ import axios from 'axios';
 import qs from 'qs';
 import store from './store';
 import constants from './constants';
-import { logout } from './actions/auth';
+import { logout, login } from './actions/auth';
+
+const tryRefreshToken = () => {
+  const request = axios.get(`
+    ${constants.API_ENDPOINT}/auth/refresh?token=${store.getState().auth.auth.token}
+  `).then(res => {
+    if (!res.data.success || !res.data.data || !res.data.data.token) {
+      return false;
+    }
+    store.dispatch(login(res.data.data.token));
+    return true;
+  }).catch(_e => false);
+
+  return request;
+};
 
 export const getApi = (location, defaultReturn = []) => {
   const request = axios.get(`
@@ -17,8 +31,15 @@ export const getApi = (location, defaultReturn = []) => {
       return res.data;
     }).catch((e) => {
       if (e && e.response && e.response.status && e.response.status === 401) {
-        store.dispatch(logout());
-        window.location.href = '/login';
+        tryRefreshToken().then(e => {
+          if (!e) {
+            store.dispatch(logout());
+            window.location.href = '/login';
+          }
+        }).catch(_e => {
+          store.dispatch(logout());
+          window.location.href = '/login';
+        });
       }
       return defaultReturn;
     });
@@ -39,8 +60,15 @@ export const postApi = (location, data = {}, defaultReturn = []) => {
       return res.data;
     }).catch((e) => {
       if (e && e.response && e.response.status && e.response.status === 401) {
-        store.dispatch(logout());
-        window.location.href = '/login';
+        tryRefreshToken().then(e => {
+          if (!e) {
+            store.dispatch(logout());
+            window.location.href = '/login';
+          }
+        }).catch(_e => {
+          store.dispatch(logout());
+          window.location.href = '/login';
+        });
       }
       return defaultReturn;
     });
@@ -61,8 +89,15 @@ export const putApi = (location, data = {}, defaultReturn = []) => {
       return res.data;
     }).catch((e) => {
       if (e && e.response && e.response.status && e.response.status === 401) {
-        store.dispatch(logout());
-        window.location.href = '/login';
+        tryRefreshToken().then(e => {
+          if (!e) {
+            store.dispatch(logout());
+            window.location.href = '/login';
+          }
+        }).catch(_e => {
+          store.dispatch(logout());
+          window.location.href = '/login';
+        });
       }
       return defaultReturn;
     });
@@ -83,8 +118,15 @@ export const deleteApi = (location, defaultReturn = []) => {
       return res.data;
     }).catch((e) => {
       if (e && e.response && e.response.status && e.response.status === 401) {
-        store.dispatch(logout());
-        window.location.href = '/login';
+        tryRefreshToken().then(e => {
+          if (!e) {
+            store.dispatch(logout());
+            window.location.href = '/login';
+          }
+        }).catch(_e => {
+          store.dispatch(logout());
+          window.location.href = '/login';
+        });
       }
       return defaultReturn;
     });
