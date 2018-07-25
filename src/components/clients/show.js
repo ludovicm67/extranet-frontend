@@ -8,6 +8,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { getApi } from '../../utils';
 
@@ -21,7 +22,20 @@ const styles = theme => ({
     justifyContent: 'space-between',
     alignContent: 'flex-start',
   },
+  projectCards: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignContent: 'flex-start',
+  },
   contactCard: {
+    width: 'calc(50% - 10px)',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    marginTop: '15px',
+  },
+  projectCard: {
     width: 'calc(50% - 10px)',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
@@ -59,6 +73,7 @@ class ClientsShow extends Component {
       contacts: [],
       orders: [],
       subscriptions: [],
+      projects: [],
     },
   };
 
@@ -97,6 +112,7 @@ class ClientsShow extends Component {
 
   render() {
     const { classes } = this.props;
+
     let contacts = null;
     if (this.state.data.contacts.length > 0) {
       const contactsMap = this.state.data.contacts.map(n => {
@@ -120,6 +136,32 @@ class ClientsShow extends Component {
         <div>
           <Typography variant="headline" className={classes.partTitle}>Contacts</Typography>
           <div className={classes.contactCards}>{contactsMap}</div>
+        </div>
+      );
+    }
+
+    let projects = null;
+    if (this.state.data.projects.length > 0) {
+      const projectsMap = this.state.data.projects.map(n => {
+        return (
+          <Link to={`/projects/${n.id}`} key={n.id} className={classes.projectCard}>
+            <Card>
+              <CardContent>
+                <Typography gutterBottom variant="headline" component="h2">
+                  {n.name}
+                </Typography>
+                <Typography component="ul" className={classes.simpleList}>
+                  {n.domain ? (<li>{n.domain}</li>) : null}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Link>
+        );
+      });
+      projects = (
+        <div>
+          <Typography variant="headline" className={classes.partTitle}>Projets</Typography>
+          <div className={classes.projectCards}>{projectsMap}</div>
         </div>
       );
     }
@@ -342,6 +384,7 @@ class ClientsShow extends Component {
         </Typography>
         <Typography className={classes.intro}>Affichage de quelques informations à propos de ce client</Typography>
         {contacts}
+        {projects}
         {orders}
         {subscriptions}
       </div>
