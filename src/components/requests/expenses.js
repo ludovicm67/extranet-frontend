@@ -115,6 +115,7 @@ class Expenses extends Component {
             inputComponent: Select,
             inputProps: {
               creatable: false,
+              clearable: false,
               multi: false,
               instanceId: "select-month",
               id: "select-month",
@@ -139,6 +140,7 @@ class Expenses extends Component {
             inputComponent: Select,
             inputProps: {
               creatable: false,
+              clearable: false,
               multi: false,
               instanceId: "select-type",
               id: "select-type",
@@ -172,7 +174,7 @@ class Expenses extends Component {
                 onChange={this.handleChange('file')}
               />
               <label htmlFor="raised-button-file">
-                <Button raised component="span">
+                <Button component="span">
                   Parcourir...
                 </Button>
               </label>

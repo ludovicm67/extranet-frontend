@@ -97,7 +97,6 @@ class Teamview extends Component {
     return (
       <div className={classes.timelineContainer}>
         <Timeline
-          style={styles(theme).timeline}
           lineHeight={40}
           groups={this.state.groups}
           items={this.state.items}

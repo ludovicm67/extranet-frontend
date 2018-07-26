@@ -24,7 +24,7 @@ const styles = theme => ({
       alignItems: "center",
       border: 0,
       height: "auto",
-      background: "transparent",
+      background: "transparent !important",
       "&:hover": {
         boxShadow: "none"
       }
