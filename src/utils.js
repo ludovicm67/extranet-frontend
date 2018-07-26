@@ -18,6 +18,22 @@ const tryRefreshToken = () => {
   return request;
 };
 
+const generateFormData = (data, method = null) => {
+  const hasFile = data && data.file && data.file instanceof File;
+  const completeData = method ? { ...data, _method: method } : data;
+  const fd = new FormData();
+  const qsData = qs.stringify(completeData);
+  const qsSplitted = qsData.split('&');
+  for (let k in qsSplitted) {
+    const [head, ...tail] = qsSplitted[k].split('=');
+    fd.append(decodeURIComponent(head), decodeURIComponent(tail));
+  }
+  if (hasFile) {
+    fd.append('file', data.file);
+  }
+  return fd;
+};
+
 export const getApi = (location, defaultReturn = []) => {
   const request = axios.get(`
     ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
@@ -52,7 +68,7 @@ export const getApi = (location, defaultReturn = []) => {
 export const postApi = (location, data = {}, defaultReturn = []) => {
   const request = axios.post(`
     ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, qs.stringify(data)).then(res => {
+  `, generateFormData(data)).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
@@ -83,7 +99,7 @@ export const postApi = (location, data = {}, defaultReturn = []) => {
 export const putApi = (location, data = {}, defaultReturn = []) => {
   const request = axios.post(`
     ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, qs.stringify({ ...data, _method: 'PUT' })).then(res => {
+  `, generateFormData(data, 'PUT')).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
@@ -114,7 +130,7 @@ export const putApi = (location, data = {}, defaultReturn = []) => {
 export const deleteApi = (location, defaultReturn = []) => {
   const request = axios.post(`
     ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, qs.stringify({ _method: 'DELETE' })).then(res => {
+  `, generateFormData({}, 'DELETE')).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
