@@ -20,6 +20,9 @@ const styles = {
   formControl: {
     marginTop: 20,
   },
+  hidden: {
+    display: 'none',
+  },
 };
 
 const months = [
@@ -54,6 +57,7 @@ class Expenses extends Component {
     type: 'Transports',
     amount: 0,
     details: '',
+    file: '',
 
     types: types.map(e => ({
       label: e,
@@ -155,6 +159,28 @@ class Expenses extends Component {
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
+          <InputLabel htmlFor="form-file">Jutificatif</InputLabel>
+          <Input
+            id="form-file"
+            type="text"
+            disabled
+            endAdornment={<InputAdornment position="end">
+              <input
+                id="raised-button-file"
+                type="file"
+                style={styles.hidden}
+                onChange={this.handleChange('file')}
+              />
+              <label htmlFor="raised-button-file">
+                <Button raised component="span">
+                  Parcourir...
+                </Button>
+              </label>
+            </InputAdornment>}
+            value={this.state.file}
+          />
+        </FormControl>
+        <FormControl fullWidth style={styles.formControl}>
           <InputLabel htmlFor="form-details">Commentaire</InputLabel>
           <Input
             id="form-details"
@@ -165,7 +191,7 @@ class Expenses extends Component {
           />
         </FormControl>
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
-          Créer
+          Soumettre
         </Button>
       </div>
     );
