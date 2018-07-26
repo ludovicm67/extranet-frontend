@@ -96,6 +96,10 @@ class Leave extends Component {
     }
   };
 
+  handleFileChange(e) {
+    this.setState({ file: e.target.files[0] })
+  }
+
   handleDateChange = (prop, date) => {
     this.setState({ [prop]: date });
   }
@@ -240,7 +244,7 @@ class Leave extends Component {
                 id="raised-button-file"
                 type="file"
                 style={styles.hidden}
-                onChange={this.handleChange('file')}
+                onChange={this.handleFileChange.bind(this)}
               />
               <label htmlFor="raised-button-file">
                 <Button component="span">
@@ -248,7 +252,7 @@ class Leave extends Component {
                 </Button>
               </label>
             </InputAdornment>}
-            value={this.state.file}
+            value={(this.state.file && this.state.file.name) || ''}
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>

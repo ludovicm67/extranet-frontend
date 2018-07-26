@@ -67,7 +67,12 @@ class Expenses extends Component {
 
   handleSubmit() {
     postApi('expenses', {
-      name: this.state.name,
+      year: this.state.year,
+      month: this.state.month,
+      type: this.state.type,
+      amount: this.state.amount,
+      details: this.state.details,
+      file: this.state.file,
     }).then(() => this.props.history.push('/requests'));
   }
 
@@ -82,6 +87,10 @@ class Expenses extends Component {
       });
     }
   };
+
+  handleFileChange(e) {
+    this.setState({ file: e.target.files[0] })
+  }
 
   render() {
     return (
@@ -171,7 +180,7 @@ class Expenses extends Component {
                 id="raised-button-file"
                 type="file"
                 style={styles.hidden}
-                onChange={this.handleChange('file')}
+                onChange={this.handleFileChange.bind(this)}
               />
               <label htmlFor="raised-button-file">
                 <Button component="span">
@@ -179,7 +188,7 @@ class Expenses extends Component {
                 </Button>
               </label>
             </InputAdornment>}
-            value={this.state.file}
+            value={(this.state.file && this.state.file.name) || ''}
           />
         </FormControl>
         <FormControl fullWidth style={styles.formControl}>
