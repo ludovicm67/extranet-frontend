@@ -53,6 +53,7 @@ class Expenses extends Component {
     month: todayInfos.month,
     type: 'Transports',
     amount: 0,
+    details: '',
 
     types: types.map(e => ({
       label: e,
@@ -151,6 +152,16 @@ class Expenses extends Component {
             endAdornment={<InputAdornment position="end">€</InputAdornment>}
             value={this.state.amount}
             onChange={this.handleChange('amount')}
+          />
+        </FormControl>
+        <FormControl fullWidth style={styles.formControl}>
+          <InputLabel htmlFor="form-details">Commentaire</InputLabel>
+          <Input
+            id="form-details"
+            multiline
+            rowsMax="10"
+            value={this.state.details}
+            onChange={this.handleChange('details')}
           />
         </FormControl>
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
