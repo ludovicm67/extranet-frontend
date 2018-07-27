@@ -39,46 +39,36 @@ class Teamview extends Component {
         title: 'Chargement...',
       }
     ],
-    items: [
-      {
-        id: 1,
-        group: 1,
-        style: {
-          backgroundColor: 'red',
-        },
-        title: 'item 1',
-        start_time: moment(),
-        end_time: moment().add(1, 'day')
-      },
-      {
-        id: 2,
-        group: 2,
-        title: 'item 2',
-        start_time: moment().add(-0.5, 'day'),
-        end_time: moment().add(0.5, 'day')
-      },
-      {
-        id: 3,
-        group: 1,
-        title: 'item 3',
-        start_time: moment().add(2, 'day'),
-        end_time: moment().add(3, 'day')
-      }
-    ],
+    items: [],
   };
 
   fetchList() {
-    getApi('users').then(res => {
+    getApi('team').then(res => {
       if (this.isUnmounted) {
         return;
       }
+      const items = [];
       this.setState({
         groups: res.map(e => {
           const lastname = e.lastname ? `${e.lastname[0]}.` : '';
+          e.leave && e.leave.map(l => {
+            items.push({
+              id: l.id,
+              group: l.user_id,
+              title: l.reason,
+              start_time: moment(l.start),
+              end_time: moment(l.end),
+              style: {
+                opacity: l.accepted > 0 ? 1 : .4,
+              }
+            });
+            return null;
+          });
           return {
             id: e.id,
             title: `${e.firstname} ${lastname}`,
         }}),
+        items,
       });
     });
   }
