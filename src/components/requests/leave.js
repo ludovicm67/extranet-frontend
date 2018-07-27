@@ -55,7 +55,7 @@ class Leave extends Component {
 
     reasons: reasons.map(e => ({
       label: e,
-      value: e,
+      value: e.split(' ')[0],
     })),
     starts: starts.map(e => ({
       label: `${e} h`,
@@ -80,7 +80,15 @@ class Leave extends Component {
 
   handleSubmit() {
     postApi('leave', {
-      name: this.state.name,
+      start: this.formatDate(this.state.start),
+      end: this.formatDate(this.state.end),
+      start_time: this.state.start_time,
+      end_time: this.state.end_time,
+      year: this.state.year,
+      month: this.state.month,
+      reason: this.state.reason,
+      details: this.state.details,
+      file: this.state.file,
     }).then(() => this.props.history.push('/requests'));
   }
 
