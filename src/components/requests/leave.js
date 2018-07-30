@@ -35,20 +35,12 @@ const reasons = [
 const starts = [9, 14];
 const ends = [18, 12];
 
-const today = new Date();
-const todayInfos = {
-  year: today.getFullYear(),
-  month: 1 + today.getMonth(),
-};
-
 class Leave extends Component {
   state = {
     start: new Date(),
     end: new Date(),
     start_time: 9,
     end_time: 18,
-    year: todayInfos.year,
-    month: todayInfos.month,
     reason: 'Congé',
     details: '',
     file: '',
@@ -84,8 +76,6 @@ class Leave extends Component {
       end: this.formatDate(this.state.end),
       start_time: this.state.start_time,
       end_time: this.state.end_time,
-      year: this.state.year,
-      month: this.state.month,
       reason: this.state.reason,
       details: this.state.details,
       file: this.state.file,
