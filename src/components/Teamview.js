@@ -52,6 +52,7 @@ class Teamview extends Component {
         groups: res.map(e => {
           const lastname = e.lastname ? `${e.lastname[0]}.` : '';
           e.leave && e.leave.map(l => {
+            if (l.accepted < 0) return null;
             items.push({
               id: l.id,
               group: l.user_id,
