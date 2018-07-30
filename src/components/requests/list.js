@@ -9,8 +9,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
+import moment from 'moment';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, urlApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -29,14 +30,14 @@ class TypesList extends Component {
   };
 
   fetchList() {
-    // getApi('types').then(res => {
-    //   if (this.isUnmounted) {
-    //     return;
-    //   }
-    //   this.setState({
-    //     data: res,
-    //   });
-    // });
+    getApi('requests').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      this.setState({
+        data: res,
+      });
+    });
   }
 
   componentDidMount() {
@@ -51,6 +52,56 @@ class TypesList extends Component {
     deleteApi(ressource).then(() => {
       this.fetchList();
     });
+  }
+
+  formatDate(date) {
+    if (!date || date === '') return '';
+    return date = moment(date).format('DD/MM/YYYY');
+  }
+  formatHour(date) {
+    if (!date || date === '') return '';
+    return `${moment(date).format('H')}h`;
+  }
+
+  formatDateInterval(a, b) {
+    const d1 = this.formatDate(a);
+    const d2 = this.formatDate(b);
+    if (d1 === d2) {
+      return `le ${d1} de ${this.formatHour(a)} à ${this.formatHour(b)}`;
+    } else {
+      return `du ${d1} à ${this.formatHour(a)} au ${d2} à ${this.formatHour(b)}`;
+    }
+  }
+
+  formatMonth(month) {
+    switch (month) {
+      case 1:
+        return 'Janvier';
+      case 2:
+        return 'Février';
+      case 3:
+        return 'Mars';
+      case 4:
+        return 'Avril';
+      case 5:
+        return 'Mai';
+      case 6:
+        return 'Juin';
+      case 7:
+        return 'Juillet';
+      case 8:
+        return 'Août';
+      case 9:
+        return 'Septembre';
+      case 10:
+        return 'Octobre';
+      case 11:
+        return 'Novembre';
+      case 12:
+        return 'Décembre';
+      default:
+        return '';
+    }
   }
 
   render() {
@@ -84,22 +135,76 @@ class TypesList extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Nom</TableCell>
+                <TableCell>Type de demande</TableCell>
+                <TableCell>Utilisateur</TableCell>
+                <TableCell>Période</TableCell>
+                <TableCell>Montant</TableCell>
+                <TableCell>Statut</TableCell>
+                <TableCell>Commentaire</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.state.data.map(n => {
+                const status = ((a) => {
+                  switch (a) {
+                    case 1:
+                      return 'Acceptée';
+                    case -1:
+                      return 'Refusée';
+                    default:
+                      return 'En attente...';
+                  }
+                })(n.accepted);
+
+                const dates = ((t) => {
+                  switch (t) {
+                    case 'leave':
+                      return this.formatDateInterval(n.leave_start, n.leave_end);
+                    case 'expenses':
+                      return `${this.formatMonth(n.expense_month)} ${n.expense_year}`;
+                    default:
+                      return null;
+                  }
+                })(n.request_type);
+
+                const unit = ((t) => {
+                  switch (t) {
+                    case 'leave':
+                      return 'jours';
+                    case 'expenses':
+                      return '€';
+                    default:
+                      return null;
+                  }
+                })(n.request_type);
+
                 return (
-                  <TableRow key={n.id}>
+                  <TableRow key={`${n.request_type}-${n.id}`}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/types/${n.id}`}>{n.name}</Link>
+                      {n.request_type &&
+                        (n.request_type === 'leave') ? 'Congés' :
+                        (n.request_type === 'expenses') ? 'Note de frais' :
+                        'Autre'
+                      } / {n.category}
                     </TableCell>
+                    <TableCell component="th" scope="row">
+                      <Link to={`/users/${n.user_id}`}>{
+                        `${n.firstname} ${n.lastname}`
+                      }</Link>
+                    </TableCell>
+                    <TableCell>{dates}</TableCell>
+                    <TableCell>{n.amount || 0} {unit}</TableCell>
+                    <TableCell>{status}</TableCell>
+                    <TableCell>{n.details}</TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/types/${n.id}/edit`}>
+                      <IconButton component='a' href={urlApi(`storage/${n.file}`)} disabled={n.file === null} target="_blank">
+                        <Icon>attach_file</Icon>
+                      </IconButton>
+                      <IconButton component={Link} to={`/${n.request_type}/${n.id}/edit`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `types/${n.id}`)}>
+                      <IconButton onClick={this.handleDelete.bind(this, `${n.request_type}/${n.id}`)}>
                         <Icon>delete</Icon>
                       </IconButton>
                     </TableCell>

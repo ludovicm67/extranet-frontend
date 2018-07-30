@@ -157,3 +157,7 @@ export const deleteApi = (location, defaultReturn = []) => {
 
   return request;
 }
+
+export const urlApi = (url) => {
+  return `${constants.API_ENDPOINT}/${url}`
+}
