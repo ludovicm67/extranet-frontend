@@ -201,7 +201,7 @@ class TypesList extends Component {
                       <IconButton component='a' href={urlApi(`storage/${n.file}`)} disabled={n.file === null} target="_blank">
                         <Icon>attach_file</Icon>
                       </IconButton>
-                      <IconButton component={Link} to={`/${n.request_type}/${n.id}/edit`}>
+                      <IconButton component={Link} to={`/${n.request_type}/${n.id}`}>
                         <Icon>edit</Icon>
                       </IconButton>
                       <IconButton onClick={this.handleDelete.bind(this, `${n.request_type}/${n.id}`)}>
