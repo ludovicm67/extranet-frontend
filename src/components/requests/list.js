@@ -224,10 +224,10 @@ class TypesList extends Component {
                       <IconButton component={Link} to={`/${n.request_type}/${n.id}`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/accept`)}>
+                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/accept`)} disabled={n.accepted === 1}>
                         <Icon>check</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/reject`)}>
+                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/reject`)} disabled={n.accepted === -1}>
                         <Icon>close</Icon>
                       </IconButton>
                       <IconButton onClick={this.handleDelete.bind(this, `${n.request_type}/${n.id}`)}>
