@@ -11,7 +11,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import moment from 'moment';
 
-import { getApi, deleteApi, urlApi } from '../../utils';
+import { getApi, deleteApi, urlApi, postApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -54,6 +54,12 @@ class TypesList extends Component {
     });
   }
 
+  handlePost(ressource) {
+    postApi(ressource).then(() => {
+      this.fetchList();
+    });
+  }
+
   formatDate(date) {
     if (!date || date === '') return '';
     return date = moment(date).format('DD/MM/YYYY');
@@ -66,10 +72,15 @@ class TypesList extends Component {
   formatDateInterval(a, b) {
     const d1 = this.formatDate(a);
     const d2 = this.formatDate(b);
-    if (d1 === d2) {
-      return `le ${d1} de ${this.formatHour(a)} à ${this.formatHour(b)}`;
+    const h1 = this.formatHour(a);
+    const h2 = this.formatHour(b);
+
+    if (d1 === d2 && h1 === h2) {
+      return `le ${d1} à ${h1}`;
+    } else if (d1 === d2) {
+      return `le ${d1} de ${h1} à ${h2}`;
     } else {
-      return `du ${d1} à ${this.formatHour(a)} au ${d2} à ${this.formatHour(b)}`;
+      return `du ${d1} à ${h1} au ${d2} à ${h2}`;
     }
   }
 
@@ -157,6 +168,17 @@ class TypesList extends Component {
                   }
                 })(n.accepted);
 
+                const styleColor = ((a) => {
+                  switch (a) {
+                    case 1:
+                      return '#4CAF50';
+                    case -1:
+                      return '#d50000';
+                    default:
+                      return '#000000de';
+                  }
+                })(n.accepted);
+
                 const dates = ((t) => {
                   switch (t) {
                     case 'leave':
@@ -169,19 +191,17 @@ class TypesList extends Component {
                 })(n.request_type);
 
 
-                let amount = 0;
-                let unit;
+                let amount;
                 if (n.request_type === 'leave' && n.leave_days) {
-                  amount = n.leave_days;
-                  unit = (amount > 1) ? 'jours' : 'jour';
+                  amount = n.leave_days + ((n.leave_days > 1) ? ' jours' : ' jour');
                 } else if (n.request_type === 'expenses' && n.expense_amount) {
-                  amount = n.expense_amount;
-                  unit = '€';
+                  amount = n.expense_amount + ' €';
                 }
+
 
                 return (
                   <TableRow key={`${n.request_type}-${n.id}`}>
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" style={{ color: styleColor }}>
                       {n.request_type &&
                         (n.request_type === 'leave') ? 'Congés' :
                         (n.request_type === 'expenses') ? 'Note de frais' :
@@ -189,20 +209,26 @@ class TypesList extends Component {
                       } / {n.category}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      <Link to={`/users/${n.user_id}`}>{
+                      <Link to={`/users/${n.user_id}`} style={{ color: styleColor }}>{
                         `${n.firstname} ${n.lastname}`
                       }</Link>
                     </TableCell>
-                    <TableCell>{dates}</TableCell>
-                    <TableCell>{amount || 0} {unit}</TableCell>
-                    <TableCell>{status}</TableCell>
-                    <TableCell>{n.details}</TableCell>
+                    <TableCell style={{ color: styleColor }}>{dates}</TableCell>
+                    <TableCell style={{ color: styleColor }}>{amount}</TableCell>
+                    <TableCell style={{ color: styleColor }}>{status}</TableCell>
+                    <TableCell style={{ color: styleColor }}>{n.details}</TableCell>
                     <TableCell>
                       <IconButton component='a' href={urlApi(`storage/${n.file}`)} disabled={n.file === null} target="_blank">
                         <Icon>attach_file</Icon>
                       </IconButton>
                       <IconButton component={Link} to={`/${n.request_type}/${n.id}`}>
                         <Icon>edit</Icon>
+                      </IconButton>
+                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/accept`)}>
+                        <Icon>check</Icon>
+                      </IconButton>
+                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/reject`)}>
+                        <Icon>close</Icon>
                       </IconButton>
                       <IconButton onClick={this.handleDelete.bind(this, `${n.request_type}/${n.id}`)}>
                         <Icon>delete</Icon>
