@@ -168,16 +168,16 @@ class TypesList extends Component {
                   }
                 })(n.request_type);
 
-                const unit = ((t) => {
-                  switch (t) {
-                    case 'leave':
-                      return 'jours';
-                    case 'expenses':
-                      return '€';
-                    default:
-                      return null;
-                  }
-                })(n.request_type);
+
+                let amount = 0;
+                let unit;
+                if (n.request_type === 'leave' && n.leave_days) {
+                  amount = n.leave_days;
+                  unit = (amount > 1) ? 'jours' : 'jour';
+                } else if (n.request_type === 'expenses' && n.expense_amount) {
+                  amount = n.expense_amount;
+                  unit = '€';
+                }
 
                 return (
                   <TableRow key={`${n.request_type}-${n.id}`}>
@@ -194,7 +194,7 @@ class TypesList extends Component {
                       }</Link>
                     </TableCell>
                     <TableCell>{dates}</TableCell>
-                    <TableCell>{n.amount || 0} {unit}</TableCell>
+                    <TableCell>{amount || 0} {unit}</TableCell>
                     <TableCell>{status}</TableCell>
                     <TableCell>{n.details}</TableCell>
                     <TableCell>
