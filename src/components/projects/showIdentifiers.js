@@ -98,7 +98,7 @@ class ProjectsShow extends Component {
     });
   }
 
-  componentDidMount() {
+  fetchList() {
     getApi(`projects/${this.state.id}/identifiers`, {
       notFound: true,
     }).then(res => {
@@ -115,6 +115,10 @@ class ProjectsShow extends Component {
         identifiers: res.identifiers || [],
       });
     });
+  }
+
+  componentDidMount() {
+    this.fetchList();
   }
 
   componentWillUnmount() {
@@ -177,10 +181,10 @@ class ProjectsShow extends Component {
                       {parseInt(n.confidential, 10) ? 'Oui' : 'Non'}
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/projects/${n.id}/edit`}>
+                      <IconButton component={Link} to={`/project_identifier/${n.id}`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `projects/${n.id}`)}>
+                      <IconButton onClick={this.handleDelete.bind(this, `project_identifier/${n.id}`)}>
                         <Icon>delete</Icon>
                       </IconButton>
                     </TableCell>

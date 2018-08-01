@@ -383,6 +383,7 @@ class Layout extends React.Component {
               <Route path="/identifiers" component={Identifiers} />
               <Route path="/tags" component={Tags} />
               <Route path="/updates" component={Updates} />
+              <Route path="/project_identifier" component={Projects} />
               <Route path="/projects" component={Projects} />
               <Route path="/teamview" component={Teamview} />
               <Route path="/contracts" component={Contracts} />

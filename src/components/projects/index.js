@@ -5,6 +5,7 @@ import ProjectsNew from './new';
 import ProjectsEdit from './edit';
 import ProjectsShow from './show';
 import ProjectsNewIdentifier from './newIdentifier';
+import ProjectsEditIdentifier from './editIdentifier';
 import ProjectsShowIdentifiers from './showIdentifiers';
 
 class Projects extends Component {
@@ -14,6 +15,7 @@ class Projects extends Component {
         <Route path="/projects/new" component={ProjectsNew} />
         <Route path="/projects/:projectId/edit" component={ProjectsEdit} />
         <Route path="/projects/:projectId/identifiers/new" component={ProjectsNewIdentifier} />
+        <Route path="/project_identifier/:identifierId" component={ProjectsEditIdentifier} />
         <Route path="/projects/:projectId/identifiers" component={ProjectsShowIdentifiers} />
         <Route path="/projects/:projectId" component={ProjectsShow} />
         <Route path="/projects" component={ProjectsList} />
