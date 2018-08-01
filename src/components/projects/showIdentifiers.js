@@ -13,7 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 
-import { getApi } from '../../utils';
+import { getApi, deleteApi } from '../../utils';
 
 const styles = theme => ({
   intro: {
@@ -92,6 +92,12 @@ class ProjectsShow extends Component {
     this.setState({ end_at: date });
   }
 
+  handleDelete(ressource) {
+    deleteApi(ressource).then(() => {
+      this.fetchList();
+    });
+  }
+
   componentDidMount() {
     getApi(`projects/${this.state.id}/identifiers`, {
       notFound: true,
@@ -160,10 +166,10 @@ class ProjectsShow extends Component {
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      {n.name}
+                      {n.type && n.type.name}
                     </TableCell>
                     <TableCell>
-                      {n.next_action && n.next_action.split('\n').map((item, key) => {
+                      {n.value && n.value.split('\n').map((item, key) => {
                         return <span key={key}>{item}<br /></span>
                       })}
                     </TableCell>
