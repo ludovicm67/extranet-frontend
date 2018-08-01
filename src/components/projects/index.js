@@ -4,6 +4,7 @@ import ProjectsList from './list';
 import ProjectsNew from './new';
 import ProjectsEdit from './edit';
 import ProjectsShow from './show';
+import ProjectsShowIdentifiers from './showIdentifiers';
 
 class Projects extends Component {
   render() {
@@ -11,6 +12,7 @@ class Projects extends Component {
       <Switch>
         <Route path="/projects/new" component={ProjectsNew} />
         <Route path="/projects/:projectId/edit" component={ProjectsEdit} />
+        <Route path="/projects/:projectId/identifiers" component={ProjectsShowIdentifiers} />
         <Route path="/projects/:projectId" component={ProjectsShow} />
         <Route path="/projects" component={ProjectsList} />
       </Switch>

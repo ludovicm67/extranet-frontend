@@ -11,6 +11,8 @@ import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import amber from '@material-ui/core/colors/amber';
+import Icon from '@material-ui/core/Icon';
+import Button from '@material-ui/core/Button';
 
 import { getApi } from '../../utils';
 import Autolinker from 'autolinker';
@@ -112,10 +114,17 @@ class ProjectsShow extends Component {
   }
 
   componentDidMount() {
-    getApi(`projects/${this.state.id}`).then(res => {
+    getApi(`projects/${this.state.id}`, {
+      notFound: true,
+    }).then(res => {
       if (this.isUnmounted) {
         return;
       }
+      if (res.notFound) {
+        this.props.history.push('/projects');
+        return;
+      }
+
       const parsedDate = res.end_at && new Date(Date.parse(res.end_at));
 
       const tags = (res.tags) ? res.tags.map(e => {
@@ -359,6 +368,16 @@ class ProjectsShow extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
+          <Button
+            component={Link}
+            to={`/projects/${this.state.id}/identifiers`}
+            variant="contained"
+            color="primary"
+            className={classes.right}
+          >
+            <Icon>vpn_key</Icon>
+            Identifiants
+          </Button>
           {this.state.name}
         </Typography>
         <Typography className={classes.intro}>Affichages d'informations concernant le projet</Typography>
