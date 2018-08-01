@@ -123,7 +123,7 @@ class ProjectsShow extends Component {
         <Typography variant="display1" gutterBottom>
           <Button
             component={Link}
-            to={`/projects/${this.state.id}`}
+            to={`/projects/${this.state.id}/identifiers/new`}
             variant="contained"
             color="primary"
             className={classes.right}
@@ -156,22 +156,11 @@ class ProjectsShow extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.identifiers.map((n, key) => {
+              {this.state.identifiers.map((n, _key) => {
                 return (
                   <TableRow key={n.id}>
-                    <TableCell>
-                      <IconButton onClick={
-                        n.favorited
-                          ? this.handleUnfav.bind(this, `projects/${n.id}`, key)
-                          : this.handleFav.bind(this, `projects/${n.id}`, key)
-                      }>
-                        <Icon>
-                          {n.favorited ? 'star' : 'star_border'}
-                        </Icon>
-                      </IconButton>
-                    </TableCell>
                     <TableCell component="th" scope="row">
-                      <Link to={`/projects/${n.id}`}>{n.name}</Link>
+                      {n.name}
                     </TableCell>
                     <TableCell>
                       {n.next_action && n.next_action.split('\n').map((item, key) => {
@@ -179,7 +168,7 @@ class ProjectsShow extends Component {
                       })}
                     </TableCell>
                     <TableCell>
-
+                      {parseInt(n.confidential, 10) ? 'Oui' : 'Non'}
                     </TableCell>
                     <TableCell>
                       <IconButton component={Link} to={`/projects/${n.id}/edit`}>
