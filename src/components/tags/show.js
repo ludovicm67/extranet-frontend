@@ -66,6 +66,14 @@ class TagsShow extends Component {
     this.fetchList();
   }
 
+  handleAddFilter(value) {
+    this.props.history.push({ pathname: `/tags/${this.state.id}/${value}` });
+    this.setState({
+      value,
+    });
+    this.fetchList();
+  }
+
   render() {
     const tagRemoveFilter = (this.state.value) ? (
       <Button
@@ -111,7 +119,7 @@ class TagsShow extends Component {
                       })}
                     </TableCell>
                     <TableCell>
-                      {n.pivot && n.pivot.value}
+                      <span onClick={this.handleAddFilter.bind(this, n.pivot && n.pivot.value)}>{(n.pivot && n.pivot.value)}</span>
                     </TableCell>
                   </TableRow>
                 );
