@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { getApi } from '../utils';
+import { getApi, putApi } from '../utils';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -11,6 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from '@material-ui/core/FormControl';
 import Select from './layout/Select';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Button from '@material-ui/core/Button';
 
 moment.locale('fr');
 
@@ -61,7 +62,7 @@ class Teamview extends Component {
 
       window.setTimeout(() => {
         this.busy = false;
-      }, 1000);
+      }, 300);
     });
   }
 
@@ -89,15 +90,24 @@ class Teamview extends Component {
     this.handleChange(prop)(event);
     if (!this.busy) {
       this.busy = true;
-      this.fetchPeriodData();
+      window.setTimeout(() => {
+        this.fetchPeriodData();
+      }, 200);
     } else {
       window.setTimeout(() => {
         if (!this.busy) {
           this.busy = true;
           this.fetchPeriodData();
         }
-      }, 2000);
+      }, 1000);
     }
+  }
+
+  handleSubmit() {
+    putApi(`overtime/${this.state.id}?year=${this.state.year}&month=${this.state.month}`, {
+      volume: this.state.volume || 0,
+      details: this.state.details || '',
+    });
   }
 
   render() {
@@ -173,6 +183,10 @@ class Teamview extends Component {
             margin="normal"
           />
         </FormControl>
+
+        <Button variant="contained" color="primary" className={classes.submit} onClick={this.handleSubmit.bind(this)}>
+          Sauvegarder
+        </Button>
       </div>
     );
   }
