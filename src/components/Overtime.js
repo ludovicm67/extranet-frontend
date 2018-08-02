@@ -42,6 +42,10 @@ class Teamview extends Component {
     details: '',
     volume: 0,
 
+    user: '',
+
+    submitting: false,
+
     months: moment.months().map((v, k) => ({
       label: v,
       value: 1 + k,
@@ -68,6 +72,14 @@ class Teamview extends Component {
 
   componentDidMount() {
     this.fetchPeriodData();
+    getApi(`users/${this.state.id}`).then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      this.setState({
+        user: ` pour ${res.firstname} ${res.lastname} (${res.email})` || '',
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -104,9 +116,18 @@ class Teamview extends Component {
   }
 
   handleSubmit() {
+    this.setState({
+      submitting: true,
+    });
     putApi(`overtime/${this.state.id}?year=${this.state.year}&month=${this.state.month}`, {
       volume: this.state.volume || 0,
       details: this.state.details || '',
+    }).then(() => {
+      window.setTimeout(() => {
+        this.setState({
+          submitting: false,
+        });
+      }, 1000);
     });
   }
 
@@ -118,7 +139,7 @@ class Teamview extends Component {
         <Typography variant="display1" gutterBottom>
           Ajout/modification d'une heure supplémentaire
         </Typography>
-        <Typography className={classes.intro}>Choisissez la période souhaitée, et éditez le volume horaire puis validez. Il est également possible de rajouter des précisions dans le champ prévu à cet effet.</Typography>
+        <Typography className={classes.intro}>Choisissez la période souhaitée, et éditez le volume horaire{this.state.user} puis validez. Il est également possible de rajouter des précisions dans le champ prévu à cet effet.</Typography>
         <TextField
           className={classes.formControl}
           fullWidth
@@ -184,7 +205,13 @@ class Teamview extends Component {
           />
         </FormControl>
 
-        <Button variant="contained" color="primary" className={classes.submit} onClick={this.handleSubmit.bind(this)}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={this.state.submitting}
+          className={classes.submit}
+          onClick={this.handleSubmit.bind(this)}
+        >
           Sauvegarder
         </Button>
       </div>
