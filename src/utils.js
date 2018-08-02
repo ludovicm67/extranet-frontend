@@ -4,10 +4,17 @@ import store from './store';
 import constants from './constants';
 import { logout, login } from './actions/auth';
 
+// axios.defaults.headers.common = { 'Authorization': `Bearer ${store.getState().auth.auth.token}` };
+
 const tryRefreshToken = () => {
   const request = axios.get(`
-    ${constants.API_ENDPOINT}/auth/refresh?token=${store.getState().auth.auth.token}
-  `).then(res => {
+    ${constants.API_ENDPOINT}/auth/refresh
+  `, {
+    headers: {
+      'Authorization': `Bearer ${store.getState().auth.auth.token}`,
+      'Content-type': 'application/x-www-form-urlencoded',
+    },
+  }).then(res => {
     if (!res.data.success || !res.data.data || !res.data.data.token) {
       return false;
     }
@@ -36,8 +43,13 @@ const generateFormData = (data, method = null) => {
 
 export const getApi = (location, defaultReturn = []) => {
   const request = axios.get(`
-    ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `).then(res => {
+    ${constants.API_ENDPOINT}/${location}
+  `, {
+      headers: {
+        'Authorization': `Bearer ${store.getState().auth.auth.token}`,
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+    }).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
@@ -67,8 +79,13 @@ export const getApi = (location, defaultReturn = []) => {
 
 export const postApi = (location, data = {}, defaultReturn = []) => {
   const request = axios.post(`
-    ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, generateFormData(data)).then(res => {
+    ${constants.API_ENDPOINT}/${location}
+  `, generateFormData(data), {
+      headers: {
+        'Authorization': `Bearer ${store.getState().auth.auth.token}`,
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+    }).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
@@ -98,8 +115,13 @@ export const postApi = (location, data = {}, defaultReturn = []) => {
 
 export const putApi = (location, data = {}, defaultReturn = []) => {
   const request = axios.post(`
-    ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, generateFormData(data, 'PUT')).then(res => {
+    ${constants.API_ENDPOINT}/${location}
+  `, generateFormData(data, 'PUT'), {
+      headers: {
+        'Authorization': `Bearer ${store.getState().auth.auth.token}`,
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+    }).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }
@@ -129,8 +151,13 @@ export const putApi = (location, data = {}, defaultReturn = []) => {
 
 export const deleteApi = (location, defaultReturn = []) => {
   const request = axios.post(`
-    ${constants.API_ENDPOINT}/${location}?token=${store.getState().auth.auth.token}
-  `, generateFormData({}, 'DELETE')).then(res => {
+    ${constants.API_ENDPOINT}/${location}
+  `, generateFormData({}, 'DELETE'), {
+      headers: {
+        'Authorization': `Bearer ${store.getState().auth.auth.token}`,
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+    }).then(res => {
       if (!res.data.success) {
         throw new Error('no success');
       }

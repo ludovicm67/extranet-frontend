@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 
 import { getApi } from '../../utils';
 
@@ -12,6 +15,9 @@ const styles = {
   },
   formControl: {
     marginTop: '20px',
+  },
+  right: {
+    float: 'right',
   },
 };
 
@@ -50,6 +56,16 @@ class UsersShow extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
+          <Button
+            component={Link}
+            to={`/overtime/${this.state.id}`}
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>access_time</Icon>
+            Heures supplémentaires
+          </Button>
           {`${this.state.firstname} ${this.state.lastname} (${this.state.email})`}
         </Typography>
         <Typography style={styles.intro}>Affichage des informations à propos de cet utilisateur</Typography>
