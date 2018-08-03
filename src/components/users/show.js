@@ -18,6 +18,7 @@ const styles = {
   },
   right: {
     float: 'right',
+    margin: 5,
   },
 };
 
@@ -65,6 +66,16 @@ class UsersShow extends Component {
           >
             <Icon>access_time</Icon>
             Heures supplémentaires
+          </Button>
+          <Button
+            component={Link}
+            to={`/documents/${this.state.id}`}
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>insert_drive_file</Icon>
+            Déposer un document
           </Button>
           {`${this.state.firstname} ${this.state.lastname} (${this.state.email})`}
         </Typography>
