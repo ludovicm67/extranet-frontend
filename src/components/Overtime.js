@@ -33,7 +33,7 @@ const todayInfos = {
   month: 1 + today.getMonth(),
 };
 
-class Teamview extends Component {
+class Overtime extends Component {
   state = {
     id: this.props.match.params.userId,
     month: todayInfos.month,
@@ -219,9 +219,9 @@ class Teamview extends Component {
   }
 }
 
-Teamview.propTypes = {
+Overtime.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Teamview);
+export default withStyles(styles, { withTheme: true })(Overtime);

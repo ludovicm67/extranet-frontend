@@ -24,7 +24,7 @@ const styles = {
   },
 };
 
-class TypesList extends Component {
+class RequestsList extends Component {
   state = {
     data: [],
   };
@@ -139,6 +139,16 @@ class TypesList extends Component {
             <Icon>local_taxi</Icon>
             Note de frais
           </Button>
+          <Button
+            component={Link}
+            to="/pdf/compta"
+            variant="contained"
+            color="primary"
+            style={styles.rightBtn}
+          >
+            <Icon>picture_as_pdf</Icon>
+            PDF
+          </Button>
           Liste des différentes demandes
         </Typography>
         <Typography style={styles.intro}>Page listant les différentes demandes ({this.state.data.length})</Typography>
@@ -245,4 +255,4 @@ class TypesList extends Component {
   };
 }
 
-export default TypesList;
+export default RequestsList;

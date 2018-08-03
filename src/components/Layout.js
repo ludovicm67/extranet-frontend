@@ -43,6 +43,7 @@ import Teamview from './Teamview';
 import Contracts from './contracts';
 import Requests from './requests';
 import Overtime from './Overtime';
+import PdfCompta from './PdfCompta';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -392,6 +393,7 @@ class Layout extends React.Component {
               <Route path="/leave" component={Requests} />
               <Route path="/expenses" component={Requests} />
               <Route path="/requests" component={Requests} />
+              <Route path="/pdf/compta" component={PdfCompta} />
               <Route path="/" component={Dashboard} />
             </Switch>
         </main>
