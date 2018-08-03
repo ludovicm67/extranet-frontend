@@ -7,9 +7,15 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from '@material-ui/core/FormControl';
 import Select from '../layout/Select';
 
-import { putApi } from '../../utils';
+import { putApi, urlApi } from '../../utils';
 import store from '../../store';
 import { setUserData } from '../../actions/auth';
+
+import moment from 'moment';
+import 'moment/locale/fr';
+
+
+moment.locale('fr');
 
 const styles = {
   intro: {
@@ -77,6 +83,7 @@ class UsersMe extends Component {
     email: '',
     password: '',
     defaultPage: '/',
+    documents: [],
   };
 
   componentDidMount() {
@@ -105,6 +112,7 @@ class UsersMe extends Component {
       email: user.email || '',
       password: '',
       defaultPage: user.default_page || '/',
+      documents: user.documents || [],
     });
   }
 
@@ -145,6 +153,29 @@ class UsersMe extends Component {
       });
     }
   };
+
+  displayFile(file) {
+    let name;
+    if (!file) return '';
+
+    const d = moment(file.date);
+    switch (file.type) {
+      case 'pay':
+        name = 'Fiche de paie du mois de ' + d.format('MMMM YYYY');
+        break;
+      case 'medical':
+        name = 'Fiche de visite médicale du ' + d.format('Do MMMM YYYY');
+        break;
+      default:
+        name = 'Document du ' + d.format('Do MMMM YYYY');
+    }
+
+    if (file.details) {
+      name = `${name}. ${file.details}`;
+    }
+
+    return name;
+  }
 
   render() {
     return (
@@ -220,6 +251,17 @@ class UsersMe extends Component {
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Modifier
         </Button>
+
+        {this.state.documents.length > 0 && (
+          <div>
+            <Typography variant="headline" style={styles.formControl}>Documents</Typography>
+            <ul>
+              {this.state.documents.map((d, k) => (
+                <li key={k}><a href={urlApi(`storage/${d.file}`)} target="_blank">{this.displayFile(d)}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   };

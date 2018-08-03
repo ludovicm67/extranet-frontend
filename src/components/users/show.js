@@ -3,8 +3,12 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
+import moment from 'moment';
+import 'moment/locale/fr';
 
-import { getApi } from '../../utils';
+import { getApi, urlApi } from '../../utils';
+
+moment.locale('fr');
 
 const styles = {
   intro: {
@@ -30,7 +34,7 @@ class UsersShow extends Component {
     role: '',
     is_admin: 0,
     email: '',
-    password: '',
+    documents: [],
   };
 
   componentDidMount() {
@@ -44,13 +48,36 @@ class UsersShow extends Component {
         role: (res.is_admin === 1 ? (<strong>Super administrateur</strong>) : (res.role && res.role.name) ? res.role.name : 'Aucun'),
         is_admin: res.is_admin,
         email: res.email || '',
-        password: '',
+        documents: res.documents || [],
       });
     });
   }
 
   componentWillUnmount() {
     this.isUnmounted = true;
+  }
+
+  displayFile(file) {
+    let name;
+    if (!file) return '';
+
+    const d = moment(file.date);
+    switch (file.type) {
+      case 'pay':
+        name = 'Fiche de paie du mois de ' + d.format('MMMM YYYY');
+        break;
+        case 'medical':
+        name = 'Fiche de visite médicale du ' + d.format('Do MMMM YYYY');
+        break;
+      default:
+        name = 'Document du ' + d.format('Do MMMM YYYY');
+    }
+
+    if (file.details) {
+      name = `${name}. ${file.details}`;
+    }
+
+    return name;
   }
 
   render() {
@@ -92,6 +119,16 @@ class UsersShow extends Component {
           <strong>Rôle : </strong>
           {this.state.role}
         </Typography>
+        {this.state.documents.length > 0 && (
+          <div>
+            <Typography variant="headline" style={styles.formControl}>Documents</Typography>
+            <ul>
+              {this.state.documents.map((d, k) => (
+                <li key={k}><a href={urlApi(`storage/${d.file}`)} target="_blank">{this.displayFile(d)}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   };
