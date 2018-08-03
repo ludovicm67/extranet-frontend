@@ -108,7 +108,7 @@ class Documents extends Component {
 
   handleSubmit() {
     postApi(`documents`, {
-      user: this.state.user || '',
+      user_id: this.state.user || '',
       type: this.state.type || '',
       date: this.formatDate(this.state.date),
       file: this.state.file || '',
