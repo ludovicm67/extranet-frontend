@@ -14,11 +14,21 @@ import Icon from '@material-ui/core/Icon';
 import { Link } from 'react-router-dom';
 import Autolinker from 'autolinker';
 import store from '../store';
+import TextField from "@material-ui/core/TextField";
+import Select from './layout/Select';
 
 const styles = _theme => ({
   right: {
     float: 'right',
     margin: 5,
+  },
+  formControl: {
+    minWidth: 180,
+    margin: 5,
+  },
+  filters: {
+    display: 'flex',
+    flexWrap: 'wrap',
   },
 });
 
@@ -30,6 +40,9 @@ class Export extends Component {
     value: this.props.match.params.tagValue || '',
 
     data: [],
+
+    types: [],
+    tags: [],
   };
 
   fetchList() {
@@ -46,10 +59,68 @@ class Export extends Component {
 
   componentDidMount() {
     this.fetchList();
+    getApi('types').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const types = [
+        {
+          label: 'Type...',
+          value: '',
+        }
+      ];
+      types.push(...res.map(e => {
+        return {
+          label: e.name,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        types,
+      });
+    });
+    getApi('tags').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const tags = [
+        {
+          label: 'Tag...',
+          value: '',
+        }
+      ];
+      tags.push(...res.map(e => {
+        return {
+          label: e.name,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        tags,
+      });
+    });
   }
 
   componentWillUnmount() {
     this.isUnmounted = true;
+  }
+
+  handleChange = prop => event => {
+    if (event && event.target && event.target.value !== undefined) {
+      this.setState({
+        [prop]: event.target.value,
+      });
+    } else {
+      this.setState({
+        [prop]: event,
+      });
+    }
+  };
+
+  handleFilter() {
+    this.props.history.push({ pathname: `/export/${encodeURIComponent(this.state.type)}/${encodeURIComponent(this.state.tag)}/${encodeURIComponent(this.state.value)}` });
+    this.setState();
+    this.fetchList();
   }
 
   render() {
@@ -73,6 +144,76 @@ class Export extends Component {
           Exporter des contacts
         </Typography>
         <Typography className={classes.intro}>Exportez des contacts en filtrant sur le type et par tags de projets sur lesquels ils sont affectés ({this.state.data.length})</Typography>
+
+        <div className={classes.filters}>
+          <TextField
+            className={classes.formControl}
+            value={this.state.type}
+            onChange={this.handleChange('type')}
+            name="select-type"
+            placeholder="Type..."
+            label="Type de contact"
+            autoComplete="new-password"
+            InputLabelProps={{
+              shrink: true
+            }}
+            InputProps={{
+              inputComponent: Select,
+              inputProps: {
+                clearable: false,
+                multi: false,
+                instanceId: "select-type",
+                id: "select-type",
+                simpleValue: true,
+                options: this.state.types,
+              }
+            }}
+          />
+          <TextField
+            className={classes.formControl}
+            value={this.state.tag}
+            onChange={this.handleChange('tag')}
+            name="select-tag"
+            placeholder="Tag..."
+            label="Tag"
+            autoComplete="new-password"
+            InputLabelProps={{
+              shrink: true
+            }}
+            InputProps={{
+              inputComponent: Select,
+              inputProps: {
+                clearable: false,
+                multi: false,
+                instanceId: "select-tag",
+                id: "select-tag",
+                simpleValue: true,
+                options: this.state.tags,
+              }
+            }}
+          />
+          <TextField
+            className={classes.formControl}
+            value={this.state.value}
+            onChange={this.handleChange('value')}
+            name="select-tag-value"
+            placeholder="Valeur..."
+            label="Valeur du tag"
+            autoComplete="new-password"
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={this.handleFilter.bind(this)}
+          >
+            Filtrer
+          </Button>
+      </div>
+
         <Paper>
           <Table>
             <TableHead>
