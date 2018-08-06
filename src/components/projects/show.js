@@ -95,6 +95,7 @@ class ProjectsShow extends Component {
     next_action: '',
     end_at: null,
     urls: [],
+    parent: null,
   };
 
   handleChange = prop => event => {
@@ -148,6 +149,7 @@ class ProjectsShow extends Component {
         end_at: parsedDate || null,
         tags,
         urls: res.urls || [],
+        parent: res.parent || null,
       });
     });
   }
@@ -395,6 +397,15 @@ class ProjectsShow extends Component {
             <strong>Domaine principal : </strong>
             <span dangerouslySetInnerHTML={{__html: Autolinker.link(this.state.domain)}} />
           </Typography>
+        }
+
+        {this.state.parent &&
+          <div>
+            <Typography>
+              <strong>Ce projet a pour parent : </strong>
+              <a href={`/projects/${this.state.parent.id}`}>{this.state.parent.name}</a>
+            </Typography>
+          </div>
         }
 
         {this.state.end_at &&
