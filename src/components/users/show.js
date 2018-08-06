@@ -6,7 +6,7 @@ import Icon from '@material-ui/core/Icon';
 import moment from 'moment';
 import 'moment/locale/fr';
 
-import { getApi, urlApi } from '../../utils';
+import { getApi, urlApi, deleteApi } from '../../utils';
 
 moment.locale('fr');
 
@@ -24,6 +24,9 @@ const styles = {
     float: 'right',
     margin: 5,
   },
+  click: {
+    cursor: 'pointer',
+  },
 };
 
 class UsersShow extends Component {
@@ -37,7 +40,7 @@ class UsersShow extends Component {
     documents: [],
   };
 
-  componentDidMount() {
+  fetchData() {
     getApi(`users/${this.state.id}`).then(res => {
       if (this.isUnmounted) {
         return;
@@ -51,6 +54,10 @@ class UsersShow extends Component {
         documents: res.documents || [],
       });
     });
+  }
+
+  componentDidMount() {
+    this.fetchData();
   }
 
   componentWillUnmount() {
@@ -78,6 +85,12 @@ class UsersShow extends Component {
     }
 
     return name;
+  }
+
+  handleDelete(ressource) {
+    deleteApi(ressource).then(() => {
+      this.fetchData();
+    });
   }
 
   render() {
@@ -124,7 +137,10 @@ class UsersShow extends Component {
             <Typography variant="headline" style={styles.formControl}>Documents</Typography>
             <ul>
               {this.state.documents.map((d, k) => (
-                <li key={k}><a href={urlApi(`storage/${d.file}`)} target="_blank">{this.displayFile(d)}</a></li>
+                <li key={k}>
+                  <a href={urlApi(`storage/${d.file}`)} target="_blank">{this.displayFile(d)}</a>
+                  - <span style={styles.click} onClick={this.handleDelete.bind(this, `documents/${d.id}`)}>Supprimer</span>
+                </li>
               ))}
             </ul>
           </div>

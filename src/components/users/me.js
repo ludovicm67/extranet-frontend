@@ -7,7 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from '@material-ui/core/FormControl';
 import Select from '../layout/Select';
 
-import { putApi, urlApi } from '../../utils';
+import { getApi, putApi, urlApi, deleteApi } from '../../utils';
 import store from '../../store';
 import { setUserData } from '../../actions/auth';
 
@@ -26,6 +26,9 @@ const styles = {
   },
   formControl: {
     marginTop: '20px',
+  },
+  click: {
+    cursor: 'pointer',
   },
 };
 
@@ -86,34 +89,46 @@ class UsersMe extends Component {
     documents: [],
   };
 
+
+  fetchData() {
+    getApi('users/me').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      store.dispatch(setUserData(res));
+
+      const user = res;
+
+      const defaultPage = user.default_page;
+      const filterPages = this.state.defaultPages.filter(e => {
+        return e.value === defaultPage;
+      });
+
+      let defaultPages = this.state.defaultPages;
+      if (filterPages.length <= 0) {
+        defaultPages.push({
+          label: defaultPage,
+          value: defaultPage,
+        });
+      }
+
+      this.setState({
+        defaultPages,
+        firstname: user.firstname || '',
+        lastname: user.lastname || '',
+        email: user.email || '',
+        password: '',
+        defaultPage: user.default_page || '/',
+        documents: user.documents || [],
+      });
+    });
+  }
+
   componentDidMount() {
     if (this.isUnmounted) {
       return;
     }
-    const user = store.getState().auth.auth.userData;
-
-    const defaultPage = user.default_page;
-    const filterPages = this.state.defaultPages.filter(e => {
-      return e.value === defaultPage;
-    });
-
-    let defaultPages = this.state.defaultPages;
-    if (filterPages.length <= 0) {
-      defaultPages.push({
-        label: defaultPage,
-        value: defaultPage,
-      });
-    }
-
-    this.setState({
-      defaultPages,
-      firstname: user.firstname || '',
-      lastname: user.lastname || '',
-      email: user.email || '',
-      password: '',
-      defaultPage: user.default_page || '/',
-      documents: user.documents || [],
-    });
+    this.fetchData();
   }
 
   componentWillUnmount() {
@@ -131,14 +146,7 @@ class UsersMe extends Component {
       errored: true,
     }).then((res) => {
       if (res.errored) return;
-      store.dispatch(setUserData(res));
-      this.setState({
-        firstname: res.firstname || '',
-        lastname: res.lastname || '',
-        email: res.email || '',
-        password: '',
-        defaultPage: res.default_page || '/',
-      });
+      this.fetchData();
     });
   }
 
@@ -175,6 +183,12 @@ class UsersMe extends Component {
     }
 
     return name;
+  }
+
+  handleDelete(ressource) {
+    deleteApi(ressource).then(() => {
+      this.fetchData();
+    });
   }
 
   render() {
@@ -257,7 +271,10 @@ class UsersMe extends Component {
             <Typography variant="headline" style={styles.formControl}>Documents</Typography>
             <ul>
               {this.state.documents.map((d, k) => (
-                <li key={k}><a href={urlApi(`storage/${d.file}`)} target="_blank">{this.displayFile(d)}</a></li>
+                <li key={k}>
+                  <a href={urlApi(`storage/${d.file}`)} target="_blank">{this.displayFile(d)}</a>
+                  - <span style={styles.click} onClick={this.handleDelete.bind(this, `documents/${d.id}`)}>Supprimer</span>
+                </li>
               ))}
             </ul>
           </div>
