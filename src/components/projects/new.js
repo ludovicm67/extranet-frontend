@@ -39,6 +39,7 @@ class ProjectsNew extends Component {
     contacts: [],
     orders: [],
     users: [],
+    projects: [],
 
     name: '',
     domain: '',
@@ -50,6 +51,7 @@ class ProjectsNew extends Component {
     end_at: null,
     tag: [],
     url: [],
+    parent_id: null,
   };
 
   handleSubmit() {
@@ -57,6 +59,7 @@ class ProjectsNew extends Component {
       name: this.state.name,
       domain: this.state.domain,
       client_id: this.state.client || '',
+      parent_id: this.state.parent_id || '',
       contacts: this.state.contact
         ? this.state.contact.split(',').map(i => i.trim()) : '',
       orders: this.state.order
@@ -115,6 +118,21 @@ class ProjectsNew extends Component {
       }));
       this.setState({
         tags,
+      });
+    });
+    getApi('projects').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const projects = [];
+      projects.push(...res.map(e => {
+        return {
+          label: e.name,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        projects,
       });
     });
     getApi('contacts').then(res => {
@@ -251,6 +269,33 @@ class ProjectsNew extends Component {
             onChange={this.handleChange('name')}
           />
         </FormControl>
+
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.parent_id}
+          onChange={this.handleChange('parent_id')}
+          placeholder="Choisissez un projet parent..."
+          name="select-parent_id"
+          label="Projet parent"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              clearable: true,
+              creatable: false,
+              multi: false,
+              instanceId: "select-parent_id",
+              id: "select-parent_id",
+              simpleValue: true,
+              options: this.state.projects,
+            }
+          }}
+        />
+
         <FormControl fullWidth style={styles.formControl}>
           <InputLabel htmlFor="project-domain">Domaine principal</InputLabel>
           <Input
