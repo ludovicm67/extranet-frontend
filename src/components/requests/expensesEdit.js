@@ -7,6 +7,8 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Select from '../layout/Select';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { FormControlLabel } from '@material-ui/core';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import { putApi, getApi } from '../../utils';
 
@@ -61,6 +63,9 @@ class ExpensesEdit extends Component {
     details: '',
     file: '',
 
+    current_file: '',
+    delete_file: false,
+
     types: types.map(e => ({
       label: e,
       value: e,
@@ -75,6 +80,7 @@ class ExpensesEdit extends Component {
       amount: this.state.amount,
       details: this.state.details,
       file: this.state.file,
+      delete_file: this.state.delete_file ? 1 : 0,
     }).then(() => this.props.history.push('/requests'));
   }
 
@@ -106,9 +112,14 @@ class ExpensesEdit extends Component {
         type: res.type || 'Transports',
         amount: res.amount || 0,
         details: res.details || '',
+        current_file: res.file || '',
       });
     });
   }
+
+  handleCheckChange = name => event => {
+    this.setState({ [name]: event.target.checked });
+  };
 
   render() {
     return (
@@ -209,6 +220,20 @@ class ExpensesEdit extends Component {
             value={(this.state.file && this.state.file.name) || ''}
           />
         </FormControl>
+
+        {this.state.current_file && (
+          <FormControl fullWidth style={styles.formControl}>
+            <FormControlLabel
+              control={<Checkbox
+                checked={this.state.delete_file}
+                onChange={this.handleCheckChange('delete_file')}
+                value="1"
+                color="primary"
+              />}
+              label="Supprimer la pièce justificative existante ?" />
+          </FormControl>
+        )}
+
         <FormControl fullWidth style={styles.formControl}>
           <InputLabel htmlFor="form-details">Commentaire</InputLabel>
           <Input
