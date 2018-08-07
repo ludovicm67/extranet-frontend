@@ -60,6 +60,10 @@ class ProjectsList extends Component {
     });
   }
 
+  handleArchive(projectId) {
+    postApi(`projects/${projectId}/archive`).then(() => this.fetchList());
+  }
+
   handleFav(ressource, key) {
     const data = this.state['data'].map((v, k) => {
       if (k === key) {
@@ -168,6 +172,9 @@ class ProjectsList extends Component {
                     <TableCell>
                       <IconButton component={Link} to={`/projects/${n.id}/edit`}>
                         <Icon>edit</Icon>
+                      </IconButton>
+                      <IconButton onClick={this.handleArchive.bind(this, n.id)}>
+                        <Icon>archive</Icon>
                       </IconButton>
                       <IconButton onClick={this.handleDelete.bind(this, `projects/${n.id}`)}>
                         <Icon>delete</Icon>
