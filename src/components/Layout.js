@@ -46,6 +46,7 @@ import Overtime from './Overtime';
 import Documents from './Documents';
 import PdfCompta from './PdfCompta';
 import Export from './Export';
+import Search from './Search';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -407,6 +408,7 @@ class Layout extends React.Component {
               <Route path="/export/:typeId/:tagId" component={Export} />
               <Route path="/export/:typeId" component={Export} />
               <Route path="/export" component={Export} />
+              <Route path="/search" component={Search} />
               <Route path="/pdf/compta" component={PdfCompta} />
               <Route path="/" component={Dashboard} />
             </Switch>

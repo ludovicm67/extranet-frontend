@@ -4,8 +4,6 @@ import store from './store';
 import constants from './constants';
 import { logout, login } from './actions/auth';
 
-// axios.defaults.headers.common = { 'Authorization': `Bearer ${store.getState().auth.auth.token}` };
-
 const tryRefreshToken = () => {
   const request = axios.get(`
     ${constants.API_ENDPOINT}/auth/refresh
