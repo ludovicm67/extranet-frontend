@@ -32,13 +32,13 @@ const styles = {
   },
 };
 
-class ProjectsList extends Component {
+class ProjectsArchived extends Component {
   state = {
     data: [],
   };
 
   fetchList() {
-    getApi('projects').then(res => {
+    getApi('projects/archived').then(res => {
       if (this.isUnmounted) {
         return;
       }
@@ -62,8 +62,8 @@ class ProjectsList extends Component {
     });
   }
 
-  handleArchive(projectId) {
-    postApi(`projects/${projectId}/archive`).then(() => this.fetchList());
+  handleUnArchive(projectId) {
+    postApi(`projects/${projectId}/unarchive`).then(() => this.fetchList());
   }
 
   handleFav(ressource, key) {
@@ -120,27 +120,17 @@ class ProjectsList extends Component {
         <Typography variant="display1" gutterBottom>
           <Button
             component={Link}
-            to="/projects/new"
+            to="/projects"
             variant="contained"
             color="primary"
             style={styles.right}
           >
-            <Icon>add</Icon>
-            Ajouter
+            <Icon>arrow_back</Icon>
+            Projets
           </Button>
-          <Button
-            component={Link}
-            to="/projects/archived"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>archive</Icon>
-            Archives
-          </Button>
-          Liste des projets
+          Liste des projets archivés
         </Typography>
-        <Typography style={styles.intro}>Page listant les différents projets ({this.state.data.length})</Typography>
+        <Typography style={styles.intro}>Page listant les différents projets archivés ({this.state.data.length})</Typography>
         <Paper>
           <Table>
             <TableHead>
@@ -185,8 +175,8 @@ class ProjectsList extends Component {
                       <IconButton component={Link} to={`/projects/${n.id}/edit`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handleArchive.bind(this, n.id)}>
-                        <Icon>archive</Icon>
+                      <IconButton onClick={this.handleUnArchive.bind(this, n.id)}>
+                        <Icon>unarchive</Icon>
                       </IconButton>
                       <IconButton onClick={this.handleDelete.bind(this, `projects/${n.id}`)}>
                         <Icon>delete</Icon>
@@ -203,4 +193,4 @@ class ProjectsList extends Component {
   };
 }
 
-export default ProjectsList;
+export default ProjectsArchived;
