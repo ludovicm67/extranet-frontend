@@ -81,7 +81,6 @@ const styles = theme => ({
 
 class ProjectsShow extends Component {
   state = {
-    id: this.props.match.params.projectId,
     expanded: null,
     invoiceExpanded: null,
 
@@ -114,8 +113,8 @@ class ProjectsShow extends Component {
     this.setState({ end_at: date });
   }
 
-  componentDidMount() {
-    getApi(`projects/${this.state.id}`, {
+  fetchData(projectId) {
+    getApi(`projects/${projectId}`, {
       notFound: true,
     }).then(res => {
       if (this.isUnmounted) {
@@ -152,6 +151,14 @@ class ProjectsShow extends Component {
         parent: res.parent || null,
       });
     });
+  }
+
+  componentWillReceiveProps(p) {
+    this.fetchData(p.match.params.projectId);
+  }
+
+  componentDidMount() {
+    this.fetchData(this.props.match.params.projectId);
   }
 
   componentWillUnmount() {
@@ -372,7 +379,7 @@ class ProjectsShow extends Component {
         <Typography variant="display1" gutterBottom>
           <Button
             component={Link}
-            to={`/projects/${this.state.id}/identifiers`}
+            to={`/projects/${this.props.match.params.projectId}/identifiers`}
             variant="contained"
             color="primary"
             className={classes.right}
@@ -403,7 +410,7 @@ class ProjectsShow extends Component {
           <div>
             <Typography>
               <strong>Ce projet a pour parent : </strong>
-              <a href={`/projects/${this.state.parent.id}`}>{this.state.parent.name}</a>
+              <Link to={`/projects/${this.state.parent.id}`}>{this.state.parent.name}</Link>
             </Typography>
           </div>
         }
