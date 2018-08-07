@@ -7,6 +7,11 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   intro: {
@@ -17,6 +22,13 @@ const styles = theme => ({
   },
   formControl: {
     marginTop: '20px',
+  },
+  cursor: {
+    cursor: 'pointer',
+  },
+  category: {
+    marginTop: 20,
+    marginBottom: 10,
   },
 });
 
@@ -51,15 +63,32 @@ class Search extends Component {
   };
 
   handleSubmit() {
-    getApi(`search?q=${encodeURIComponent(this.state.q)}`).then(res => {
+    getApi(`search?q=${encodeURIComponent(this.state.q)}`, {
+      users: [],
+      clients: [],
+      projects: [],
+      contacts: [],
+      sellsy_contacts: [],
+      tags: [],
+    }).then(res => {
       if (this.isUnmounted) {
         return;
       }
-      console.log(res.projects);
+
       this.setState({
         results: res,
       });
     });
+  }
+
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      this.handleSubmit();
+    }
+  }
+
+  handleLocation(url) {
+    this.props.history.push(url);
   }
 
   render() {
@@ -80,6 +109,7 @@ class Search extends Component {
             value={this.state.q}
             onChange={this.handleChange('q')}
             autoComplete="new-password"
+            onKeyPress={this.handleKeyPress}
           />
         </FormControl>
 
@@ -91,7 +121,108 @@ class Search extends Component {
         >
           Lancer la recherche
         </Button>
-        {JSON.stringify(this.state.results)}
+
+        {this.state.results.clients.length > 0 && (
+          <div>
+            <Typography variant="headline" className={classes.category}>Clients ({this.state.results.clients.length})</Typography>
+            <Paper>
+              <Table>
+                <TableBody>
+                  {this.state.results.clients.map(e => (
+                    <TableRow className={classes.cursor} key={e.id} onClick={this.handleLocation.bind(this, `/clients/${e.id}`)}>
+                      <TableCell>{`${e.name}`}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+          </div>
+        )}
+
+        {this.state.results.projects.length > 0 && (
+          <div>
+            <Typography variant="headline" className={classes.category}>Projets ({this.state.results.projects.length})</Typography>
+            <Paper>
+              <Table>
+                <TableBody>
+                  {this.state.results.projects.map(e => (
+                    <TableRow className={classes.cursor} key={e.id} onClick={this.handleLocation.bind(this, `/projects/${e.id}`)}>
+                      <TableCell>{`${e.name}`}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+          </div>
+        )}
+
+        {this.state.results.contacts.length > 0 && (
+          <div>
+            <Typography variant="headline" className={classes.category}>Interlocuteurs ({this.state.results.contacts.length})</Typography>
+            <Paper>
+              <Table>
+                <TableBody>
+                  {this.state.results.contacts.map(e => (
+                    <TableRow className={classes.cursor} key={e.id} onClick={this.handleLocation.bind(this, `/contacts/${e.id}`)}>
+                      <TableCell>{`${e.name}`}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+          </div>
+        )}
+
+        {this.state.results.sellsy_contacts.length > 0 && (
+          <div>
+            <Typography variant="headline" className={classes.category}>Contacts ({this.state.results.sellsy_contacts.length})</Typography>
+            <Paper>
+              <Table>
+                <TableBody>
+                  {this.state.results.sellsy_contacts.map(e => (
+                    <TableRow className={classes.cursor} key={e.id} onClick={this.handleLocation.bind(this, `/clients/${e.client && e.client.id}`)}>
+                      <TableCell>{`${e.fullName} ${(e.client && 'de ' + e.client.fullName) || ''}`}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+          </div>
+        )}
+
+        {this.state.results.users.length > 0 && (
+          <div>
+            <Typography variant="headline" className={classes.category}>Utilisateurs ({this.state.results.users.length})</Typography>
+            <Paper>
+              <Table>
+                <TableBody>
+                  {this.state.results.users.map(e => (
+                    <TableRow className={classes.cursor} key={e.id} onClick={this.handleLocation.bind(this, `/users/${e.id}`)}>
+                      <TableCell>{`${e.firstname} ${e.lastname} (${e.email})`}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+          </div>
+        )}
+
+        {this.state.results.tags.length > 0 && (
+          <div>
+            <Typography variant="headline" className={classes.category}>Tags ({this.state.results.tags.length})</Typography>
+            <Paper>
+              <Table>
+                <TableBody>
+                  {this.state.results.tags.map(e => (
+                    <TableRow className={classes.cursor} key={e.id} onClick={this.handleLocation.bind(this, `/tags/${e.id}`)}>
+                      <TableCell>{e.name}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+          </div>
+        )}
       </div>
     );
   }
