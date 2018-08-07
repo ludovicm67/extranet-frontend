@@ -51,7 +51,7 @@ import { logout } from '../actions/auth';
 import store from '../store';
 import constants from '../constants';
 
-import { Route, Switch, NavLink } from 'react-router-dom';
+import { Route, Switch, Link, NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -64,6 +64,9 @@ const styles = theme => ({
     display: 'flex',
     width: '100%',
     minHeight: '100vh',
+  },
+  flex: {
+    flexGrow: 1,
   },
   appBar: {
     position: 'fixed',
@@ -343,9 +346,12 @@ class Layout extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="title" color="inherit" noWrap>
+            <Typography variant="title" color="inherit" noWrap className={classes.flex}>
               Extranet
             </Typography>
+            <IconButton component={Link} to="/search" color="inherit">
+              <Icon>search</Icon>
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Hidden mdUp>
