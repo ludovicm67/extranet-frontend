@@ -16,6 +16,8 @@ import { Link } from 'react-router-dom';
 const styles = {
   right: {
     float: 'right',
+    marginLeft: 10,
+    marginBottom: 10,
   },
   intro: {
     paddingBottom: '50px',
@@ -65,6 +67,26 @@ class ContactsList extends Component {
           >
             <Icon>add</Icon>
             Ajouter
+          </Button>
+          <Button
+            component={Link}
+            to="/types"
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>contacts</Icon>
+            Types
+          </Button>
+          <Button
+            component={Link}
+            to="/export"
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>vertical_align_bottom</Icon>
+            Exporter
           </Button>
           Liste des contacts
         </Typography>

@@ -143,6 +143,16 @@ class ProjectsShow extends Component {
           </Button>
           <Button
             component={Link}
+            to="/identifiers"
+            variant="contained"
+            color="primary"
+            className={classes.right}
+          >
+            <Icon>recent_actors</Icon>
+            Types
+          </Button>
+          <Button
+            component={Link}
             to={`/projects/${this.state.id}`}
             variant="contained"
             color="primary"

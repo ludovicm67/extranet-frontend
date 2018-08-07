@@ -17,6 +17,8 @@ import store from '../../store';
 const styles = {
   right: {
     float: 'right',
+    marginLeft: 10,
+    marginBottom: 10,
   },
   intro: {
     paddingBottom: '50px',
@@ -67,6 +69,26 @@ class UsersList extends Component {
           >
             <Icon>add</Icon>
             Ajouter
+          </Button>
+          <Button
+            component={Link}
+            to="/roles"
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>lock</Icon>
+            Rôles
+          </Button>
+          <Button
+            component={Link}
+            to="/contracts"
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>insert_drive_file</Icon>
+            Contrats
           </Button>
           Liste des utilisateurs
         </Typography>

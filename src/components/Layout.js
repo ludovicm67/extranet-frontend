@@ -18,16 +18,11 @@ import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import LogoutIcon from '@material-ui/icons/PowerSettingsNew';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import LockIcon from '@material-ui/icons/Lock';
 import UpdatesIcon from '@material-ui/icons/Update';
 import DomainIcon from '@material-ui/icons/Domain';
 import PeopleIcon from '@material-ui/icons/People';
 import AccountIcon from '@material-ui/icons/AccountCircle';
 import WorkIcon from '@material-ui/icons/Work';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import RecentActorsIcon from '@material-ui/icons/RecentActors';
-import ContactsIcon from '@material-ui/icons/Contacts';
-import DownloadIcon from '@material-ui/icons/VerticalAlignBottom';
 
 import Users from './users';
 import Clients from './clients';
@@ -151,19 +146,6 @@ class Layout extends React.Component {
           </ListItem>
           <ListItem
             component={NavLink}
-            to="/contracts"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <Icon>insert_drive_file</Icon>
-            </ListItemIcon>
-            <ListItemText inset primary="Contrats" />
-          </ListItem>
-          <ListItem
-            component={NavLink}
             to="/requests"
             button
             activeClassName="activeNavLink"
@@ -203,32 +185,6 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Projets" />
           </ListItem>
-          <ListItem
-            component={NavLink}
-            to="/tags"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <BookmarkIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Tags" />
-          </ListItem>
-          <ListItem
-            component={NavLink}
-            to="/identifiers"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <RecentActorsIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Types d'identifiants" />
-          </ListItem>
           <Divider />
           <ListItem
             component={NavLink}
@@ -243,46 +199,7 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Contacts" />
           </ListItem>
-          <ListItem
-            component={NavLink}
-            to="/types"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <ContactsIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Types" />
-          </ListItem>
-          <ListItem
-            component={NavLink}
-            to="/export"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <DownloadIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Exporter" />
-          </ListItem>
           <Divider />
-          <ListItem
-            component={NavLink}
-            to="/roles"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <LockIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Rôles" />
-          </ListItem>
           <ListItem
             component={NavLink}
             to="/users"

@@ -138,6 +138,16 @@ class ProjectsList extends Component {
             <Icon>archive</Icon>
             Archives
           </Button>
+          <Button
+            component={Link}
+            to="/tags"
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>bookmark</Icon>
+            Tags
+          </Button>
           Liste des projets
         </Typography>
         <Typography style={styles.intro}>Page listant les différents projets ({this.state.data.length})</Typography>
