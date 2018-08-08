@@ -73,9 +73,11 @@ class UsersEdit extends Component {
       },
     ],
     roles: [],
+    teams: [],
     firstname: '',
     lastname: '',
     roleId: 0,
+    teamId: 0,
     email: '',
     password: '',
     defaultPage: '/',
@@ -106,6 +108,26 @@ class UsersEdit extends Component {
         roles,
       });
     });
+    getApi('teams').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const teams = [
+        {
+          label: 'Aucune équipe',
+          value: 0,
+        }
+      ];
+      teams.push(...res.map(e => {
+        return {
+          label: e.name,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        teams,
+      });
+    });
     getApi(`users/${this.state.id}`).then(res => {
       if (this.isUnmounted) {
         return;
@@ -128,6 +150,7 @@ class UsersEdit extends Component {
         firstname: res.firstname || '',
         lastname: res.lastname || '',
         roleId: (res.is_admin === 1 ? -1 : res.role_id) || 0,
+        teamId: res.team_id || 0,
         email: res.email || '',
         password: '',
         defaultPage: res.default_page || '/',
@@ -144,6 +167,7 @@ class UsersEdit extends Component {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
       role_id: this.state.roleId || 0,
+      team_id: this.state.teamId || 0,
       email: this.state.email,
       password: this.state.password,
       default_page: this.state.defaultPage || '/',
@@ -209,12 +233,38 @@ class UsersEdit extends Component {
           InputProps={{
             inputComponent: Select,
             inputProps: {
+              clearable: false,
               creatable: true,
               multi: false,
               instanceId: "select-role",
               id: "select-role",
               simpleValue: true,
               options: this.state.roles,
+            }
+          }}
+        />
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.teamId}
+          onChange={this.handleChange('teamId')}
+          placeholder="Choisissez l'équipe de l'utilisateur..."
+          name="select-team"
+          label="Équipe"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              clearable: false,
+              creatable: true,
+              multi: false,
+              instanceId: "select-team",
+              id: "select-team",
+              simpleValue: true,
+              options: this.state.teams,
             }
           }}
         />

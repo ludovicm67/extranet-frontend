@@ -70,9 +70,11 @@ class UsersNew extends Component {
       },
     ],
     roles: [],
+    teams: [],
     firstname: '',
     lastname: '',
-    roleId: '',
+    roleId: 0,
+    teamId: 0,
     email: '',
     password: '',
     defaultPage: '/',
@@ -103,6 +105,26 @@ class UsersNew extends Component {
         roles,
       });
     });
+    getApi('teams').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const teams = [
+        {
+          label: 'Aucune équipe',
+          value: 0,
+        }
+      ];
+      teams.push(...res.map(e => {
+        return {
+          label: e.name,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        teams,
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -114,6 +136,7 @@ class UsersNew extends Component {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
       role_id: this.state.roleId || 0,
+      team_id: this.state.teamId || 0,
       email: this.state.email,
       password: this.state.password,
       default_page: this.state.defaultPage || '/',
@@ -174,12 +197,38 @@ class UsersNew extends Component {
           InputProps={{
             inputComponent: Select,
             inputProps: {
+              clearable: false,
               creatable: true,
               multi: false,
               instanceId: "select-role",
               id: "select-role",
               simpleValue: true,
               options: this.state.roles,
+            }
+          }}
+        />
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.teamId}
+          onChange={this.handleChange('teamId')}
+          placeholder="Choisissez l'équipe de l'utilisateur..."
+          name="select-team"
+          label="Équipe"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              clearable: false,
+              creatable: true,
+              multi: false,
+              instanceId: "select-team",
+              id: "select-team",
+              simpleValue: true,
+              options: this.state.teams,
             }
           }}
         />
