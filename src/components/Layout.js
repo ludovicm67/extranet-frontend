@@ -29,6 +29,7 @@ import Clients from './clients';
 import Contacts from './contacts';
 import Roles from './roles';
 import Types from './types';
+import Teams from './teams';
 import Identifiers from './identifiers';
 import Tags from './tags';
 import Updates from './updates';
@@ -308,6 +309,7 @@ class Layout extends React.Component {
               <Route path="/contacts" component={Contacts} />
               <Route path="/roles" component={Roles} />
               <Route path="/types" component={Types} />
+              <Route path="/teams" component={Teams} />
               <Route path="/identifiers" component={Identifiers} />
               <Route path="/tags" component={Tags} />
               <Route path="/updates" component={Updates} />

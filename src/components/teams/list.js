@@ -12,26 +12,23 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { getApi, deleteApi } from '../../utils';
 import { Link } from 'react-router-dom';
-import store from '../../store';
 
 const styles = {
   right: {
     float: 'right',
-    marginLeft: 10,
-    marginBottom: 10,
   },
   intro: {
     paddingBottom: '50px',
   },
 };
 
-class UsersList extends Component {
+class TeamsList extends Component {
   state = {
     data: [],
   };
 
   fetchList() {
-    getApi('users').then(res => {
+    getApi('teams').then(res => {
       if (this.isUnmounted) {
         return;
       }
@@ -56,13 +53,12 @@ class UsersList extends Component {
   }
 
   render() {
-    const user = store.getState().auth.auth.userData;
     return (
       <div>
         <Typography variant="display1" gutterBottom>
           <Button
             component={Link}
-            to="/users/new"
+            to="/teams/new"
             variant="contained"
             color="primary"
             style={styles.right}
@@ -70,80 +66,29 @@ class UsersList extends Component {
             <Icon>add</Icon>
             Ajouter
           </Button>
-          <Button
-            component={Link}
-            to="/roles"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>lock</Icon>
-            Rôles
-          </Button>
-          <Button
-            component={Link}
-            to="/teams"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>group</Icon>
-            Équipes
-          </Button>
-          <Button
-            component={Link}
-            to="/contracts"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>insert_drive_file</Icon>
-            Contrats
-          </Button>
-          Liste des utilisateurs
+          Liste des équipes
         </Typography>
-        <Typography style={styles.intro}>Page listant les différents utilisateurs ({this.state.data.length})</Typography>
+        <Typography style={styles.intro}>Page listant les différentes équipes ({this.state.data.length})</Typography>
         <Paper>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Nom</TableCell>
-                <TableCell>Adresse mail</TableCell>
-                <TableCell>Rôle</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.state.data.map(n => {
-                let role = null;
-                if (n.is_admin === 1) {
-                  role = (<strong>Super administrateur</strong>);
-                } else if (n.role && n.role.name) {
-                  role = n.role.name;
-                }
-                if (!role || role === 'null') {
-                  role = 'Aucun';
-                }
-
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/users/${n.id}`}>{n.firstname} {n.lastname}</Link>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <a href={`mailto:${n.email}`}>{n.email}</a>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {role}
+                      <Link to={`/teams/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/users/${n.id}/edit`}>
+                      <IconButton component={Link} to={`/teams/${n.id}/edit`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton
-                        onClick={this.handleDelete.bind(this, `users/${n.id}`)}
-                        disabled={n.id === user.id}
-                      >
+                      <IconButton onClick={this.handleDelete.bind(this, `teams/${n.id}`)}>
                         <Icon>delete</Icon>
                       </IconButton>
                     </TableCell>
@@ -158,4 +103,4 @@ class UsersList extends Component {
   };
 }
 
-export default UsersList;
+export default TeamsList;
