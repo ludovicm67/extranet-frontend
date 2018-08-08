@@ -42,6 +42,19 @@ class Teamview extends Component {
     items: [],
   };
 
+  stringToColour = str => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let colour = '#';
+    for (let i = 0; i < 3; i++) {
+      let value = (hash >> (i * 8)) & 0xFF;
+      colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
+  }
+
   fetchList() {
     getApi('team').then(res => {
       if (this.isUnmounted) {
@@ -50,6 +63,7 @@ class Teamview extends Component {
       const items = [];
       this.setState({
         groups: res.map(e => {
+          const team = e.team ? ` (${e.team.name})` : '';
           const lastname = e.lastname ? `${e.lastname[0]}.` : '';
           e.leave && e.leave.map(l => {
             if (l.accepted < 0) return null;
@@ -61,13 +75,14 @@ class Teamview extends Component {
               end_time: moment(l.end),
               style: {
                 opacity: l.accepted > 0 ? 1 : .4,
+                background: this.stringToColour(team),
               }
             });
             return null;
           });
           return {
             id: e.id,
-            title: `${e.firstname} ${lastname}`,
+            title: `${e.firstname} ${lastname}${team}`,
         }}),
         items,
       });
