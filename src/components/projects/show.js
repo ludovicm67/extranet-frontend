@@ -29,6 +29,8 @@ const styles = theme => ({
   },
   right: {
     float: 'right',
+    marginLeft: 10,
+    marginBottom: 10,
   },
   paper: {
     display: 'block',
@@ -386,6 +388,16 @@ class ProjectsShow extends Component {
           >
             <Icon>vpn_key</Icon>
             Identifiants
+          </Button>
+          <Button
+            component={Link}
+            to={`/projects/${this.props.match.params.projectId}/wiki`}
+            variant="contained"
+            color="primary"
+            className={classes.right}
+          >
+            <Icon>import_contacts</Icon>
+            Wiki
           </Button>
           {this.state.name}
         </Typography>
