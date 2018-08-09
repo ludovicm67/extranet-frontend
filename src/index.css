@@ -29,3 +29,7 @@ a {
 .rct-item, .rct-item.selected {
   border: none !important;
 }
+
+.rct-vl.rct-day-0, .rct-vl.rct-day-6 {
+  background: rgba(0, 0, 0, .4) !important;
+}
