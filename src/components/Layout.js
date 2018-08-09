@@ -49,6 +49,7 @@ import store from '../store';
 import constants from '../constants';
 
 import { Route, Switch, Link, NavLink } from 'react-router-dom';
+import Links from './links';
 
 const drawerWidth = 240;
 
@@ -157,6 +158,19 @@ class Layout extends React.Component {
               <Icon>live_help</Icon>
             </ListItemIcon>
             <ListItemText inset primary="Demandes" />
+          </ListItem>
+          <ListItem
+            component={NavLink}
+            to="/links"
+            button
+            activeClassName="activeNavLink"
+            exact
+            onClick={() => this.setState({ mobileOpen: false })}
+          >
+            <ListItemIcon>
+              <Icon>language</Icon>
+            </ListItemIcon>
+            <ListItemText inset primary="Liens" />
           </ListItem>
           <Divider />
           <ListItem
@@ -312,6 +326,7 @@ class Layout extends React.Component {
               <Route path="/teams" component={Teams} />
               <Route path="/identifiers" component={Identifiers} />
               <Route path="/tags" component={Tags} />
+              <Route path="/links" component={Links} />
               <Route path="/updates" component={Updates} />
               <Route path="/project_identifier" component={Projects} />
               <Route path="/projects" component={Projects} />
