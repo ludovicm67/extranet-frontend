@@ -194,7 +194,7 @@ class RequestsList extends Component {
                 if (n.request_type === 'leave' && n.leave_days) {
                   amount = '(' + n.leave_days + ((n.leave_days > 1) ? ' jours' : ' jour') + ')';
                 } else if (n.request_type === 'expenses' && n.expense_amount) {
-                  amount = '(' + n.expense_amount + ' €' + ')';
+                  amount = `(${n.expense_amount} €)`;
                 }
 
 

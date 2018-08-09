@@ -18,8 +18,12 @@ const styles = {
   intro: {
     paddingBottom: '50px',
   },
-  submit: {
+  space: {
     marginTop: '42px',
+  },
+  smallCol: {
+    maxWidth: 30,
+    padding: 5,
   },
 };
 
@@ -50,8 +54,35 @@ class RolesEdit extends Component {
     });
   }
 
-  handleCheckChange = name => event => {
-    this.setState({ [name]: event.target.checked });
+  handleCheckChange = (key, p) => event => {
+    if (!this.state.permissions || !this.state.permissions[key]) return;
+    let permissions = this.state.permissions;
+    const isChecked = event.target.checked;
+
+    if (isChecked && !permissions[key].checked.includes(p)) {
+      permissions[key].checked.push(p);
+    } else if (!isChecked && permissions[key].checked.includes(p)) {
+      const index = permissions[key].checked.indexOf(p);
+      if (index !== -1) permissions[key].checked.splice(index, 1);
+    }
+
+    this.setState({ permissions });
+  };
+
+  handleCheckLineChange = key => event => {
+    if (!this.state.permissions || !this.state.permissions[key]) return;
+    let permissions = this.state.permissions;
+    const isChecked = event.target.checked;
+
+    permissions[key].checked = [];
+    if (isChecked) {
+      if (permissions[key].show) permissions[key].checked.push('show');
+      if (permissions[key].add) permissions[key].checked.push('add');
+      if (permissions[key].edit) permissions[key].checked.push('edit');
+      if (permissions[key].delete) permissions[key].checked.push('delete');
+    }
+
+    this.setState({ permissions });
   };
 
   componentWillUnmount() {
@@ -59,8 +90,15 @@ class RolesEdit extends Component {
   }
 
   handleSubmit() {
+    let permissions = this.state.permissions || [];
+    permissions  = permissions.reduce((prev, cur, i) => {
+      prev[cur.id] = cur.checked;
+      return prev;
+    }, {});
+
     putApi(`roles/${this.state.id}`, {
       name: this.state.name,
+      permissions,
     }).then(() => this.props.history.push('/roles'));
   }
 
@@ -86,60 +124,68 @@ class RolesEdit extends Component {
             onChange={this.handleChange('name')}
           />
         </FormControl>
+        <Typography variant="headline" style={styles.space}>
+          Permissions
+        </Typography>
         <Paper>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Nom</TableCell>
-                <TableCell>Afficher</TableCell>
-                <TableCell>Ajouter</TableCell>
-                <TableCell>Modifier</TableCell>
-                <TableCell>Supprimer</TableCell>
-                <TableCell>Tous</TableCell>
+                <TableCell style={styles.smallCol}>Afficher</TableCell>
+                <TableCell style={styles.smallCol}>Ajouter</TableCell>
+                <TableCell style={styles.smallCol}>Modifier</TableCell>
+                <TableCell style={styles.smallCol}>Supprimer</TableCell>
+                <TableCell style={styles.smallCol}>Tous</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.state.permissions.map((e, k) => (
                 <TableRow key={k}>
                   <TableCell>{`${e.name}`}</TableCell>
-                  <TableCell>
+                  <TableCell style={styles.smallCol}>
                     <Checkbox
                       disabled={!e.show}
-                      checked={this.state.confidential}
-                      onChange={this.handleCheckChange(e.id, 'show')}
+                      checked={e.show && e.checked.includes('show')}
+                      onChange={this.handleCheckChange(k, 'show')}
                       value="1"
                       color="primary"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={styles.smallCol}>
                     <Checkbox
                       disabled={!e.add}
-                      checked={this.state.confidential}
-                      onChange={this.handleCheckChange(e.id, 'add')}
+                      checked={e.add && e.checked.includes('add')}
+                      onChange={this.handleCheckChange(k, 'add')}
                       value="1"
                       color="primary"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={styles.smallCol}>
                     <Checkbox
                       disabled={!e.edit}
-                      checked={this.state.confidential}
-                      onChange={this.handleCheckChange(e.id, 'edit')}
+                      checked={e.edit && e.checked.includes('edit')}
+                      onChange={this.handleCheckChange(k, 'edit')}
                       value="1"
                       color="primary"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={styles.smallCol}>
                     <Checkbox
                       disabled={!e.delete}
-                      checked={this.state.confidential}
-                      onChange={this.handleCheckChange(e.id, 'delete')}
+                      checked={e.delete && e.checked.includes('delete')}
+                      onChange={this.handleCheckChange(k, 'delete')}
                       value="1"
                       color="primary"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={styles.smallCol}>
                     <Checkbox
+                      checked={((e.show && e.checked.includes('show')) || !e.show)
+                        && ((e.add && e.checked.includes('add')) || !e.add)
+                        && ((e.edit && e.checked.includes('edit')) || !e.edit)
+                        && ((e.delete && e.checked.includes('delete')) || !e.delete)}
+                      onChange={this.handleCheckLineChange(k)}
                       value="1"
                       color="primary"
                     />
@@ -149,8 +195,7 @@ class RolesEdit extends Component {
             </TableBody>
           </Table>
         </Paper>
-        {JSON.stringify(this.state.permissions)}
-        <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
+        <Button variant="contained" color="primary" style={styles.space} onClick={this.handleSubmit.bind(this)}>
           Modifier
         </Button>
       </div>
