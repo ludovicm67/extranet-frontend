@@ -22,6 +22,9 @@ const styles = {
   intro: {
     paddingBottom: '50px',
   },
+  hidden: {
+    display: 'none',
+  },
 };
 
 class RequestsList extends Component {
@@ -87,29 +90,29 @@ class RequestsList extends Component {
   formatMonth(month) {
     switch (month) {
       case 1:
-        return 'Janvier';
+        return 'janvier';
       case 2:
-        return 'Février';
+        return 'février';
       case 3:
-        return 'Mars';
+        return 'mars';
       case 4:
-        return 'Avril';
+        return 'avril';
       case 5:
-        return 'Mai';
+        return 'mai';
       case 6:
-        return 'Juin';
+        return 'juin';
       case 7:
-        return 'Juillet';
+        return 'juillet';
       case 8:
-        return 'Août';
+        return 'août';
       case 9:
-        return 'Septembre';
+        return 'septembre';
       case 10:
-        return 'Octobre';
+        return 'octobre';
       case 11:
-        return 'Novembre';
+        return 'novembre';
       case 12:
-        return 'Décembre';
+        return 'décembre';
       default:
         return '';
     }
@@ -156,28 +159,14 @@ class RequestsList extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Type de demande</TableCell>
                 <TableCell>Utilisateur</TableCell>
-                <TableCell>Période</TableCell>
-                <TableCell>Montant</TableCell>
-                <TableCell>Statut</TableCell>
+                <TableCell>Période (Montant)</TableCell>
                 <TableCell>Commentaire</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.state.data.map(n => {
-                const status = ((a) => {
-                  switch (a) {
-                    case 1:
-                      return 'Acceptée';
-                    case -1:
-                      return 'Refusée';
-                    default:
-                      return 'En attente...';
-                  }
-                })(n.accepted);
-
                 const styleColor = ((a) => {
                   switch (a) {
                     case 1:
@@ -203,41 +192,34 @@ class RequestsList extends Component {
 
                 let amount;
                 if (n.request_type === 'leave' && n.leave_days) {
-                  amount = n.leave_days + ((n.leave_days > 1) ? ' jours' : ' jour');
+                  amount = '(' + n.leave_days + ((n.leave_days > 1) ? ' jours' : ' jour') + ')';
                 } else if (n.request_type === 'expenses' && n.expense_amount) {
-                  amount = n.expense_amount + ' €';
+                  amount = '(' + n.expense_amount + ' €' + ')';
                 }
 
 
                 return (
                   <TableRow key={`${n.request_type}-${n.id}`}>
-                    <TableCell component="th" scope="row" style={{ color: styleColor }}>
-                      {n.request_type &&
-                        (n.request_type === 'leave') ? 'Congés' :
-                        (n.request_type === 'expenses') ? 'Note de frais' :
-                        'Autre'
-                      } / {n.category}
-                    </TableCell>
                     <TableCell component="th" scope="row">
                       <Link to={`/users/${n.user_id}`} style={{ color: styleColor }}>{
                         `${n.firstname} ${n.lastname}`
                       }</Link>
                     </TableCell>
-                    <TableCell style={{ color: styleColor }}>{dates}</TableCell>
-                    <TableCell style={{ color: styleColor }}>{amount}</TableCell>
-                    <TableCell style={{ color: styleColor }}>{status}</TableCell>
+                    <TableCell style={{ color: styleColor }}>
+                      {n.category} {dates} {amount}
+                    </TableCell>
                     <TableCell style={{ color: styleColor }}>{n.details}</TableCell>
                     <TableCell>
-                      <IconButton component='a' href={urlApi(`storage/${n.file}`)} disabled={n.file === null} target="_blank">
+                      <IconButton component='a' href={urlApi(`storage/${n.file}`)} disabled={n.file === null} style={n.file === null ? styles.hidden : null} target="_blank">
                         <Icon>attach_file</Icon>
                       </IconButton>
                       <IconButton component={Link} to={`/${n.request_type}/${n.id}`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/accept`)} disabled={n.accepted === 1}>
+                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/accept`)} disabled={n.accepted === 1} style={n.accepted === 1 ? styles.hidden : null}>
                         <Icon>check</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/reject`)} disabled={n.accepted === -1}>
+                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/reject`)} disabled={n.accepted === -1} style={n.accepted === -1 ? styles.hidden : null}>
                         <Icon>close</Icon>
                       </IconButton>
                       <IconButton onClick={this.handleDelete.bind(this, `${n.request_type}/${n.id}`)}>
