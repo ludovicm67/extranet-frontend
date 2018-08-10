@@ -1,39 +1,34 @@
 import React, { Component } from 'react';
 import 'jodit';
 import 'jodit/build/jodit.min.css';
-import JoditEditor from 'jodit-react';
 import { getApi } from '../../utils';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 
 const styles = {
   right: {
     float: 'right',
     marginLeft: 10,
+    marginBottom: 10,
+  },
+  cursor: {
+    cursor: 'pointer',
   },
 };
 
-class WikiShow extends Component {
+class WikiList extends Component {
   state = {
-    id: this.props.match.params.postId,
-    projectId: this.props.match.params.projectId,
+    id: this.props.match.params.projectId,
 
-    title: '',
-    content: '',
-    updated_at: '',
-    user: '',
-  };
-
-  updateContent = value => {
-    this.setState({ content: value });
-  }
-
-  handleChange = prop => event => {
-    this.setState({
-      [prop]: event.target.value,
-    });
+    data: [],
   };
 
   /**
@@ -62,15 +57,11 @@ class WikiShow extends Component {
   };
 
   componentDidMount() {
-    getApi(`wikis/${this.state.id}`, {
+    getApi(`project_wikis/${this.state.id}`, {
     }).then(res => {
       if (this.unMounted) return;
-      const user = (res.user && ` par ${res.user.firstname} ${res.user.lastname} (${res.user.email})`) || '';
       this.setState({
-        title: res.title || '',
-        content: res.content || '',
-        user,
-        updated_at: (res.updated_at && `, le ${res.updated_at} UTC.`) || '',
+        data: res || [],
       });
     });
   }
@@ -79,52 +70,52 @@ class WikiShow extends Component {
     this.unMounted = true;
   }
 
+  handleLocation(url) {
+    this.props.history.push(url);
+  }
+
   render() {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
           <Button
             component={Link}
-            to={`/projects/${this.state.projectId}/wiki/${this.state.id}/edit`}
+            to={`/projects/${this.state.id}/wiki/new`}
             variant="contained"
             color="primary"
             style={styles.right}
           >
-            <Icon>edit</Icon>
-            Modifier
+            <Icon>add</Icon>
+            Ajouter
           </Button>
           <Button
             component={Link}
-            to={`/projects/${this.state.projectId}`}
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>work</Icon>
-            Projet
-          </Button>
-          <Button
-            component={Link}
-            to={`/projects/${this.state.projectId}/wiki`}
+            to={`/projects/${this.state.id}`}
             variant="contained"
             color="primary"
             style={styles.right}
           >
             <Icon>arrow_back</Icon>
-            Wiki
+            Projet
           </Button>
-          {this.state.title}
+          Wiki
         </Typography>
-        <JoditEditor
-          editorRef={this.setRef}
-          value={this.state.content}
-          config={this.config}
-          onChange={this.updateContent}
-        />
-        <em>Dernière mise à jour{this.state.user}{this.state.updated_at}</em>
+        {this.state.data.length > 0 && (
+          <Paper>
+            <Table>
+              <TableBody>
+                {this.state.data.map(e => (
+                  <TableRow style={styles.cursor} key={e.id} onClick={this.handleLocation.bind(this, `/projects/${e.project_id}/wiki/${e.id}`)}>
+                    <TableCell>{`${e.title}`}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        )}
       </div>
     );
   }
 }
 
-export default WikiShow;
+export default WikiList;
