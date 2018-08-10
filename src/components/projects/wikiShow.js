@@ -12,6 +12,10 @@ const styles = {
   right: {
     float: 'right',
     marginLeft: 10,
+    marginBottom: 10,
+  },
+  title: {
+    marginBottom: 50,
   },
 };
 
@@ -82,7 +86,7 @@ class WikiShow extends Component {
   render() {
     return (
       <div>
-        <Typography variant="display1" gutterBottom>
+        <Typography variant="display1" style={styles.title} gutterBottom>
           <Button
             component={Link}
             to={`/projects/${this.state.projectId}/wiki/${this.state.id}/edit`}
