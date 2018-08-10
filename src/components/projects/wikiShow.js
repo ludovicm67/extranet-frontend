@@ -2,9 +2,24 @@ import React, { Component } from 'react';
 import 'jodit';
 import 'jodit/build/jodit.min.css';
 import JoditEditor from 'jodit-react';
+import { getApi } from '../../utils';
+import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import Icon from '@material-ui/core/Icon';
+import Button from '@material-ui/core/Button';
+
+const styles = {
+  right: {
+    float: 'right',
+    marginLeft: 10,
+  },
+};
 
 class WikiShow extends Component {
   state = {
+    id: this.props.match.params.postId,
+    projectId: this.props.match.params.projectId,
+
     title: '',
     content: '',
   };
@@ -44,10 +59,57 @@ class WikiShow extends Component {
     buttons: 'bold,strikethrough,underline,italic,|,superscript,subscript,|,ul,ol,|,outdent,indent,|,font,fontsize,paragraph,|,image,video,table,link,|,align,undo,redo,\n,hr,symbol,print,about',
   };
 
+  componentDidMount() {
+    getApi(`wikis/${this.state.id}`, {
+    }).then(res => {
+      if (this.unMounted) return;
+      this.setState({
+        title: res.title || '',
+        content: res.content || '',
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.unMounted = true;
+  }
+
   render() {
     return (
       <div>
-        <h1>{this.state.title}</h1>
+        <Typography variant="display1" gutterBottom>
+          <Button
+            component={Link}
+            to={`/projects/${this.state.projectId}/wiki/${this.state.id}/edit`}
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>edit</Icon>
+            Modifier
+          </Button>
+          <Button
+            component={Link}
+            to={`/projects/${this.state.projectId}`}
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>work</Icon>
+            Projet
+          </Button>
+          <Button
+            component={Link}
+            to={`/projects/${this.state.projectId}/wiki`}
+            variant="contained"
+            color="primary"
+            style={styles.right}
+          >
+            <Icon>arrow_back</Icon>
+            Wiki
+          </Button>
+          {this.state.title}
+        </Typography>
         <JoditEditor
           editorRef={this.setRef}
           value={this.state.content}

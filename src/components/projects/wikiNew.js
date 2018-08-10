@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import { postApi } from '../../utils';
 
 const styles = {
   input: {
@@ -16,6 +17,8 @@ const styles = {
 
 class WikiNew extends Component {
   state = {
+    id: this.props.match.params.projectId,
+
     title: '',
     content: '',
   };
@@ -31,7 +34,11 @@ class WikiNew extends Component {
   };
 
   handleSubmit() {
-
+    postApi('wikis', {
+      title: this.state.title || '',
+      content: this.state.content || '',
+      project_id: this.state.id || '',
+    }).then(() => this.props.history.push(`/projects/${this.state.id}/wiki`));
   }
 
   /**
