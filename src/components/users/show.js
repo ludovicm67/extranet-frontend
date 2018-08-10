@@ -5,6 +5,16 @@ import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import moment from 'moment';
 import 'moment/locale/fr';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
 
 import { getApi, urlApi, deleteApi } from '../../utils';
 
@@ -62,6 +72,13 @@ class UsersShow extends Component {
 
   componentWillUnmount() {
     this.isUnmounted = true;
+  }
+
+  handleCopy(id) {
+    var copyText = document.getElementById(id);
+    copyText.select();
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
   }
 
   displayFile(file) {
@@ -135,14 +152,40 @@ class UsersShow extends Component {
         {this.state.documents.length > 0 && (
           <div>
             <Typography variant="headline" style={styles.formControl}>Documents</Typography>
-            <ul>
-              {this.state.documents.map((d, k) => (
-                <li key={k}>
-                  <a href={urlApi(`storage/${d.file}`)} target="_blank">{this.displayFile(d)}</a>
-                  - <span style={styles.click} onClick={this.handleDelete.bind(this, `documents/${d.id}`)}>Supprimer</span>
-                </li>
-              ))}
-            </ul>
+            <Paper>
+              <Table>
+                <TableBody>
+                  {this.state.documents.map((d, k) => (
+                    <TableRow key={k}>
+                      <TableCell><a href={urlApi(`storage/${d.file}`)} target="_blank">{this.displayFile(d)}</a></TableCell>
+                      <TableCell>
+                        {d.password && (
+                          <FormControl>
+                            <InputLabel htmlFor={`doc-${k}-password`}>Mot de passe</InputLabel>
+                            <Input
+                              id={`doc-${k}-password`}
+                              type="text"
+                              value={d.password}
+                              endAdornment={
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    aria-label="Toggle password visibility"
+                                    onClick={this.handleCopy.bind(this, `doc-${k}-password`)}
+                                  >
+                                    <Icon>filter_none</Icon>
+                                  </IconButton>
+                                </InputAdornment>
+                              }
+                            />
+                          </FormControl>
+                        )}
+                      </TableCell>
+                      <TableCell><span style={styles.click} onClick={this.handleDelete.bind(this, `documents/${d.id}`)}>Supprimer</span></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
           </div>
         )}
       </div>
