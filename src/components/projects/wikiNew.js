@@ -2,11 +2,19 @@ import React, { Component } from 'react';
 import 'jodit';
 import 'jodit/build/jodit.min.css';
 import JoditEditor from 'jodit-react';
+import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 
-class WikiEdit extends Component {
+const styles = {
+  input: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+};
+
+class WikiNew extends Component {
   state = {
     title: '',
     content: '',
@@ -21,6 +29,10 @@ class WikiEdit extends Component {
       [prop]: event.target.value,
     });
   };
+
+  handleSubmit() {
+
+  }
 
   /**
    * @property Jodit jodit instance of native Jodit
@@ -47,6 +59,7 @@ class WikiEdit extends Component {
         <FormControl fullWidth>
           <InputLabel htmlFor="wiki-title">Titre</InputLabel>
           <Input
+            style={styles.input}
             id="wiki-title"
             type="text"
             value={this.state.title}
@@ -54,14 +67,18 @@ class WikiEdit extends Component {
           />
         </FormControl>
         <JoditEditor
+          style={styles.input}
           editorRef={this.setRef}
           value={this.state.content}
           config={this.config}
           onChange={this.updateContent}
         />
+        <Button variant="contained" color="primary" style={styles.input} onClick={this.handleSubmit.bind(this)}>
+          Créer
+        </Button>
       </div>
     );
   }
 }
 
-export default WikiEdit;
+export default WikiNew;

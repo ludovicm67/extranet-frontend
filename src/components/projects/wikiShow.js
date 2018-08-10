@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import 'jodit';
 import 'jodit/build/jodit.min.css';
 import JoditEditor from 'jodit-react';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
 
-class WikiEdit extends Component {
+class WikiShow extends Component {
   state = {
     title: '',
     content: '',
@@ -29,6 +26,12 @@ class WikiEdit extends Component {
   setRef = jodit => this.jodit = jodit;
 
   config = {
+    readonly: true,
+    toolbar: false,
+    showCharsCounter: false,
+    showWordsCounter: false,
+    showXPathInStatusbar: false,
+
     uploader: {
       insertImageAsBase64URI: true,
     },
@@ -44,15 +47,7 @@ class WikiEdit extends Component {
   render() {
     return (
       <div>
-        <FormControl fullWidth>
-          <InputLabel htmlFor="wiki-title">Titre</InputLabel>
-          <Input
-            id="wiki-title"
-            type="text"
-            value={this.state.title}
-            onChange={this.handleChange('title')}
-          />
-        </FormControl>
+        <h1>{this.state.title}</h1>
         <JoditEditor
           editorRef={this.setRef}
           value={this.state.content}
@@ -64,4 +59,4 @@ class WikiEdit extends Component {
   }
 }
 
-export default WikiEdit;
+export default WikiShow;

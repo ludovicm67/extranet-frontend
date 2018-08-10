@@ -45,6 +45,8 @@ import Export from './Export';
 import Search from './Search';
 import Links from './links';
 import WikiEdit from './projects/wikiEdit';
+import WikiShow from './projects/wikiShow';
+import WikiNew from './projects/wikiNew';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -330,7 +332,9 @@ class Layout extends React.Component {
               <Route path="/links" component={Links} />
               <Route path="/updates" component={Updates} />
               <Route path="/project_identifier" component={Projects} />
+              <Route path="/projects/:projectId/wiki/new" component={WikiNew} />
               <Route path="/projects/:projectId/wiki/:postId/edit" component={WikiEdit} />
+              <Route path="/projects/:projectId/wiki/:postId" component={WikiShow} />
               <Route path="/projects" component={Projects} />
               <Route path="/teamview" component={Teamview} />
               <Route path="/overtime/:userId" component={Overtime} />
