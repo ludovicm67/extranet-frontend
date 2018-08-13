@@ -16,21 +16,19 @@ import { Link } from 'react-router-dom';
 const styles = {
   right: {
     float: 'right',
-    marginLeft: 10,
-    marginBottom: 10,
   },
   intro: {
     paddingBottom: '50px',
   },
 };
 
-class LinksList extends Component {
+class LinkCategoriesList extends Component {
   state = {
     data: [],
   };
 
   fetchList() {
-    getApi('links').then(res => {
+    getApi('link_categories').then(res => {
       if (this.isUnmounted) {
         return;
       }
@@ -60,17 +58,7 @@ class LinksList extends Component {
         <Typography variant="display1" gutterBottom>
           <Button
             component={Link}
-            to="/link_categories"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>bookmarks</Icon>
-            Catégories
-          </Button>
-          <Button
-            component={Link}
-            to="/links/new"
+            to="/link_categories/new"
             variant="contained"
             color="primary"
             style={styles.right}
@@ -78,9 +66,9 @@ class LinksList extends Component {
             <Icon>add</Icon>
             Ajouter
           </Button>
-          Liste des liens
+          Liste des catégories de liens
         </Typography>
-        <Typography style={styles.intro}>Page listant les différents liens ({this.state.data.length})</Typography>
+        <Typography style={styles.intro}>Page listant les différentes catégories de liens ({this.state.data.length})</Typography>
         <Paper>
           <Table>
             <TableHead>
@@ -94,16 +82,13 @@ class LinksList extends Component {
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      <strong>{n.title}</strong>
-                      {n.description && n.description.split('\n').map((item, key) => {
-                        return <p key={key}>{item}</p>
-                      })}
+                      <Link to={`/link_categories/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/links/${n.id}/edit`}>
+                      <IconButton component={Link} to={`/link_categories/${n.id}/edit`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `links/${n.id}`)}>
+                      <IconButton onClick={this.handleDelete.bind(this, `link_categories/${n.id}`)}>
                         <Icon>delete</Icon>
                       </IconButton>
                     </TableCell>
@@ -118,4 +103,4 @@ class LinksList extends Component {
   };
 }
 
-export default LinksList;
+export default LinkCategoriesList;

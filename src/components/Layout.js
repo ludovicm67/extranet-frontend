@@ -48,6 +48,7 @@ import WikiEdit from './projects/wikiEdit';
 import WikiShow from './projects/wikiShow';
 import WikiNew from './projects/wikiNew';
 import WikiList from './projects/wikiList';
+import LinkCategories from './linkCategories';
 
 import { logout } from '../actions/auth';
 import store from '../store';
@@ -352,6 +353,7 @@ class Layout extends React.Component {
               <Route path="/export" component={Export} />
               <Route path="/search" component={Search} />
               <Route path="/pdf/compta" component={PdfCompta} />
+              <Route path="/link_categories" component={LinkCategories} />
               <Route path="/" component={Dashboard} />
             </Switch>
         </main>
