@@ -4,6 +4,8 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import Select from '../layout/Select';
 
 import { getApi, postApi } from '../../utils';
 
@@ -18,6 +20,8 @@ const styles = {
 
 class LinksNew extends Component {
   state = {
+    getCategories: [],
+    categories: '',
     linkData: {
       title: '',
       img: null,
@@ -37,7 +41,7 @@ class LinksNew extends Component {
         final: '',
       },
     }).then(res => {
-      if (this.unMounted) return;
+      if (this.isUnmounted) return;
       this.setState({
         linkData: res,
       });
@@ -46,7 +50,11 @@ class LinksNew extends Component {
 
   handleSubmit() {
     postApi('links', {
-      url: this.state.linkData.url.final,
+      url: this.state.linkData.url.final || '',
+      title: this.state.linkData.title || '',
+      description: this.state.linkData.description || '',
+      image_url: (this.state.linkData.img && this.state.linkData.img.url) || null,
+      categories: this.state.categories ? this.state.categories.split(',').map(i => i.trim()) : '',
     }).then(() => this.props.history.push('/links'));
   }
 
@@ -84,8 +92,38 @@ class LinksNew extends Component {
     });
   };
 
+  handleChange = prop => event => {
+    if (event && event.target && event.target.value !== undefined) {
+      this.setState({
+        [prop]: event.target.value,
+      });
+    } else {
+      this.setState({
+        [prop]: event,
+      });
+    }
+  };
+
   componentWillUnmount() {
-    this.unMounted = true;
+    this.isUnmounted = true;
+  }
+
+  componentDidMount() {
+    getApi('link_categories').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const categories = [];
+      categories.push(...res.map(e => {
+        return {
+          label: e.name,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        getCategories: categories,
+      });
+    });
   }
 
   render() {
@@ -139,6 +177,30 @@ class LinksNew extends Component {
             onChange={this.handleChangeImage.bind(this)}
           />
         </FormControl>
+        <TextField
+          style={styles.space}
+          fullWidth
+          value={this.state.categories}
+          onChange={this.handleChange('categories')}
+          placeholder="Choisissez une ou plusieurs catégories..."
+          name="select-categories"
+          label="Utilisateurs affectés"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              creatable: true,
+              multi: true,
+              instanceId: "select-categories",
+              id: "select-categories",
+              simpleValue: true,
+              options: this.state.getCategories,
+            }
+          }}
+        />
         <Button variant="contained" color="primary" style={styles.space} onClick={this.handleSubmit.bind(this)}>
           Créer
         </Button>
