@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { getApi, urlApi } from '../utils';
+import { getApi, urlApi, hasPermission } from '../utils';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
@@ -130,17 +130,19 @@ class Export extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component="a"
-            href={urlApi(`contacts/csv?type=${encodeURIComponent(this.state.type)}&tag=${encodeURIComponent(this.state.tag)}&value=${encodeURIComponent(this.state.value)}&token=${token}`)}
-            target="_blank"
-            variant="contained"
-            color="primary"
-            className={classes.right}
-          >
-            <Icon>import_export</Icon>
-            Exporter en CSV
-          </Button>
+          {hasPermission('export_contacts', 'show') && (
+            <Button
+              component="a"
+              href={urlApi(`contacts/csv?type=${encodeURIComponent(this.state.type)}&tag=${encodeURIComponent(this.state.tag)}&value=${encodeURIComponent(this.state.value)}&token=${token}`)}
+              target="_blank"
+              variant="contained"
+              color="primary"
+              className={classes.right}
+            >
+              <Icon>import_export</Icon>
+              Exporter en CSV
+            </Button>
+          )}
           Exporter des contacts
         </Typography>
         <Typography className={classes.intro}>Exportez des contacts en filtrant sur le type et par tags de projets sur lesquels ils sont affectés ({this.state.data.length})</Typography>

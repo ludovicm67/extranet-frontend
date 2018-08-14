@@ -214,20 +214,26 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Projets" />
           </ListItem>
-          <Divider />
-          <ListItem
-            component={NavLink}
-            to="/contacts"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Contacts" />
-          </ListItem>
+
+          {hasPermission('contacts') && (
+            <div>
+              <Divider />
+              <ListItem
+                component={NavLink}
+                to="/contacts"
+                button
+                activeClassName="activeNavLink"
+                exact
+                onClick={() => this.setState({ mobileOpen: false })}
+              >
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText inset primary="Contacts" />
+              </ListItem>
+            </div>
+          )}
+
           <Divider />
           <ListItem
             component={NavLink}

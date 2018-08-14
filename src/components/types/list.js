@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -56,16 +56,18 @@ class TypesList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/types/new"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('contacts', 'add') && (
+            <Button
+              component={Link}
+              to="/types/new"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           Liste des types de contacts
         </Typography>
         <Typography style={styles.intro}>Page listant les différents types de contacts ({this.state.data.length})</Typography>
@@ -85,12 +87,16 @@ class TypesList extends Component {
                       <Link to={`/types/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/types/${n.id}/edit`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `types/${n.id}`)}>
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('contacts', 'edit') && (
+                        <IconButton component={Link} to={`/types/${n.id}/edit`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
+                      {hasPermission('contacts', 'delete') && (
+                        <IconButton onClick={this.handleDelete.bind(this, `types/${n.id}`)}>
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

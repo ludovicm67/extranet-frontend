@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -58,36 +58,42 @@ class ContactsList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/contacts/new"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
-          <Button
-            component={Link}
-            to="/types"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>contacts</Icon>
-            Types
-          </Button>
-          <Button
-            component={Link}
-            to="/export"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>vertical_align_bottom</Icon>
-            Exporter
-          </Button>
+          {hasPermission('contacts', 'add') && (
+            <Button
+              component={Link}
+              to="/contacts/new"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
+          {hasPermission('contacts', 'show') && (
+            <Button
+              component={Link}
+              to="/types"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>contacts</Icon>
+              Types
+            </Button>
+          )}
+          {hasPermission('export_contacts', 'show') && (
+            <Button
+              component={Link}
+              to="/export"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>vertical_align_bottom</Icon>
+              Exporter
+            </Button>
+          )}
           Liste des contacts
         </Typography>
         <Typography style={styles.intro}>Page listant les différents contacts ({this.state.data.length})</Typography>
@@ -107,14 +113,18 @@ class ContactsList extends Component {
                       <Link to={`/contacts/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/contacts/${n.id}/edit`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
-                      <IconButton
-                        onClick={this.handleDelete.bind(this, `contacts/${n.id}`)}
-                      >
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('contacts', 'edit') && (
+                        <IconButton component={Link} to={`/contacts/${n.id}/edit`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
+                      {hasPermission('contacts', 'delete') && (
+                        <IconButton
+                          onClick={this.handleDelete.bind(this, `contacts/${n.id}`)}
+                        >
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
