@@ -10,7 +10,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
@@ -98,16 +98,18 @@ class LinksList extends Component {
             <Icon>bookmarks</Icon>
             Catégories
           </Button>
-          <Button
-            component={Link}
-            to="/links/new"
-            variant="contained"
-            color="primary"
-            className={classes.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('links', 'add') && (
+            <Button
+              component={Link}
+              to="/links/new"
+              variant="contained"
+              color="primary"
+              className={classes.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           Liste des liens
         </Typography>
 
@@ -133,12 +135,16 @@ class LinksList extends Component {
                   })}
                 </CardContent>
                 <CardActions>
-                  <IconButton component={Link} to={`/links/${n.id}/edit`}>
-                    <Icon>edit</Icon>
-                  </IconButton>
-                  <IconButton onClick={this.handleDelete.bind(this, `links/${n.id}`)}>
-                    <Icon>delete</Icon>
-                  </IconButton>
+                  {hasPermission('links', 'edit') && (
+                    <IconButton component={Link} to={`/links/${n.id}/edit`}>
+                      <Icon>edit</Icon>
+                    </IconButton>
+                  )}
+                  {hasPermission('links', 'delete') && (
+                    <IconButton onClick={this.handleDelete.bind(this, `links/${n.id}`)}>
+                      <Icon>delete</Icon>
+                    </IconButton>
+                  )}
                 </CardActions>
               </div>
             </Card>
