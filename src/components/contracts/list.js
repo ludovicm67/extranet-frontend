@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -68,16 +68,18 @@ class ContractsList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/contracts/new"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('contracts', 'add') && (
+            <Button
+              component={Link}
+              to="/contracts/new"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           Liste des contrats
         </Typography>
         <Typography style={styles.intro}>Page listant les différents contrats ({this.state.data.length})</Typography>
@@ -116,12 +118,16 @@ class ContractsList extends Component {
                       }
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/contracts/${n.id}/edit`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `contracts/${n.id}`)}>
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('contracts', 'edit') && (
+                        <IconButton component={Link} to={`/contracts/${n.id}/edit`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
+                      {hasPermission('contracts', 'delete') && (
+                        <IconButton onClick={this.handleDelete.bind(this, `contracts/${n.id}`)}>
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 import store from '../../store';
 
@@ -90,16 +90,18 @@ class UsersList extends Component {
             <Icon>group</Icon>
             Équipes
           </Button>
-          <Button
-            component={Link}
-            to="/contracts"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>insert_drive_file</Icon>
-            Contrats
-          </Button>
+          {hasPermission('contracts') && (
+            <Button
+              component={Link}
+              to="/contracts"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>insert_drive_file</Icon>
+              Contrats
+            </Button>
+          )}
           Liste des utilisateurs
         </Typography>
         <Typography style={styles.intro}>Page listant les différents utilisateurs ({this.state.data.length})</Typography>
@@ -137,15 +139,19 @@ class UsersList extends Component {
                       {role}
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/users/${n.id}/edit`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
-                      <IconButton
-                        onClick={this.handleDelete.bind(this, `users/${n.id}`)}
-                        disabled={n.id === user.id}
-                      >
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('users', 'edit') && (
+                        <IconButton component={Link} to={`/users/${n.id}/edit`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
+                      {hasPermission('users', 'delete') && (
+                        <IconButton
+                          onClick={this.handleDelete.bind(this, `users/${n.id}`)}
+                          disabled={n.id === user.id}
+                        >
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
