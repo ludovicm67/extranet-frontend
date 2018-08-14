@@ -218,12 +218,16 @@ class RequestsList extends Component {
                       <IconButton component={Link} to={`/${n.request_type}/${n.id}`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/accept`)} disabled={n.accepted === 1} style={n.accepted === 1 ? styles.hidden : null}>
-                        <Icon>check</Icon>
-                      </IconButton>
-                      <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/reject`)} disabled={n.accepted === -1} style={n.accepted === -1 ? styles.hidden : null}>
-                        <Icon>close</Icon>
-                      </IconButton>
+                      {hasPermission('request_management', 'edit') && (
+                        <div>
+                          <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/accept`)} disabled={n.accepted === 1} style={n.accepted === 1 ? styles.hidden : null}>
+                            <Icon>check</Icon>
+                          </IconButton>
+                          <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/reject`)} disabled={n.accepted === -1} style={n.accepted === -1 ? styles.hidden : null}>
+                            <Icon>close</Icon>
+                          </IconButton>
+                        </div>
+                      )}
                       <IconButton onClick={this.handleDelete.bind(this, `${n.request_type}/${n.id}`)}>
                         <Icon>delete</Icon>
                       </IconButton>
