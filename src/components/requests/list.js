@@ -11,7 +11,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import moment from 'moment';
 
-import { getApi, deleteApi, urlApi, postApi } from '../../utils';
+import { getApi, deleteApi, urlApi, postApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -142,16 +142,18 @@ class RequestsList extends Component {
             <Icon>local_taxi</Icon>
             Note de frais
           </Button>
-          <Button
-            component={Link}
-            to="/pdf/compta"
-            variant="contained"
-            color="primary"
-            style={styles.rightBtn}
-          >
-            <Icon>picture_as_pdf</Icon>
-            PDF
-          </Button>
+          {hasPermission('pdf', 'show') && (
+            <Button
+              component={Link}
+              to="/pdf/compta"
+              variant="contained"
+              color="primary"
+              style={styles.rightBtn}
+            >
+              <Icon>picture_as_pdf</Icon>
+              PDF
+            </Button>
+          )}
           Liste des différentes demandes
         </Typography>
         <Typography style={styles.intro}>Page listant les différentes demandes ({this.state.data.length})</Typography>

@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { urlApi } from '../utils';
+import { urlApi, hasPermission } from '../utils';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -110,14 +110,16 @@ class PdfCompta extends Component {
           />
         </FormControl>
 
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={this.handleSubmit.bind(this)}
-        >
-          Consulter
-        </Button>
+        {hasPermission('pdf', 'show') && (
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={this.handleSubmit.bind(this)}
+          >
+            Consulter
+          </Button>
+        )}
       </div>
     );
   }

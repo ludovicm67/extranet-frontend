@@ -11,7 +11,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import amber from '@material-ui/core/colors/amber';
 
-import { getApi, deleteApi, postApi } from '../../utils';
+import { getApi, deleteApi, postApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -118,16 +118,18 @@ class ProjectsList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/projects/new"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('projects', 'add') && (
+            <Button
+              component={Link}
+              to="/projects/new"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           <Button
             component={Link}
             to="/projects/archived"
@@ -138,16 +140,18 @@ class ProjectsList extends Component {
             <Icon>archive</Icon>
             Archives
           </Button>
-          <Button
-            component={Link}
-            to="/tags"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>bookmark</Icon>
-            Tags
-          </Button>
+          {hasPermission('projects', 'show') && (
+            <Button
+              component={Link}
+              to="/tags"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>bookmark</Icon>
+              Tags
+            </Button>
+          )}
           Liste des projets
         </Typography>
         <Typography style={styles.intro}>Page listant les différents projets ({this.state.data.length})</Typography>
@@ -195,12 +199,16 @@ class ProjectsList extends Component {
                       <IconButton component={Link} to={`/projects/${n.id}/edit`}>
                         <Icon>edit</Icon>
                       </IconButton>
-                      <IconButton onClick={this.handleArchive.bind(this, n.id)}>
-                        <Icon>archive</Icon>
-                      </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `projects/${n.id}`)}>
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('projects', 'edit') && (
+                        <IconButton onClick={this.handleArchive.bind(this, n.id)}>
+                          <Icon>archive</Icon>
+                        </IconButton>
+                      )}
+                      {hasPermission('projects', 'delete') && (
+                        <IconButton onClick={this.handleDelete.bind(this, `projects/${n.id}`)}>
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
