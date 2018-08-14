@@ -50,20 +50,24 @@ const styles = theme => ({
   },
 });
 
-class LinksList extends Component {
+class LinksShow extends Component {
   state = {
+    id: this.props.match.params.categoryId || 'all',
+
+    name: 'Tous les liens',
     data: [],
-    categories: [],
   };
 
   fetchList() {
-    getApi('links').then(res => {
+    getApi(`links_cat/${this.state.id}`).then(res => {
       if (this.isUnmounted) {
         return;
       }
+      let name = 'Tous les liens';
+      if (res.name && res.name !== 'all') name = res.name;
       this.setState({
-        data: res.lasts || [],
-        categories: res.categories || [],
+        data: res.links || [],
+        name,
       });
     });
   }
@@ -108,12 +112,10 @@ class LinksList extends Component {
             <Icon>add</Icon>
             Ajouter
           </Button>
-          Liste des liens
+          {this.state.name}
         </Typography>
 
-        {this.state.data.length > 0 && (
-          <Typography variant="headline">Les {this.state.data.length} derniers liens :</Typography>
-        )}
+        <Typography style={styles.intro}>Voici les différents liens de cette catégorie ({this.state.data.length})</Typography>
 
         {this.state.data.map(n => {
           return (
@@ -144,24 +146,13 @@ class LinksList extends Component {
             </Card>
           );
         })}
-
-        <Typography variant="headline">Catégories de liens :</Typography>
-        <Button component={Link} to="/links/all" variant="outlined" size="medium" className={classes.btn}>
-          Tous les liens
-        </Button>
-
-        {this.state.categories.map(e => (
-          <Button component={Link} to={`/links/${e.id}`} key={e.id} variant="outlined" size="medium" className={classes.btn}>
-            #{e.name}
-          </Button>
-        ))}
       </div>
     );
   };
 }
 
-LinksList.propTypes = {
+LinksShow.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(LinksList);
+export default withStyles(styles, { withTheme: true })(LinksShow);

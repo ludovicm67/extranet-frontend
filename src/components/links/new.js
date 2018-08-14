@@ -184,7 +184,7 @@ class LinksNew extends Component {
           onChange={this.handleChange('categories')}
           placeholder="Choisissez une ou plusieurs catégories..."
           name="select-categories"
-          label="Utilisateurs affectés"
+          label="Catégories"
           autoComplete="new-password"
           InputLabelProps={{
             shrink: true
