@@ -35,7 +35,7 @@ class LinksList extends Component {
         return;
       }
       this.setState({
-        data: res.last || [],
+        data: res.lasts || [],
       });
     });
   }
