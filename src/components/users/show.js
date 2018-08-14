@@ -16,7 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 
-import { getApi, urlApi, deleteApi } from '../../utils';
+import { getApi, urlApi, deleteApi, hasPermission } from '../../utils';
 
 moment.locale('fr');
 
@@ -114,16 +114,18 @@ class UsersShow extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to={`/overtime/${this.state.id}`}
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>access_time</Icon>
-            Heures supplémentaires
-          </Button>
+          {hasPermission('overtime', 'edit') && (
+            <Button
+              component={Link}
+              to={`/overtime/${this.state.id}`}
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>access_time</Icon>
+              Heures supplémentaires
+            </Button>
+          )}
           <Button
             component={Link}
             to={`/documents/${this.state.id}`}
