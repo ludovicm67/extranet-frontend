@@ -235,19 +235,23 @@ class Layout extends React.Component {
           )}
 
           <Divider />
-          <ListItem
-            component={NavLink}
-            to="/users"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Utilisateurs" />
-          </ListItem>
+
+          {hasPermission('users') && (
+            <ListItem
+              component={NavLink}
+              to="/users"
+              button
+              activeClassName="activeNavLink"
+              exact
+              onClick={() => this.setState({ mobileOpen: false })}
+            >
+              <ListItemIcon>
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText inset primary="Utilisateurs" />
+            </ListItem>
+          )}
+
           <ListItem
             component={NavLink}
             to="/users/me"

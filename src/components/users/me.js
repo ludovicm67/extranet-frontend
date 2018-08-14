@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-import { getApi, putApi, urlApi, deleteApi } from '../../utils';
+import { getApi, putApi, urlApi, deleteApi, hasPermission } from '../../utils';
 import store from '../../store';
 import { setUserData } from '../../actions/auth';
 
@@ -312,7 +312,11 @@ class UsersMe extends Component {
                           </FormControl>
                         )}
                       </TableCell>
-                      <TableCell><span style={styles.click} onClick={this.handleDelete.bind(this, `documents/${d.id}`)}>Supprimer</span></TableCell>
+                      <TableCell>
+                        {hasPermission('documents', 'delete') && (
+                          <span style={styles.click} onClick={this.handleDelete.bind(this, `documents/${d.id}`)}>Supprimer</span>
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

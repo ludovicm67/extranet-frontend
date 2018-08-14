@@ -126,16 +126,18 @@ class UsersShow extends Component {
               Heures supplémentaires
             </Button>
           )}
-          <Button
-            component={Link}
-            to={`/documents/${this.state.id}`}
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>insert_drive_file</Icon>
-            Déposer un document
-          </Button>
+          {hasPermission('documents', 'add') && (
+            <Button
+              component={Link}
+              to={`/documents/${this.state.id}`}
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>insert_drive_file</Icon>
+              Déposer un document
+            </Button>
+          )}
           {`${this.state.firstname} ${this.state.lastname} (${this.state.email})`}
         </Typography>
         <Typography style={styles.intro}>Affichage des informations à propos de cet utilisateur</Typography>
@@ -182,7 +184,11 @@ class UsersShow extends Component {
                           </FormControl>
                         )}
                       </TableCell>
-                      <TableCell><span style={styles.click} onClick={this.handleDelete.bind(this, `documents/${d.id}`)}>Supprimer</span></TableCell>
+                      <TableCell>
+                        {hasPermission('documents', 'delete') && (
+                          <span style={styles.click} onClick={this.handleDelete.bind(this, `documents/${d.id}`)}>Supprimer</span>
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
