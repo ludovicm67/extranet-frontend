@@ -60,36 +60,42 @@ class UsersList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/users/new"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
-          <Button
-            component={Link}
-            to="/roles"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>lock</Icon>
-            Rôles
-          </Button>
-          <Button
-            component={Link}
-            to="/teams"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>group</Icon>
-            Équipes
-          </Button>
+          {hasPermission('users', 'add') && (
+            <Button
+              component={Link}
+              to="/users/new"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
+          {hasPermission('roles', 'show') && (
+            <Button
+              component={Link}
+              to="/roles"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>lock</Icon>
+              Rôles
+            </Button>
+          )}
+          {hasPermission('users', 'show') && (
+            <Button
+              component={Link}
+              to="/teams"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>group</Icon>
+              Équipes
+            </Button>
+          )}
           {hasPermission('contracts') && (
             <Button
               component={Link}

@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -56,16 +56,18 @@ class RolesList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/roles/new"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('roles', 'add') && (
+            <Button
+              component={Link}
+              to="/roles/new"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           Liste des rôles
         </Typography>
         <Typography style={styles.intro}>Page listant les différents rôles ({this.state.data.length})</Typography>
@@ -85,12 +87,16 @@ class RolesList extends Component {
                       <Link to={`/roles/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/roles/${n.id}/edit`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `roles/${n.id}`)}>
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('roles', 'edit') && (
+                        <IconButton component={Link} to={`/roles/${n.id}/edit`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
+                      {hasPermission('roles', 'delete') && (
+                        <IconButton onClick={this.handleDelete.bind(this, `roles/${n.id}`)}>
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

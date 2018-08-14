@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 const styles = {
@@ -56,16 +56,18 @@ class TeamsList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/teams/new"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('users', 'add') && (
+            <Button
+              component={Link}
+              to="/teams/new"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           Liste des équipes
         </Typography>
         <Typography style={styles.intro}>Page listant les différentes équipes ({this.state.data.length})</Typography>
@@ -85,12 +87,16 @@ class TeamsList extends Component {
                       <Link to={`/teams/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/teams/${n.id}/edit`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `teams/${n.id}`)}>
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('users', 'edit') && (
+                        <IconButton component={Link} to={`/teams/${n.id}/edit`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
+                      {hasPermission('users', 'delete') && (
+                        <IconButton onClick={this.handleDelete.bind(this, `teams/${n.id}`)}>
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
