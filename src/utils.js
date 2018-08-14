@@ -186,3 +186,21 @@ export const deleteApi = (location, defaultReturn = []) => {
 export const urlApi = (url) => {
   return `${constants.API_ENDPOINT}/${url}`
 }
+
+export const hasPermission = (permission, right = 'show') => {
+  if (!store.getState().auth.auth.token) return false;
+  if (!store.getState().auth.auth.userData) return false;
+  if (store.getState().auth.auth.userData.id === 0) return false;
+  if (store.getState().auth.auth.userData.is_admin === 1) return true;
+  if (!store.getState().auth.auth.userData.role) return false;
+  if (!store.getState().auth.auth.userData.role.permissions) return false;
+  const p = store.getState().auth.auth.userData.role.permissions.filter(e => {
+    return e.name === permission;
+  });
+  if (!p || !Array.isArray(p) || !p[0]) return false;
+  if (right === 'show' && p[0].show === 1) return true;
+  if (right === 'add' && p[0].add === 1) return true;
+  if (right === 'edit' && p[0].edit === 1) return true;
+  if (right === 'delete' && p[0].delete === 1) return true;
+  return false;
+}

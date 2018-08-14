@@ -23,6 +23,7 @@ class App extends Component {
     if (hasToken) {
       getApi('users/me').then(res => {
         store.dispatch(setUserData(res));
+        this.forceUpdate();
       });
     } else if (isOnProtectedRoute && pathName !== '/login') {
       this.setState({

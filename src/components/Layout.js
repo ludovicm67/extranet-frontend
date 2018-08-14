@@ -53,7 +53,7 @@ import LinkCategories from './linkCategories';
 import { logout } from '../actions/auth';
 import store from '../store';
 import constants from '../constants';
-
+import { hasPermission } from '../utils';
 import { Route, Switch, Link, NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -178,20 +178,26 @@ class Layout extends React.Component {
             <ListItemText inset primary="Liens" />
           </ListItem>
           <Divider />
-          <ListItem
-            component={NavLink}
-            to="/clients"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({ mobileOpen: false })}
-          >
-            <ListItemIcon>
-              <DomainIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Clients" />
-          </ListItem>
-          <Divider />
+
+          {hasPermission('clients') && (
+            <div>
+              <ListItem
+                component={NavLink}
+                to="/clients"
+                button
+                activeClassName="activeNavLink"
+                exact
+                onClick={() => this.setState({ mobileOpen: false })}
+              >
+                <ListItemIcon>
+                  <DomainIcon />
+                </ListItemIcon>
+                <ListItemText inset primary="Clients" />
+              </ListItem>
+              <Divider />
+            </div>
+          )}
+
           <ListItem
             component={NavLink}
             to="/projects"

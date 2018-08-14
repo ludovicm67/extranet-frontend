@@ -82,7 +82,7 @@ class LinkCategoriesList extends Component {
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/link_categories/${n.id}`}>{n.name}</Link>
+                      <Link to={`/links/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
                       <IconButton component={Link} to={`/link_categories/${n.id}/edit`}>
