@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import 'jodit';
 import 'jodit/build/jodit.min.css';
-import { getApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -56,14 +57,17 @@ class WikiList extends Component {
     buttons: 'bold,strikethrough,underline,italic,|,superscript,subscript,|,ul,ol,|,outdent,indent,|,font,fontsize,paragraph,|,image,video,table,link,|,align,undo,redo,\n,hr,symbol,print,about',
   };
 
-  componentDidMount() {
-    getApi(`project_wikis/${this.state.id}`, {
-    }).then(res => {
+  fetchList() {
+    getApi(`project_wikis/${this.state.id}`, {}).then(res => {
       if (this.unMounted) return;
       this.setState({
         data: res || [],
       });
     });
+  }
+
+  componentDidMount() {
+    this.fetchList();
   }
 
   componentWillUnmount() {
@@ -74,20 +78,28 @@ class WikiList extends Component {
     this.props.history.push(url);
   }
 
+  handleDelete(ressource) {
+    deleteApi(ressource).then(() => {
+      this.fetchList();
+    });
+  }
+
   render() {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to={`/projects/${this.state.id}/wiki/new`}
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('projects', 'add') && (
+            <Button
+              component={Link}
+              to={`/projects/${this.state.id}/wiki/new`}
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           <Button
             component={Link}
             to={`/projects/${this.state.id}`}
@@ -107,6 +119,17 @@ class WikiList extends Component {
                 {this.state.data.map(e => (
                   <TableRow style={styles.cursor} key={e.id} onClick={this.handleLocation.bind(this, `/projects/${e.project_id}/wiki/${e.id}`)}>
                     <TableCell>{`${e.title}`}</TableCell>
+                    <TableCell>
+                      {hasPermission('projects', 'delete') && (
+                        <IconButton onClick={ev => {
+                          ev.preventDefault();
+                          ev.stopPropagation();
+                          this.handleDelete(`wikis/${e.id}`);
+                        }}>
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
