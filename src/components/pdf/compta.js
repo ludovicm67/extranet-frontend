@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '../layout/Select';
 import Button from '@material-ui/core/Button';
 import store from '../../store';
+import { Link } from 'react-router-dom';
 
 moment.locale('fr');
 
@@ -21,6 +22,7 @@ const styles = _theme => ({
   },
   submit: {
     marginTop: '42px',
+    marginRight: 10,
   },
   formControl: {
     marginTop: '20px',
@@ -35,7 +37,6 @@ const todayInfos = {
 
 class PdfCompta extends Component {
   state = {
-    id: this.props.match.params.userId,
     month: todayInfos.month,
     year: todayInfos.year,
 
@@ -118,6 +119,18 @@ class PdfCompta extends Component {
             onClick={this.handleSubmit.bind(this)}
           >
             Consulter
+          </Button>
+        )}
+
+        {hasPermission('pdf', 'edit') && (
+          <Button
+            component={Link}
+            to={`/pdf/compta/${this.state.year}/${this.state.month}`}
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Modifier
           </Button>
         )}
       </div>

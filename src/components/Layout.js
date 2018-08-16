@@ -40,6 +40,7 @@ import Contracts from './contracts';
 import Requests from './requests';
 import Overtime from './Overtime';
 import Documents from './Documents';
+import PdfEdit from './pdf/edit';
 import PdfCompta from './pdf/compta';
 import Export from './Export';
 import Search from './Search';
@@ -371,6 +372,7 @@ class Layout extends React.Component {
               <Route path="/export/:typeId" component={Export} />
               <Route path="/export" component={Export} />
               <Route path="/search" component={Search} />
+              <Route path="/pdf/compta/:year/:month" component={PdfEdit} />
               <Route path="/pdf/compta" component={PdfCompta} />
               <Route path="/link_categories" component={LinkCategories} />
               <Route path="/" component={Dashboard} />
