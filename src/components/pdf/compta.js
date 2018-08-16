@@ -3,15 +3,15 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { urlApi, hasPermission } from '../utils';
+import { urlApi, hasPermission } from '../../utils';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import TextField from "@material-ui/core/TextField";
 import FormControl from '@material-ui/core/FormControl';
-import Select from './layout/Select';
+import Select from '../layout/Select';
 import Button from '@material-ui/core/Button';
-import store from '../store';
+import store from '../../store';
 
 moment.locale('fr');
 

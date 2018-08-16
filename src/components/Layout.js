@@ -40,7 +40,7 @@ import Contracts from './contracts';
 import Requests from './requests';
 import Overtime from './Overtime';
 import Documents from './Documents';
-import PdfCompta from './PdfCompta';
+import PdfCompta from './pdf/compta';
 import Export from './Export';
 import Search from './Search';
 import Links from './links';

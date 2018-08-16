@@ -122,26 +122,30 @@ class RequestsList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/leave"
-            variant="contained"
-            color="primary"
-            style={styles.rightBtn}
-          >
-            <Icon>hotel</Icon>
-            Congés
-          </Button>
-          <Button
-            component={Link}
-            to="/expenses"
-            variant="contained"
-            color="primary"
-            style={styles.rightBtn}
-          >
-            <Icon>local_taxi</Icon>
-            Note de frais
-          </Button>
+          {hasPermission('leave', 'add') && (
+            <Button
+              component={Link}
+              to="/leave"
+              variant="contained"
+              color="primary"
+              style={styles.rightBtn}
+            >
+              <Icon>hotel</Icon>
+              Congés
+            </Button>
+          )}
+          {hasPermission('expenses', 'add') && (
+            <Button
+              component={Link}
+              to="/expenses"
+              variant="contained"
+              color="primary"
+              style={styles.rightBtn}
+            >
+              <Icon>local_taxi</Icon>
+              Note de frais
+            </Button>
+          )}
           {hasPermission('pdf', 'show') && (
             <Button
               component={Link}
@@ -228,9 +232,11 @@ class RequestsList extends Component {
                           </IconButton>
                         </div>
                       )}
+                      {hasPermission(n.request_type, 'delete') && (
                       <IconButton onClick={this.handleDelete.bind(this, `${n.request_type}/${n.id}`)}>
                         <Icon>delete</Icon>
                       </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

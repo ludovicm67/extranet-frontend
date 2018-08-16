@@ -155,7 +155,7 @@ class ProjectsEdit extends Component {
         return;
       }
       const projects = [];
-      projects.push(...res.map(e => {
+      projects.push(...res.filter(e => e.id !== this.state.id).map(e => {
         return {
           label: e.name,
           value: e.id,
