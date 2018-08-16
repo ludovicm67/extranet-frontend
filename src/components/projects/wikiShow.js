@@ -47,6 +47,8 @@ class WikiShow extends Component {
   setRef = jodit => this.jodit = jodit;
 
   config = {
+    useIframeResizer: false,
+
     readonly: true,
     toolbar: false,
     showCharsCounter: false,
