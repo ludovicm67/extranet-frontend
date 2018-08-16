@@ -106,7 +106,7 @@ class WikiShow extends Component {
             color="primary"
             style={styles.right}
           >
-            <Icon>work</Icon>
+            <Icon>arrow_back</Icon>
             Projet
           </Button>
           <Button
