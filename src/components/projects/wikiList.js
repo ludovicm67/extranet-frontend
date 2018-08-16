@@ -88,7 +88,7 @@ class WikiList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          {hasPermission('projects', 'add') && (
+          {hasPermission('projects', 'edit', this.state.id) && (
             <Button
               component={Link}
               to={`/projects/${this.state.id}/wiki/new`}

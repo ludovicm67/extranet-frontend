@@ -14,6 +14,7 @@ const initialState = {
       is_admin: 0,
       default_page: '/',
       role_id: null,
+      user_projects: [],
     },
   },
 };

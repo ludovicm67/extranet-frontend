@@ -196,9 +196,11 @@ class ProjectsList extends Component {
                       {n.end_at && this.formatDate(parsedDate)}
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/projects/${n.id}/edit`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
+                      {hasPermission('projects', 'edit', n.id) && (
+                        <IconButton component={Link} to={`/projects/${n.id}/edit`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
                       {hasPermission('projects', 'edit') && (
                         <IconButton onClick={this.handleArchive.bind(this, n.id)}>
                           <Icon>archive</Icon>

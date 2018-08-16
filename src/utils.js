@@ -187,11 +187,18 @@ export const urlApi = (url) => {
   return `${constants.API_ENDPOINT}/${url}`
 }
 
-export const hasPermission = (permission, right = 'show') => {
+export const hasPermission = (permission, right = 'show', contentId = null) => {
   if (!store.getState().auth.auth.token) return false;
   if (!store.getState().auth.auth.userData) return false;
   if (store.getState().auth.auth.userData.id === 0) return false;
   if (store.getState().auth.auth.userData.is_admin === 1) return true;
+  if (permission === 'projects' && contentId) {
+    const up = store.getState().auth.auth.userData.user_projects;
+    if (up && up.length > 0 && up.includes(parseInt(contentId, 10))) {
+      return true;
+    }
+  }
+
   if (!store.getState().auth.auth.userData.role) return false;
   if (!store.getState().auth.auth.userData.role.permissions) return false;
   const p = store.getState().auth.auth.userData.role.permissions.filter(e => {
