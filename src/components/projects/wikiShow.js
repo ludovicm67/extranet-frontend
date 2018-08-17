@@ -8,6 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   right: {
     float: 'right',
@@ -78,6 +81,8 @@ class WikiShow extends Component {
         user,
         updated_at: (res.updated_at && `, le ${res.updated_at} UTC.`) || '',
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

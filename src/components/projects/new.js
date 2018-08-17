@@ -12,6 +12,9 @@ import { DatePicker } from 'material-ui-pickers';
 
 import { getApi, postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: 20,
@@ -70,7 +73,9 @@ class ProjectsNew extends Component {
       end_at: this.formatDate(this.state.end_at),
       tags: this.state.tag,
       urls: this.state.url,
-    }).then(() => this.props.history.push('/projects'));
+    }).then(() => this.props.history.push('/projects')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {
@@ -104,6 +109,8 @@ class ProjectsNew extends Component {
       this.setState({
         clients,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('tags').then(res => {
       if (this.isUnmounted) {
@@ -119,6 +126,8 @@ class ProjectsNew extends Component {
       this.setState({
         tags,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('projects').then(res => {
       if (this.isUnmounted) {
@@ -134,6 +143,8 @@ class ProjectsNew extends Component {
       this.setState({
         projects,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('contacts').then(res => {
       if (this.isUnmounted) {
@@ -149,6 +160,8 @@ class ProjectsNew extends Component {
       this.setState({
         contacts,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('sellsy_orders').then(res => {
       if (this.isUnmounted) {
@@ -164,6 +177,8 @@ class ProjectsNew extends Component {
       this.setState({
         orders,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('users').then(res => {
       if (this.isUnmounted) {
@@ -179,6 +194,8 @@ class ProjectsNew extends Component {
       this.setState({
         users,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

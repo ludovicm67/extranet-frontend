@@ -8,6 +8,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   input: {
     marginTop: 20,
@@ -38,7 +41,9 @@ class WikiNew extends Component {
       title: this.state.title || '',
       content: this.state.content || '',
       project_id: this.state.id || '',
-    }).then(() => this.props.history.push(`/projects/${this.state.id}/wiki`));
+    }).then(() => this.props.history.push(`/projects/${this.state.id}/wiki`)).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   /**

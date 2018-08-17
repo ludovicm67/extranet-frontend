@@ -12,6 +12,9 @@ import { DatePicker } from 'material-ui-pickers';
 
 import { getApi, putApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: 20,
@@ -72,7 +75,9 @@ class ProjectsEdit extends Component {
       end_at: this.formatDate(this.state.end_at),
       tags: this.state.tag,
       urls: this.state.url,
-    }).then(() => this.props.history.push('/projects'));
+    }).then(() => this.props.history.push('/projects')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {
@@ -119,6 +124,8 @@ class ProjectsEdit extends Component {
         tag: tags,
         url: res.urls || [],
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('clients').then(res => {
       if (this.isUnmounted) {
@@ -134,6 +141,8 @@ class ProjectsEdit extends Component {
       this.setState({
         clients,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('tags').then(res => {
       if (this.isUnmounted) {
@@ -149,6 +158,8 @@ class ProjectsEdit extends Component {
       this.setState({
         tags,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('projects').then(res => {
       if (this.isUnmounted) {
@@ -164,6 +175,8 @@ class ProjectsEdit extends Component {
       this.setState({
         projects,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('contacts').then(res => {
       if (this.isUnmounted) {
@@ -179,6 +192,8 @@ class ProjectsEdit extends Component {
       this.setState({
         contacts,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('sellsy_orders').then(res => {
       if (this.isUnmounted) {
@@ -194,6 +209,8 @@ class ProjectsEdit extends Component {
       this.setState({
         orders,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('users').then(res => {
       if (this.isUnmounted) {
@@ -209,6 +226,8 @@ class ProjectsEdit extends Component {
       this.setState({
         users,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

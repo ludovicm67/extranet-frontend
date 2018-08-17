@@ -13,6 +13,9 @@ import Select from './layout/Select';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 
+import { setErrMsg } from '../actions/general';
+import store from '../store';
+
 moment.locale('fr');
 
 const styles = theme => ({
@@ -67,6 +70,8 @@ class Overtime extends Component {
       window.setTimeout(() => {
         this.busy = false;
       }, 300);
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -79,6 +84,8 @@ class Overtime extends Component {
       this.setState({
         user: ` pour ${res.firstname} ${res.lastname} (${res.email})` || '',
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -128,6 +135,8 @@ class Overtime extends Component {
           submitting: false,
         });
       }, 1000);
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

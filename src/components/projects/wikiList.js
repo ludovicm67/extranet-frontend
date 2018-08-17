@@ -13,6 +13,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
 
 const styles = {
   right: {
@@ -63,6 +65,8 @@ class WikiList extends Component {
       this.setState({
         data: res || [],
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -81,6 +85,8 @@ class WikiList extends Component {
   handleDelete(ressource) {
     deleteApi(ressource).then(() => {
       this.fetchList();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

@@ -13,6 +13,9 @@ import IconButton from '@material-ui/core/IconButton';
 import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   right: {
     float: 'right',
@@ -35,6 +38,8 @@ class LinkCategoriesList extends Component {
       this.setState({
         data: res,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -49,6 +54,8 @@ class LinkCategoriesList extends Component {
   handleDelete(ressource) {
     deleteApi(ressource).then(() => {
       this.fetchList();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

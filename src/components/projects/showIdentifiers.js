@@ -15,6 +15,9 @@ import Paper from '@material-ui/core/Paper';
 
 import { getApi, deleteApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = theme => ({
   intro: {
     paddingBottom: 20,
@@ -95,6 +98,8 @@ class ProjectsShow extends Component {
   handleDelete(ressource) {
     deleteApi(ressource).then(() => {
       this.fetchList();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -114,6 +119,8 @@ class ProjectsShow extends Component {
         name: res.name || '',
         identifiers: res.identifiers || [],
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

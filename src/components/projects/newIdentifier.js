@@ -9,6 +9,9 @@ import Select from '../layout/Select';
 import { getApi, postApi } from '../../utils';
 import { FormControlLabel } from '@material-ui/core';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '20px',
@@ -51,6 +54,8 @@ class NewIdentifier extends Component {
       this.setState({
         identifiers,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -63,7 +68,9 @@ class NewIdentifier extends Component {
       identifier_id: this.state.identifierId || 0,
       value: this.state.value,
       confidential: this.state.confidential ? 1 : 0,
-    }).then(() => this.props.history.push(`/projects/${this.state.id}/identifiers`));
+    }).then(() => this.props.history.push(`/projects/${this.state.id}/identifiers`)).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {

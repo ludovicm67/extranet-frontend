@@ -7,6 +7,9 @@ import FormControl from '@material-ui/core/FormControl';
 
 import { postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '50px',
@@ -24,7 +27,9 @@ class LinkCategoriesNew extends Component {
   handleSubmit() {
     postApi('link_categories', {
       name: this.state.name,
-    }).then(() => this.props.history.push('/link_categories'));
+    }).then(() => this.props.history.push('/link_categories')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {

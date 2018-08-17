@@ -18,6 +18,8 @@ import Typography from '@material-ui/core/Typography';
 
 import { Link } from 'react-router-dom';
 
+import { setErrMsg } from '../actions/general';
+
 const styles = {
   root: {
     padding: 50,
@@ -117,6 +119,8 @@ class Login extends Component {
             ? '/' : res.default_page;
 
           window.location.href = redirPage;
+        }).catch(e => {
+          store.dispatch(setErrMsg(e));
         });
       }
     })

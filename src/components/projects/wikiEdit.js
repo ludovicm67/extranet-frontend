@@ -8,6 +8,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { getApi, putApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   input: {
     marginTop: 20,
@@ -61,6 +64,8 @@ class WikiEdit extends Component {
         title: res.title || '',
         content: res.content || '',
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -74,7 +79,9 @@ class WikiEdit extends Component {
       content: this.state.content || '',
     }).then(() => this.props.history.push(
       `/projects/${this.state.projectId}/wiki/${this.state.id}`
-    ));
+    )).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   render() {

@@ -14,6 +14,9 @@ import amber from '@material-ui/core/colors/amber';
 import { getApi, deleteApi, postApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   right: {
     float: 'right',
@@ -45,6 +48,8 @@ class ProjectsArchived extends Component {
       this.setState({
         data: res,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -59,11 +64,15 @@ class ProjectsArchived extends Component {
   handleDelete(ressource) {
     deleteApi(ressource).then(() => {
       this.fetchList();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
   handleUnArchive(projectId) {
-    postApi(`projects/${projectId}/unarchive`).then(() => this.fetchList());
+    postApi(`projects/${projectId}/unarchive`).then(() => this.fetchList()).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleFav(ressource, key) {
@@ -77,7 +86,9 @@ class ProjectsArchived extends Component {
       return v;
     });
 
-    postApi(`${ressource}/fav`);
+    postApi(`${ressource}/fav`).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
 
     this.setState({
       data,
@@ -95,7 +106,9 @@ class ProjectsArchived extends Component {
       return v;
     });
 
-    postApi(`${ressource}/unfav`);
+    postApi(`${ressource}/unfav`).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
 
     this.setState({
       data,

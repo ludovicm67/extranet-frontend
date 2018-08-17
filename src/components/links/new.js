@@ -9,6 +9,9 @@ import Select from '../layout/Select';
 
 import { getApi, postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '50px',
@@ -45,6 +48,8 @@ class LinksNew extends Component {
       this.setState({
         linkData: res,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -55,7 +60,9 @@ class LinksNew extends Component {
       description: this.state.linkData.description || '',
       image_url: (this.state.linkData.img && this.state.linkData.img.url) || null,
       categories: this.state.categories ? this.state.categories.split(',').map(i => i.trim()) : '',
-    }).then(() => this.props.history.push('/links'));
+    }).then(() => this.props.history.push('/links')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChangeUrl = event => {
@@ -123,6 +130,8 @@ class LinksNew extends Component {
       this.setState({
         getCategories: categories,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

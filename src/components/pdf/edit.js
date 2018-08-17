@@ -9,6 +9,8 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+
+import { setErrMsg } from '../../actions/general';
 import store from '../../store';
 
 const styles = _theme => ({
@@ -61,6 +63,8 @@ class PdfEdit extends Component {
     }).then(res => {
       if (this.isUnmounted) return;
       this.setState({data: res});
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

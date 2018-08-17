@@ -13,6 +13,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = theme => ({
   right: {
     float: 'right',
@@ -69,6 +72,8 @@ class LinksShow extends Component {
         data: res.links || [],
         name,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -83,6 +88,8 @@ class LinksShow extends Component {
   handleDelete(ressource) {
     deleteApi(ressource).then(() => {
       this.fetchList();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

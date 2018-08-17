@@ -17,6 +17,9 @@ import Button from '@material-ui/core/Button';
 import { getApi } from '../../utils';
 import Autolinker from 'autolinker';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = theme => ({
   intro: {
     paddingBottom: 20,
@@ -152,6 +155,8 @@ class ProjectsShow extends Component {
         urls: res.urls || [],
         parent: res.parent || null,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
