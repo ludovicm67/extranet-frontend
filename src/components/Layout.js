@@ -56,6 +56,7 @@ import store from '../store';
 import constants from '../constants';
 import { hasPermission } from '../utils';
 import { Route, Switch, Link, NavLink } from 'react-router-dom';
+import Snack from './layout/Snack';
 
 const drawerWidth = 240;
 
@@ -342,41 +343,42 @@ class Layout extends React.Component {
         </Hidden>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-            <Switch>
-              <Route path="/users" component={Users} />
-              <Route path="/clients" component={Clients} />
-              <Route path="/contacts" component={Contacts} />
-              <Route path="/roles" component={Roles} />
-              <Route path="/types" component={Types} />
-              <Route path="/teams" component={Teams} />
-              <Route path="/identifiers" component={Identifiers} />
-              <Route path="/tags" component={Tags} />
-              <Route path="/links" component={Links} />
-              <Route path="/updates" component={Updates} />
-              <Route path="/project_identifier" component={Projects} />
-              <Route path="/projects/:projectId/wiki/new" component={WikiNew} />
-              <Route path="/projects/:projectId/wiki/:postId/edit" component={WikiEdit} />
-              <Route path="/projects/:projectId/wiki/:postId" component={WikiShow} />
-              <Route path="/projects/:projectId/wiki" component={WikiList} />
-              <Route path="/projects" component={Projects} />
-              <Route path="/teamview" component={Teamview} />
-              <Route path="/overtime/:userId" component={Overtime} />
-              <Route path="/documents/:userId" component={Documents} />
-              <Route path="/documents" component={Documents} />
-              <Route path="/contracts" component={Contracts} />
-              <Route path="/leave" component={Requests} />
-              <Route path="/expenses" component={Requests} />
-              <Route path="/requests" component={Requests} />
-              <Route path="/export/:typeId/:tagId/:tagValue" component={Export} />
-              <Route path="/export/:typeId/:tagId" component={Export} />
-              <Route path="/export/:typeId" component={Export} />
-              <Route path="/export" component={Export} />
-              <Route path="/search" component={Search} />
-              <Route path="/pdf/compta/:year/:month" component={PdfEdit} />
-              <Route path="/pdf/compta" component={PdfCompta} />
-              <Route path="/link_categories" component={LinkCategories} />
-              <Route path="/" component={Dashboard} />
-            </Switch>
+          <Switch>
+            <Route path="/users" component={Users} />
+            <Route path="/clients" component={Clients} />
+            <Route path="/contacts" component={Contacts} />
+            <Route path="/roles" component={Roles} />
+            <Route path="/types" component={Types} />
+            <Route path="/teams" component={Teams} />
+            <Route path="/identifiers" component={Identifiers} />
+            <Route path="/tags" component={Tags} />
+            <Route path="/links" component={Links} />
+            <Route path="/updates" component={Updates} />
+            <Route path="/project_identifier" component={Projects} />
+            <Route path="/projects/:projectId/wiki/new" component={WikiNew} />
+            <Route path="/projects/:projectId/wiki/:postId/edit" component={WikiEdit} />
+            <Route path="/projects/:projectId/wiki/:postId" component={WikiShow} />
+            <Route path="/projects/:projectId/wiki" component={WikiList} />
+            <Route path="/projects" component={Projects} />
+            <Route path="/teamview" component={Teamview} />
+            <Route path="/overtime/:userId" component={Overtime} />
+            <Route path="/documents/:userId" component={Documents} />
+            <Route path="/documents" component={Documents} />
+            <Route path="/contracts" component={Contracts} />
+            <Route path="/leave" component={Requests} />
+            <Route path="/expenses" component={Requests} />
+            <Route path="/requests" component={Requests} />
+            <Route path="/export/:typeId/:tagId/:tagValue" component={Export} />
+            <Route path="/export/:typeId/:tagId" component={Export} />
+            <Route path="/export/:typeId" component={Export} />
+            <Route path="/export" component={Export} />
+            <Route path="/search" component={Search} />
+            <Route path="/pdf/compta/:year/:month" component={PdfEdit} />
+            <Route path="/pdf/compta" component={PdfCompta} />
+            <Route path="/link_categories" component={LinkCategories} />
+            <Route path="/" component={Dashboard} />
+          </Switch>
+          <Snack />
         </main>
       </div>
     );

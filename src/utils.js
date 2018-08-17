@@ -4,6 +4,15 @@ import store from './store';
 import constants from './constants';
 import { logout, login } from './actions/auth';
 
+const manageErrors = msg => {
+  let message = msg;
+  if (Array.isArray(msg)) {
+    message = msg.join(', ');
+  }
+  console.log('ERROR: ' + message);
+  throw new Error(message);
+}
+
 const tryRefreshToken = () => {
   const request = axios.get(`
     ${constants.API_ENDPOINT}/auth/refresh
@@ -68,6 +77,12 @@ export const getApi = (location, defaultReturn = []) => {
           store.dispatch(logout());
           window.location.href = '/login';
         });
+      } else if (e && e.response && e.response.data) {
+        if (e.response.data.message) {
+          manageErrors(e.response.data.message);
+        } else if (e.response.data.errors) {
+          manageErrors(e.response.data.errors);
+        }
       }
       return defaultReturn;
     });
@@ -104,6 +119,12 @@ export const postApi = (location, data = {}, defaultReturn = []) => {
           store.dispatch(logout());
           window.location.href = '/login';
         });
+      } else if (e && e.response && e.response.data) {
+        if (e.response.data.message) {
+          manageErrors(e.response.data.message);
+        } else if (e.response.data.errors) {
+          manageErrors(e.response.data.errors);
+        }
       }
       return defaultReturn;
     });
@@ -140,6 +161,12 @@ export const putApi = (location, data = {}, defaultReturn = []) => {
           store.dispatch(logout());
           window.location.href = '/login';
         });
+      } else if (e && e.response && e.response.data) {
+        if (e.response.data.message) {
+          manageErrors(e.response.data.message);
+        } else if (e.response.data.errors) {
+          manageErrors(e.response.data.errors);
+        }
       }
       return defaultReturn;
     });
@@ -176,6 +203,12 @@ export const deleteApi = (location, defaultReturn = []) => {
           store.dispatch(logout());
           window.location.href = '/login';
         });
+      } else if (e && e.response && e.response.data) {
+        if (e.response.data.message) {
+          manageErrors(e.response.data.message);
+        } else if (e.response.data.errors) {
+          manageErrors(e.response.data.errors);
+        }
       }
       return defaultReturn;
     });

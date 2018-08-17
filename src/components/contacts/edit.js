@@ -9,6 +9,9 @@ import Select from '../layout/Select';
 
 import { getApi, putApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '20px',
@@ -53,6 +56,8 @@ class ContactsEdit extends Component {
       this.setState({
         types,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi(`contacts/${this.state.id}`).then(res => {
       if (this.isUnmounted) {
@@ -66,6 +71,8 @@ class ContactsEdit extends Component {
         address: res.address,
         other: res.other,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -81,7 +88,9 @@ class ContactsEdit extends Component {
       phone: this.state.phone,
       address: this.state.address,
       other: this.state.other,
-    }).then(() => this.props.history.push('/contacts'));
+    }).then(() => this.props.history.push('/contacts')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {

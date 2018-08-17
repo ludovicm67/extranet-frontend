@@ -10,6 +10,9 @@ import Paper from '@material-ui/core/Paper';
 import { getApi } from '../../utils';
 import { Link } from 'react-router-dom';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '50px',
@@ -29,6 +32,8 @@ class ClientsList extends Component {
       this.setState({
         data: res,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

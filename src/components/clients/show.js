@@ -12,6 +12,9 @@ import { Link } from 'react-router-dom';
 
 import { getApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = theme => ({
   intro: {
     paddingBottom: '10px',
@@ -91,6 +94,8 @@ class ClientsShow extends Component {
           data: res,
         });
       }
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
