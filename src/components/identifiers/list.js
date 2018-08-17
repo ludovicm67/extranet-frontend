@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
 import { setErrMsg, confirmDelete } from '../../actions/general';
@@ -65,16 +65,18 @@ class IdentifiersList extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to="/identifiers/new"
-            variant="contained"
-            color="primary"
-            style={styles.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('identifiers', 'add') && (
+            <Button
+              component={Link}
+              to="/identifiers/new"
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           Liste des types d'identifiants
         </Typography>
         <Typography style={styles.intro}>Page listant les différents types d'identifiants ({this.state.data.length})</Typography>
@@ -94,12 +96,16 @@ class IdentifiersList extends Component {
                       <Link to={`/identifiers/${n.id}`}>{n.name}</Link>
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/identifiers/${n.id}/edit`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `identifiers/${n.id}`)}>
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('identifiers', 'edit') && (
+                        <IconButton component={Link} to={`/identifiers/${n.id}/edit`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
+                      {hasPermission('identifiers', 'delete') && (
+                        <IconButton onClick={this.handleDelete.bind(this, `identifiers/${n.id}`)}>
+                          <Icon>delete</Icon>
+                        </IconButton>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
