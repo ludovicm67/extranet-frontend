@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { getApi, deleteApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 import store from '../../store';
-import { setErrMsg } from '../../actions/general';
+import { setErrMsg, confirmDelete } from '../../actions/general';
 
 const styles = {
   right: {
@@ -53,11 +53,13 @@ class UsersList extends Component {
   }
 
   handleDelete(ressource) {
-    deleteApi(ressource).then(() => {
-      this.fetchList();
-    }).catch(e => {
-      store.dispatch(setErrMsg(e));
-    });
+    store.dispatch(confirmDelete(() => {
+      deleteApi(ressource).then(() => {
+        this.fetchList();
+      }).catch(e => {
+        store.dispatch(setErrMsg(e));
+      });
+    }));
   }
 
   render() {

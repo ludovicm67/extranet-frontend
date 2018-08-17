@@ -13,7 +13,7 @@ import moment from 'moment';
 import { getApi, deleteApi, urlApi, postApi, hasPermission } from '../utils';
 import { Link } from 'react-router-dom';
 
-import { setErrMsg } from '../actions/general';
+import { setErrMsg, confirmDelete } from '../actions/general';
 import store from '../store';
 
 const styles = {
@@ -47,11 +47,13 @@ class Dashboard extends Component {
   }
 
   handleDelete(ressource) {
-    deleteApi(ressource).then(() => {
-      this.fetchPendingRequests();
-    }).catch(e => {
-      store.dispatch(setErrMsg(e));
-    });
+    store.dispatch(confirmDelete(() => {
+      deleteApi(ressource).then(() => {
+        this.fetchPendingRequests();
+      }).catch(e => {
+        store.dispatch(setErrMsg(e));
+      });
+    }));
   }
 
   handlePost(ressource) {

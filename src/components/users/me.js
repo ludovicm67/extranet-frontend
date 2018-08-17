@@ -18,7 +18,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { getApi, putApi, urlApi, deleteApi, hasPermission } from '../../utils';
 import store from '../../store';
 import { setUserData } from '../../actions/auth';
-import { setErrMsg } from '../../actions/general';
+import { setErrMsg, confirmDelete } from '../../actions/general';
 
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -206,11 +206,13 @@ class UsersMe extends Component {
   }
 
   handleDelete(ressource) {
-    deleteApi(ressource).then(() => {
-      this.fetchData();
-    }).catch(e => {
-      store.dispatch(setErrMsg(e));
-    });
+    store.dispatch(confirmDelete(() => {
+      deleteApi(ressource).then(() => {
+        this.fetchData();
+      }).catch(e => {
+        store.dispatch(setErrMsg(e));
+      });
+    }));
   }
 
   render() {

@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { getApi, deleteApi } from '../../utils';
 
-import { setErrMsg } from '../../actions/general';
+import { setErrMsg, confirmDelete } from '../../actions/general';
 import store from '../../store';
 
 const styles = theme => ({
@@ -96,11 +96,13 @@ class ProjectsShow extends Component {
   }
 
   handleDelete(ressource) {
-    deleteApi(ressource).then(() => {
-      this.fetchList();
-    }).catch(e => {
-      store.dispatch(setErrMsg(e));
-    });
+    store.dispatch(confirmDelete(() => {
+      deleteApi(ressource).then(() => {
+        this.fetchList();
+      }).catch(e => {
+        store.dispatch(setErrMsg(e));
+      });
+    }));
   }
 
   fetchList() {

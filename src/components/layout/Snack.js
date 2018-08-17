@@ -13,6 +13,7 @@ import SnackbarContent from "@material-ui/core/SnackbarContent";
 import WarningIcon from "@material-ui/icons/Warning";
 import { withStyles } from "@material-ui/core/styles";
 import store from '../../store';
+import { closeErr } from '../../actions/general';
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -96,11 +97,12 @@ class CustomizedSnackbars extends React.Component {
 
   handleErrorClose = (event, reason) => {
     this.setState({ errorOpen: false });
+    store.dispatch(closeErr());
   };
 
   componentDidMount() {
     this.setState({
-      unsubscibe: store.subscribe(() => {
+      unsubscribe: store.subscribe(() => {
         const generalState = store.getState().general;
         if (!generalState || !generalState.err) return;
         this.setState({
