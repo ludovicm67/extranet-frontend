@@ -7,7 +7,7 @@ import { logout, login } from './actions/auth';
 const manageErrors = msg => {
   let message = msg;
   if (Array.isArray(msg)) {
-    message = msg.join(', ');
+    message = msg.join(' ');
   }
   console.log('ERROR: ' + message);
   throw new Error(message);
