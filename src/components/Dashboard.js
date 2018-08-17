@@ -151,7 +151,7 @@ class Dashboard extends Component {
         {this.state.pending.leave.length > 0 && (
           <div>
             <Typography variant="headline" style={styles.title}>
-              Congés en attente de valdiation ({this.state.pending.leave.length})
+              Congés en attente de validation ({this.state.pending.leave.length})
             </Typography>
 
             <Paper>
@@ -215,7 +215,7 @@ class Dashboard extends Component {
         {this.state.pending.expenses.length > 0 && (
           <div>
             <Typography variant="headline" style={styles.title}>
-              Notes de frais en attente de valdiation ({this.state.pending.expenses.length})
+              Notes de frais en attente de validation ({this.state.pending.expenses.length})
             </Typography>
 
             <Paper>
