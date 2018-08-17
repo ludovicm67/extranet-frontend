@@ -230,9 +230,11 @@ class RequestsList extends Component {
                       <IconButton component='a' href={urlApi(`storage/${n.file}`)} disabled={n.file === null} style={n.file === null ? styles.hidden : null} target="_blank">
                         <Icon>attach_file</Icon>
                       </IconButton>
-                      <IconButton component={Link} to={`/${n.request_type}/${n.id}`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
+                      {(hasPermission(n.request_type, 'edit') || store.getState().auth.auth.userData.id === n.user_id) && (
+                        <IconButton component={Link} to={`/${n.request_type}/${n.id}`}>
+                          <Icon>edit</Icon>
+                        </IconButton>
+                      )}
                       {hasPermission('request_management', 'edit') && (
                         <div>
                           <IconButton onClick={this.handlePost.bind(this, `${n.request_type}/${n.id}/accept`)} disabled={n.accepted === 1} style={n.accepted === 1 ? styles.hidden : null}>

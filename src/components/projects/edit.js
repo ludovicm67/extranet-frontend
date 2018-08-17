@@ -96,6 +96,26 @@ class ProjectsEdit extends Component {
     this.setState({ end_at: date });
   }
 
+  updateContactsList() {
+    getApi('contacts').then(res => {
+      if (this.isUnmounted) {
+        return;
+      }
+      const contacts = [];
+      contacts.push(...res.map(e => {
+        return {
+          label: e.name,
+          value: e.id,
+        };
+      }));
+      this.setState({
+        contacts,
+      });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
+  }
+
   componentDidMount() {
     getApi(`projects/${this.state.id}`).then(res => {
       if (this.isUnmounted) {
@@ -178,23 +198,7 @@ class ProjectsEdit extends Component {
     }).catch(e => {
       store.dispatch(setErrMsg(e));
     });
-    getApi('contacts').then(res => {
-      if (this.isUnmounted) {
-        return;
-      }
-      const contacts = [];
-      contacts.push(...res.map(e => {
-        return {
-          label: e.name,
-          value: e.id,
-        };
-      }));
-      this.setState({
-        contacts,
-      });
-    }).catch(e => {
-      store.dispatch(setErrMsg(e));
-    });
+    this.updateContactsList();
     getApi('sellsy_orders').then(res => {
       if (this.isUnmounted) {
         return;
