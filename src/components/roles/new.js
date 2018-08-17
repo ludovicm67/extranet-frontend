@@ -14,6 +14,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import { getApi, postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '50px',
@@ -41,6 +44,8 @@ class RolesNew extends Component {
       this.setState({
         permissions: res,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -89,7 +94,9 @@ class RolesNew extends Component {
     postApi('roles', {
       name: this.state.name,
       permissions,
-    }).then(() => this.props.history.push('/roles'));
+    }).then(() => this.props.history.push('/roles')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {

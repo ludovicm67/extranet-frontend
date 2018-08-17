@@ -10,6 +10,7 @@ import Select from '../layout/Select';
 import { getApi, putApi } from '../../utils';
 import store from '../../store';
 import { setUserData } from '../../actions/auth';
+import { setErrMsg } from '../../actions/general';
 
 const styles = {
   intro: {
@@ -107,6 +108,8 @@ class UsersEdit extends Component {
       this.setState({
         roles,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('teams').then(res => {
       if (this.isUnmounted) {
@@ -127,6 +130,8 @@ class UsersEdit extends Component {
       this.setState({
         teams,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi(`users/${this.state.id}`).then(res => {
       if (this.isUnmounted) {
@@ -155,6 +160,8 @@ class UsersEdit extends Component {
         password: '',
         defaultPage: res.default_page || '/',
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -176,6 +183,8 @@ class UsersEdit extends Component {
         store.dispatch(setUserData(res));
       }
       this.props.history.push('/users');
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

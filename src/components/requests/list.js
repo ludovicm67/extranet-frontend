@@ -14,6 +14,9 @@ import moment from 'moment';
 import { getApi, deleteApi, urlApi, postApi, hasPermission } from '../../utils';
 import { Link } from 'react-router-dom';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   rightBtn: {
     float: 'right',
@@ -40,6 +43,8 @@ class RequestsList extends Component {
       this.setState({
         data: res,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -54,12 +59,16 @@ class RequestsList extends Component {
   handleDelete(ressource) {
     deleteApi(ressource).then(() => {
       this.fetchList();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
   handlePost(ressource) {
     postApi(ressource).then(() => {
       this.fetchList();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

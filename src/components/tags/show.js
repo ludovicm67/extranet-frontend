@@ -12,6 +12,9 @@ import { Link } from 'react-router-dom';
 
 import { getApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   right: {
     float: 'right',
@@ -47,6 +50,8 @@ class TagsShow extends Component {
         name: res.name || '',
         projects,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

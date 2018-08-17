@@ -13,6 +13,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+import { setErrMsg } from '../actions/general';
+import store from '../store';
+
 const styles = theme => ({
   intro: {
     paddingBottom: '20px',
@@ -78,6 +81,8 @@ class Search extends Component {
       this.setState({
         results: res,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

@@ -7,6 +7,9 @@ import FormControl from '@material-ui/core/FormControl';
 
 import { postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '50px',
@@ -24,7 +27,9 @@ class TypesNew extends Component {
   handleSubmit() {
     postApi('types', {
       name: this.state.name,
-    }).then(() => this.props.history.push('/types'));
+    }).then(() => this.props.history.push('/types')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {

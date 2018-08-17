@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { getApi } from '../utils';
 
+import { setErrMsg } from '../actions/general';
+import store from '../store';
+
 moment.locale('fr');
 
 const styles = theme => ({
@@ -86,6 +89,8 @@ class Teamview extends Component {
         }}),
         items,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

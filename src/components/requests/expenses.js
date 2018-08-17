@@ -10,6 +10,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 import { postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: 20,
@@ -73,7 +76,9 @@ class Expenses extends Component {
       amount: this.state.amount,
       details: this.state.details,
       file: this.state.file,
-    }).then(() => this.props.history.push('/requests'));
+    }).then(() => this.props.history.push('/requests')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {

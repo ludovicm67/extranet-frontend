@@ -18,6 +18,9 @@ import FormControl from '@material-ui/core/FormControl';
 
 import { getApi, urlApi, deleteApi, hasPermission } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 moment.locale('fr');
 
 const styles = {
@@ -63,6 +66,8 @@ class UsersShow extends Component {
         email: res.email || '',
         documents: res.documents || [],
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -107,6 +112,8 @@ class UsersShow extends Component {
   handleDelete(ressource) {
     deleteApi(ressource).then(() => {
       this.fetchData();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

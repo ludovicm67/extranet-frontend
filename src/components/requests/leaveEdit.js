@@ -13,6 +13,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import { putApi, getApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: 20,
@@ -87,7 +90,9 @@ class Leave extends Component {
       details: this.state.details,
       file: this.state.file,
       delete_file: this.state.delete_file ? 1 : 0,
-    }).then(() => this.props.history.push('/requests'));
+    }).then(() => this.props.history.push('/requests')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {
@@ -125,6 +130,8 @@ class Leave extends Component {
         details: res.details || '',
         current_file: res.file || '',
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

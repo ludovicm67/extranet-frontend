@@ -9,6 +9,9 @@ import Select from '../layout/Select';
 
 import { getApi, postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '20px',
@@ -104,6 +107,8 @@ class UsersNew extends Component {
       this.setState({
         roles,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('teams').then(res => {
       if (this.isUnmounted) {
@@ -124,6 +129,8 @@ class UsersNew extends Component {
       this.setState({
         teams,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -140,7 +147,9 @@ class UsersNew extends Component {
       email: this.state.email,
       password: this.state.password,
       default_page: this.state.defaultPage || '/',
-    }).then(() => this.props.history.push('/users'));
+    }).then(() => this.props.history.push('/users')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {

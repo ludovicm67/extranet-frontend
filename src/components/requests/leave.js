@@ -11,6 +11,9 @@ import { DatePicker } from 'material-ui-pickers';
 
 import { postApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: 20,
@@ -79,7 +82,9 @@ class Leave extends Component {
       reason: this.state.reason,
       details: this.state.details,
       file: this.state.file,
-    }).then(() => this.props.history.push('/requests'));
+    }).then(() => this.props.history.push('/requests')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {
