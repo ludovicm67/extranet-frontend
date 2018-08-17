@@ -12,6 +12,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import { DatePicker } from 'material-ui-pickers';
 
+import { setErrMsg } from '../actions/general';
+import store from '../store';
+
 const styles = _theme => ({
   intro: {
     paddingBottom: '20px',
@@ -65,6 +68,8 @@ class Documents extends Component {
           value: e.id,
         }))) || [],
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
 
     if (this.state.user) {
@@ -75,6 +80,8 @@ class Documents extends Component {
         this.setState({
           userLine: ` pour ${res.firstname} ${res.lastname} (${res.email})` || '',
         });
+      }).catch(e => {
+        store.dispatch(setErrMsg(e));
       });
     }
   }
@@ -113,7 +120,9 @@ class Documents extends Component {
       date: this.formatDate(this.state.date),
       file: this.state.file || '',
       details: this.state.details || '',
-    }).then(() => this.props.history.push(`/users/${this.state.user}`));
+    }).then(() => this.props.history.push(`/users/${this.state.user}`)).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleDateChange = (prop, date) => {

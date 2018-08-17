@@ -8,6 +8,9 @@ import { DatePicker } from 'material-ui-pickers';
 
 import { getApi, putApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: 20,
@@ -55,7 +58,9 @@ class ContractsEdit extends Component {
       type: this.state.type,
       start_at: this.formatDate(this.state.start_at),
       end_at: this.formatDate(this.state.end_at),
-    }).then(() => this.props.history.push('/contracts'));
+    }).then(() => this.props.history.push('/contracts')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {
@@ -89,6 +94,8 @@ class ContractsEdit extends Component {
       this.setState({
         users,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi(`contracts/${this.state.id}`).then(res => {
       if (this.isUnmounted) {
@@ -111,6 +118,8 @@ class ContractsEdit extends Component {
         start_at: startAt || null,
         end_at: endAt || null,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

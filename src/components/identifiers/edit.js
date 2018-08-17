@@ -7,6 +7,9 @@ import FormControl from '@material-ui/core/FormControl';
 
 import { getApi, putApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '50px',
@@ -30,6 +33,8 @@ class IdentifiersEdit extends Component {
       this.setState({
         name: res.name,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -40,7 +45,9 @@ class IdentifiersEdit extends Component {
   handleSubmit() {
     putApi(`identifiers/${this.state.id}`, {
       name: this.state.name,
-    }).then(() => this.props.history.push('/identifiers'));
+    }).then(() => this.props.history.push('/identifiers')).catch(e => {
+      store.dispatch(setErrMsg(e));
+    });
   }
 
   handleChange = prop => event => {

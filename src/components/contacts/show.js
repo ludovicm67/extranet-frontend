@@ -3,6 +3,9 @@ import Typography from '@material-ui/core/Typography';
 
 import { getApi } from '../../utils';
 
+import { setErrMsg } from '../../actions/general';
+import store from '../../store';
+
 const styles = {
   intro: {
     paddingBottom: '20px',
@@ -42,6 +45,8 @@ class ContactShow extends Component {
         address: res.address || '',
         type: (res.type && res.type.name) || 'Aucun',
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

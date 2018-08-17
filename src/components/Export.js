@@ -13,9 +13,11 @@ import Paper from '@material-ui/core/Paper';
 import Icon from '@material-ui/core/Icon';
 import { Link } from 'react-router-dom';
 import Autolinker from 'autolinker';
-import store from '../store';
 import TextField from "@material-ui/core/TextField";
 import Select from './layout/Select';
+
+import { setErrMsg } from '../actions/general';
+import store from '../store';
 
 const styles = _theme => ({
   right: {
@@ -54,6 +56,8 @@ class Export extends Component {
       this.setState({
         data: res,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
@@ -78,6 +82,8 @@ class Export extends Component {
       this.setState({
         types,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
     getApi('tags').then(res => {
       if (this.isUnmounted) {
@@ -98,6 +104,8 @@ class Export extends Component {
       this.setState({
         tags,
       });
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 

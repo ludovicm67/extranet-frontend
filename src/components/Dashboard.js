@@ -13,6 +13,7 @@ import moment from 'moment';
 import { getApi, deleteApi, urlApi, postApi, hasPermission } from '../utils';
 import { Link } from 'react-router-dom';
 
+import { setErrMsg } from '../actions/general';
 import store from '../store';
 
 const styles = {
@@ -39,6 +40,8 @@ class Dashboard extends Component {
       getApi('requests/pending').then(res => {
         if (this.isUnmounted) return;
         this.setState({pending: res});
+      }).catch(e => {
+        store.dispatch(setErrMsg(e));
       });
     }
   }
@@ -46,12 +49,16 @@ class Dashboard extends Component {
   handleDelete(ressource) {
     deleteApi(ressource).then(() => {
       this.fetchPendingRequests();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
   handlePost(ressource) {
     postApi(ressource).then(() => {
       this.fetchPendingRequests();
+    }).catch(e => {
+      store.dispatch(setErrMsg(e));
     });
   }
 
