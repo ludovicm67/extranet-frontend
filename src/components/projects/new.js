@@ -375,6 +375,12 @@ class ProjectsNew extends Component {
             }
           }}
         />
+        <Button size="small" variant="flat" component="a" href="/contacts" target="_blank">
+          Modifier les interlocuteurs (nouvel onglet)
+        </Button>
+        <Button size="small" variant="flat" onClick={this.updateContactsList.bind(this)}>
+          Mettre à jour la liste des interlocuteurs
+        </Button>
         <TextField
           style={styles.formControl}
           fullWidth
