@@ -64,12 +64,12 @@ class ContactsEdit extends Component {
         return;
       }
       this.setState({
-        name: res.name,
+        name: res.name || '',
         typeId: res.type_id || 0,
-        mail: res.mail,
-        phone: res.phone,
-        address: res.address,
-        other: res.other,
+        mail: res.mail || '',
+        phone: res.phone || '',
+        address: res.address || '',
+        other: res.other || '',
       });
     }).catch(e => {
       store.dispatch(setErrMsg(e));

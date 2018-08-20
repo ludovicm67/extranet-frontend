@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import { Link } from 'react-router-dom';
 
-import { getApi } from '../../utils';
+import { getApi, hasPermission } from '../../utils';
 
 import { setErrMsg } from '../../actions/general';
 import store from '../../store';
@@ -18,6 +21,11 @@ const styles = {
   },
   line: {
     display: 'block',
+  },
+  right: {
+    float: 'right',
+    marginBottom: 10,
+    marginLeft: 10,
   },
 };
 
@@ -59,6 +67,18 @@ class ContactShow extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
+          {hasPermission('contacts', 'edit') && (
+            <Button
+              component={Link}
+              to={`/contacts/${this.state.id}/edit`}
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>edit</Icon>
+              Modifier
+            </Button>
+          )}
           {this.state.name}
         </Typography>
         <Typography style={styles.intro}>Affichage des informations à propos de ce contact</Typography>

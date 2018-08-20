@@ -147,6 +147,18 @@ class UsersShow extends Component {
               Déposer un document
             </Button>
           )}
+          {hasPermission('users', 'edit') && (
+            <Button
+              component={Link}
+              to={`/users/${this.state.id}/edit`}
+              variant="contained"
+              color="primary"
+              style={styles.right}
+            >
+              <Icon>edit</Icon>
+              Modifier
+            </Button>
+          )}
           {`${this.state.firstname} ${this.state.lastname} (${this.state.email})`}
         </Typography>
         <Typography style={styles.intro}>Affichage des informations à propos de cet utilisateur</Typography>

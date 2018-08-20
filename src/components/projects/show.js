@@ -14,7 +14,7 @@ import amber from '@material-ui/core/colors/amber';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
 
-import { getApi } from '../../utils';
+import { getApi, hasPermission } from '../../utils';
 import Autolinker from 'autolinker';
 
 import { setErrMsg } from '../../actions/general';
@@ -404,6 +404,18 @@ class ProjectsShow extends Component {
             <Icon>import_contacts</Icon>
             Wiki
           </Button>
+          {hasPermission('projects', 'edit', this.props.match.params.projectId) && (
+            <Button
+              component={Link}
+              to={`/projects/${this.props.match.params.projectId}/edit`}
+              variant="contained"
+              color="primary"
+              className={classes.right}
+            >
+              <Icon>edit</Icon>
+              Modifier
+            </Button>
+          )}
           {this.state.name}
         </Typography>
         <Typography className={classes.intro}>Affichages d'informations concernant le projet</Typography>
