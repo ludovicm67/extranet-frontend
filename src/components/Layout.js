@@ -269,20 +269,24 @@ class Layout extends React.Component {
             <ListItemText inset primary="Mon compte" />
           </ListItem>
           <Divider />
-          <ListItem
-            component={NavLink}
-            to="/updates"
-            button
-            activeClassName="activeNavLink"
-            exact
-            onClick={() => this.setState({mobileOpen: false})}
-          >
-            <ListItemIcon>
-              <UpdatesIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Mises à jour" />
-          </ListItem>
-          <Divider />
+          {parseInt(store.getState().auth.auth.userData.is_admin, 10) === 1 && (
+            <div>
+              <ListItem
+                component={NavLink}
+                to="/updates"
+                button
+                activeClassName="activeNavLink"
+                exact
+                onClick={() => this.setState({mobileOpen: false})}
+              >
+                <ListItemIcon>
+                  <UpdatesIcon />
+                </ListItemIcon>
+                <ListItemText inset primary="Mises à jour" />
+              </ListItem>
+              <Divider />
+            </div>
+          )}
           <ListItem button onClick={this.handleLogout.bind(this)}>
             <ListItemIcon>
               <LogoutIcon />
