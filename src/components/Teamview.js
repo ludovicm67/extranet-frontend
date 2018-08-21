@@ -119,8 +119,8 @@ class Teamview extends Component {
           showCursorLine
           canMove={false}
           canResize={false}
-          defaultTimeStart={moment().add(-1, 'day')}
-          defaultTimeEnd={moment().add(7, 'day')}
+          defaultTimeStart={moment().add(-2, 'day')}
+          defaultTimeEnd={moment().add(25, 'day')}
         />
       </div>
     );
