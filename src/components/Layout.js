@@ -122,7 +122,7 @@ class Layout extends React.Component {
 
     const drawer = (
       <div>
-        <div className={classes.toolbar} style={{
+        <div className={`${classes.toolbar} sidebar-menu-header`} style={{
           background: theme.palette.primary.main,
         }}>
           <img src="/logo.png" height="42" alt="Logo" style={{
