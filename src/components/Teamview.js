@@ -57,16 +57,36 @@ class Teamview extends Component {
           const lastname = e.lastname ? `${e.lastname[0]}.` : '';
           e.leave && e.leave.map(l => {
             if (l.accepted < 0) return null;
+            const momentStart = moment(l.start);
+            const startHour = momentStart.hour() <= 10 ? 0 : 12;
+            momentStart.hour(startHour);
+
+            const momentEnd = moment(l.end);
+            if (momentEnd.hour() >= 14) {
+              momentEnd.hour(23);
+              momentEnd.minute(59);
+              momentEnd.second(59);
+            } else {
+              momentEnd.hour(12);
+              momentEnd.minute(0);
+              momentEnd.second(0);
+            }
+
             items.push({
               id: l.id,
               group: l.user_id,
               title: l.reason,
-              start_time: moment(l.start),
-              end_time: moment(l.end),
+              start_time: momentStart,
+              end_time: momentEnd,
               style: {
                 opacity: l.accepted > 0 ? 1 : .4,
                 background: e.team.color,
-              }
+              },
+              itemProps: {
+                onClick: () => {
+                  console.log(l);
+                },
+              },
             });
             return null;
           });
