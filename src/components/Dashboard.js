@@ -24,6 +24,9 @@ const styles = {
   hidden: {
     display: 'none',
   },
+  actionIcons: {
+    width: 250,
+  },
 };
 
 class Dashboard extends Component {
@@ -161,7 +164,7 @@ class Dashboard extends Component {
                     <TableCell>Utilisateur</TableCell>
                     <TableCell>Période (Montant)</TableCell>
                     <TableCell>Commentaire</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell style={styles.actionIcons}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -180,7 +183,7 @@ class Dashboard extends Component {
                           {n.reason} {dates} {amount}
                         </TableCell>
                         <TableCell>{n.details}</TableCell>
-                        <TableCell>
+                        <TableCell style={styles.actionIcons}>
                           <IconButton component='a' href={urlApi(`storage/${n.file}`)} disabled={n.file === null} style={n.file === null ? styles.hidden : null} target="_blank">
                             <Icon>attach_file</Icon>
                           </IconButton>
@@ -188,14 +191,14 @@ class Dashboard extends Component {
                             <Icon>edit</Icon>
                           </IconButton>
                           {hasPermission('request_management', 'edit') && (
-                            <div>
+                            <React.Fragment>
                               <IconButton onClick={this.handlePost.bind(this, `leave/${n.id}/accept`)}>
                                 <Icon>check</Icon>
                               </IconButton>
                               <IconButton onClick={this.handlePost.bind(this, `leave/${n.id}/reject`)}>
                                 <Icon>close</Icon>
                               </IconButton>
-                            </div>
+                            </React.Fragment>
                           )}
                           {hasPermission('leave', 'delete') && (
                             <IconButton onClick={this.handleDelete.bind(this, `leave/${n.id}`)}>
@@ -225,7 +228,7 @@ class Dashboard extends Component {
                     <TableCell>Utilisateur</TableCell>
                     <TableCell>Période (Montant)</TableCell>
                     <TableCell>Commentaire</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell style={styles.actionIcons}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -244,7 +247,7 @@ class Dashboard extends Component {
                           {n.type} {dates} {amount}
                         </TableCell>
                         <TableCell>{n.details}</TableCell>
-                        <TableCell>
+                        <TableCell style={styles.actionIcons}>
                           <IconButton component='a' href={urlApi(`storage/${n.file}`)} disabled={n.file === null} style={n.file === null ? styles.hidden : null} target="_blank">
                             <Icon>attach_file</Icon>
                           </IconButton>
@@ -252,14 +255,14 @@ class Dashboard extends Component {
                             <Icon>edit</Icon>
                           </IconButton>
                           {hasPermission('request_management', 'edit') && (
-                            <div>
+                            <React.Fragment>
                               <IconButton onClick={this.handlePost.bind(this, `expenses/${n.id}/accept`)}>
                                 <Icon>check</Icon>
                               </IconButton>
                               <IconButton onClick={this.handlePost.bind(this, `expenses/${n.id}/reject`)}>
                                 <Icon>close</Icon>
                               </IconButton>
-                            </div>
+                            </React.Fragment>
                           )}
                           {hasPermission('expenses', 'delete') && (
                             <IconButton onClick={this.handleDelete.bind(this, `expenses/${n.id}`)}>
