@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import ColorPicker from 'material-ui-color-picker';
 
 import { postApi } from '../../utils';
 
@@ -22,11 +23,13 @@ const styles = {
 class TeamsNew extends Component {
   state = {
     name: '',
+    color: '#000000',
   };
 
   handleSubmit() {
     postApi('teams', {
-      name: this.state.name,
+      name: this.state.name || '',
+      color: this.state.color || '#000000',
     }).then(() => this.props.history.push('/teams')).catch(e => {
       store.dispatch(setErrMsg(e));
     });
@@ -54,6 +57,10 @@ class TeamsNew extends Component {
             onChange={this.handleChange('name')}
           />
         </FormControl>
+        <ColorPicker
+          defaultValue={this.state.color}
+          onChange={color => this.setState({ color })}
+        />
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Créer
         </Button>
