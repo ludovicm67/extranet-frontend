@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Select from '../layout/Select';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { DatePicker } from 'material-ui-pickers';
+import { Link } from 'react-router-dom';
+import Icon from '@material-ui/core/Icon';
 
 import { postApi } from '../../utils';
 
@@ -18,14 +20,17 @@ const styles = {
   intro: {
     paddingBottom: 20,
   },
-  submit: {
-    marginTop: '42px',
-  },
   formControl: {
     marginTop: 20,
   },
   hidden: {
     display: 'none',
+  },
+  bottomBtn: {
+    float: 'left',
+    marginTop: 42,
+    marginRight: 10,
+    marginBottom: 10,
   },
 };
 
@@ -268,7 +273,18 @@ class Leave extends Component {
             onChange={this.handleChange('details')}
           />
         </FormControl>
-        <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
+        <Button
+          component={Link}
+          to="/requests"
+          variant="contained"
+          size="large"
+          color="primary"
+          style={styles.bottomBtn}
+        >
+          <Icon>arrow_back</Icon>
+          Annuler
+        </Button>
+        <Button variant="contained" size="large" color="primary" style={styles.bottomBtn} onClick={this.handleSubmit.bind(this)}>
           Soumettre
         </Button>
       </div>

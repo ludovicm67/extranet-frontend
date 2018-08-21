@@ -9,6 +9,8 @@ import Select from '../layout/Select';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { FormControlLabel } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
+import { Link } from 'react-router-dom';
+import Icon from '@material-ui/core/Icon';
 
 import { putApi, getApi } from '../../utils';
 
@@ -19,14 +21,17 @@ const styles = {
   intro: {
     paddingBottom: 20,
   },
-  submit: {
-    marginTop: '42px',
-  },
   formControl: {
     marginTop: 20,
   },
   hidden: {
     display: 'none',
+  },
+  bottomBtn: {
+    float: 'left',
+    marginTop: 42,
+    marginRight: 10,
+    marginBottom: 10,
   },
 };
 
@@ -251,7 +256,18 @@ class ExpensesEdit extends Component {
             onChange={this.handleChange('details')}
           />
         </FormControl>
-        <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
+        <Button
+          component={Link}
+          to="/requests"
+          variant="contained"
+          size="large"
+          color="primary"
+          style={styles.bottomBtn}
+        >
+          <Icon>arrow_back</Icon>
+          Annuler
+        </Button>
+        <Button variant="contained" size="large" color="primary" style={styles.bottomBtn} onClick={this.handleSubmit.bind(this)}>
           Modifier
         </Button>
       </div>
