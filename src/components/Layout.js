@@ -122,7 +122,15 @@ class Layout extends React.Component {
 
     const drawer = (
       <div>
-        <div className={classes.toolbar} />
+        <div className={classes.toolbar} style={{
+          background: '#000',
+        }}>
+          <img src="/logo.png" height="42" alt="Logo" style={{
+            paddingTop: 8,
+            paddingLeft: 20,
+            maxWidth: 200,
+          }} />
+        </div>
         <List style={{
           marginTop: '-8px',
         }}>
