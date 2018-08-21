@@ -148,7 +148,6 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Tableau de bord" />
           </ListItem>
-          <Divider />
           <ListItem
             component={NavLink}
             to="/teamview"
@@ -191,25 +190,21 @@ class Layout extends React.Component {
               <ListItemText inset primary="Liens" />
             </ListItem>
           )}
-          <Divider />
 
           {hasPermission('clients') && (
-            <div>
-              <ListItem
-                component={NavLink}
-                to="/clients"
-                button
-                activeClassName="activeNavLink"
-                exact
-                onClick={() => this.setState({ mobileOpen: false })}
-              >
-                <ListItemIcon>
-                  <DomainIcon />
-                </ListItemIcon>
-                <ListItemText inset primary="Clients" />
-              </ListItem>
-              <Divider />
-            </div>
+            <ListItem
+              component={NavLink}
+              to="/clients"
+              button
+              activeClassName="activeNavLink"
+              exact
+              onClick={() => this.setState({ mobileOpen: false })}
+            >
+              <ListItemIcon>
+                <DomainIcon />
+              </ListItemIcon>
+              <ListItemText inset primary="Clients" />
+            </ListItem>
           )}
 
           <ListItem
@@ -227,25 +222,21 @@ class Layout extends React.Component {
           </ListItem>
 
           {hasPermission('contacts') && (
-            <div>
-              <Divider />
-              <ListItem
-                component={NavLink}
-                to="/contacts"
-                button
-                activeClassName="activeNavLink"
-                exact
-                onClick={() => this.setState({ mobileOpen: false })}
-              >
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText inset primary="Contacts" />
-              </ListItem>
-            </div>
+            <ListItem
+              component={NavLink}
+              to="/contacts"
+              button
+              activeClassName="activeNavLink"
+              exact
+              onClick={() => this.setState({ mobileOpen: false })}
+            >
+              <ListItemIcon>
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText inset primary="Contacts" />
+            </ListItem>
           )}
 
-          <Divider />
 
           {hasPermission('users') && (
             <ListItem
@@ -276,24 +267,20 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Mon compte" />
           </ListItem>
-          <Divider />
           {parseInt(store.getState().auth.auth.userData.is_admin, 10) === 1 && (
-            <div>
-              <ListItem
-                component={NavLink}
-                to="/updates"
-                button
-                activeClassName="activeNavLink"
-                exact
-                onClick={() => this.setState({mobileOpen: false})}
-              >
-                <ListItemIcon>
-                  <UpdatesIcon />
-                </ListItemIcon>
-                <ListItemText inset primary="Mises à jour" />
-              </ListItem>
-              <Divider />
-            </div>
+            <ListItem
+              component={NavLink}
+              to="/updates"
+              button
+              activeClassName="activeNavLink"
+              exact
+              onClick={() => this.setState({mobileOpen: false})}
+            >
+              <ListItemIcon>
+                <UpdatesIcon />
+              </ListItemIcon>
+              <ListItemText inset primary="Mises à jour" />
+            </ListItem>
           )}
           <ListItem button onClick={this.handleLogout.bind(this)}>
             <ListItemIcon>
@@ -301,7 +288,6 @@ class Layout extends React.Component {
             </ListItemIcon>
             <ListItemText inset primary="Déconnexion" />
           </ListItem>
-          <Divider />
         </List>
       </div>
     );
