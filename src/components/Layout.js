@@ -123,7 +123,7 @@ class Layout extends React.Component {
     const drawer = (
       <div>
         <div className={classes.toolbar} style={{
-          background: '#000',
+          background: theme.palette.primary.main,
         }}>
           <img src="/logo.png" height="42" alt="Logo" style={{
             paddingTop: 8,
