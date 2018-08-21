@@ -52,19 +52,19 @@ class UsersNew extends Component {
         value: '/roles',
       },
       {
-        label: 'Calendrier',
-        value: '/calendar',
+        label: "Vue d'équipe",
+        value: '/teamview',
       },
       {
-        label: 'Mon calendrier',
-        value: '/calendar?me=1',
+        label: 'Demandes',
+        value: '/requests',
       },
       {
-        label: 'Congés',
+        label: 'Congés (nouvelle demande)',
         value: '/leave',
       },
       {
-        label: 'Notes de frais',
+        label: 'Notes de frais (nouvelle demande)',
         value: '/expenses',
       },
       {
