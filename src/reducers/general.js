@@ -1,4 +1,4 @@
-import { SET_ERR_MSG, CONFIRM, CLOSE_ERR, CLOSE_CONFIRM } from '../actions/general';
+import { SET_ERR_MSG, CONFIRM, CLOSE_ERR, CLOSE_CONFIRM, REQ, CLOSE_REQ } from '../actions/general';
 
 // the initial store state, at the boot of the app
 const initialState = {
@@ -10,6 +10,11 @@ const initialState = {
     open: false,
     title: '',
     content: '',
+    callback: () => {},
+  },
+  req: {
+    open: false,
+    leave: null,
     callback: () => {},
   },
 };
@@ -34,6 +39,25 @@ export default (state = initialState, action) => {
           title: '',
           content: '',
           callback: () => { },
+        },
+      };
+
+    case CLOSE_REQ:
+      return {
+        ...state,
+        req: {
+          open: false,
+          leave: null,
+        },
+      };
+
+    case REQ:
+      return {
+        ...state,
+        req: {
+          open: true,
+          leave: action.payload.leave,
+          callback: action.payload.callback,
         },
       };
 

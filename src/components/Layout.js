@@ -58,6 +58,7 @@ import { hasPermission } from '../utils';
 import { Route, Switch, Link, NavLink } from 'react-router-dom';
 import Snack from './layout/Snack';
 import ConfirmDialog from './layout/ConfirmDialog';
+import RequestsDialog from './layout/RequestsDialog';
 
 const drawerWidth = 240;
 
@@ -378,6 +379,7 @@ class Layout extends React.Component {
             <Route path="/" component={Dashboard} />
           </Switch>
           <ConfirmDialog />
+          <RequestsDialog />
           <Snack />
         </main>
       </div>

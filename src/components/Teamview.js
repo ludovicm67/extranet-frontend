@@ -7,8 +7,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { getApi } from '../utils';
 
-import { setErrMsg } from '../actions/general';
 import store from '../store';
+import { setErrMsg, req } from '../actions/general';
+
 
 moment.locale('fr');
 
@@ -62,7 +63,7 @@ class Teamview extends Component {
             momentStart.hour(startHour);
 
             const momentEnd = moment(l.end);
-            if (momentEnd.hour() >= 14) {
+            if (momentEnd.hour() >= 15) {
               momentEnd.hour(23);
               momentEnd.minute(59);
               momentEnd.second(59);
@@ -84,7 +85,7 @@ class Teamview extends Component {
               },
               itemProps: {
                 onClick: () => {
-                  console.log(l);
+                  store.dispatch(req(l, () => this.fetchList()));
                 },
               },
             });
