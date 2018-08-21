@@ -24,7 +24,7 @@ class TeamsEdit extends Component {
   state = {
     id: this.props.match.params.teamId,
     name: '',
-    color: '#000000',
+    color: null,
   };
 
   componentDidMount() {
@@ -33,8 +33,10 @@ class TeamsEdit extends Component {
         return;
       }
       this.setState({
-        name: res.name,
+        name: res.name || '',
+        color: res.color || '#000000',
       });
+      this.forceUpdate();
     }).catch(e => {
       store.dispatch(setErrMsg(e));
     });
@@ -75,10 +77,12 @@ class TeamsEdit extends Component {
             onChange={this.handleChange('name')}
           />
         </FormControl>
-        <ColorPicker
-          defaultValue={this.state.color}
-          onChange={color => this.setState({color})}
-        />
+        {this.state.color && (
+          <ColorPicker
+            defaultValue={this.state.color}
+            onChange={color => this.setState({color})}
+          />
+        )}
         <Button variant="contained" color="primary" style={styles.submit} onClick={this.handleSubmit.bind(this)}>
           Modifier
         </Button>
