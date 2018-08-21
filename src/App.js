@@ -7,6 +7,15 @@ import store from './store';
 import { getApi } from './utils';
 import PasswordReset from './components/PasswordReset';
 
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#000',
+    },
+  },
+});
+
 class App extends Component {
 
   state = {
@@ -51,11 +60,13 @@ class App extends Component {
       );
 
     return (
-      <main className="App">
-        <Router>
-          {redirect}
-        </Router>
-      </main>
+      <MuiThemeProvider theme={theme}>
+        <main className="App">
+          <Router>
+            {redirect}
+          </Router>
+        </main>
+      </MuiThemeProvider>
     );
   }
 }
