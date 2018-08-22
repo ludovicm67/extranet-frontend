@@ -24,6 +24,10 @@ const styles = {
   intro: {
     paddingBottom: '50px',
   },
+  disabled: {
+    color: '#c62828',
+    fontStyle: 'italic',
+  },
 };
 
 class UsersList extends Component {
@@ -140,15 +144,22 @@ class UsersList extends Component {
                   role = 'Aucun';
                 }
 
+                if (n.disabled === 1) role = (
+                  <React.Fragment>
+                    {role}
+                    <span> (compte désactivé)</span>
+                  </React.Fragment>
+                );
+
                 return (
                   <TableRow key={n.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/users/${n.id}`}>{n.firstname} {n.lastname}</Link>
+                      <Link to={`/users/${n.id}`} style={n.disabled === 1 ? styles.disabled : null}>{n.firstname} {n.lastname}</Link>
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      <a href={`mailto:${n.email}`}>{n.email}</a>
+                      <a href={`mailto:${n.email}`} style={n.disabled === 1 ? styles.disabled : null}>{n.email}</a>
                     </TableCell>
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" style={n.disabled === 1 ? styles.disabled : null}>
                       {role}
                     </TableCell>
                     <TableCell>

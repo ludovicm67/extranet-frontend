@@ -73,6 +73,16 @@ class UsersEdit extends Component {
         value: '/contracts',
       },
     ],
+    active: [
+      {
+        label: 'Compte activé',
+        value: 0,
+      },
+      {
+        label: 'Compte désactivé',
+        value: 1,
+      },
+    ],
     roles: [],
     teams: [],
     firstname: '',
@@ -82,6 +92,7 @@ class UsersEdit extends Component {
     email: '',
     password: '',
     defaultPage: '/',
+    disabled: 0,
   };
 
   componentDidMount() {
@@ -159,6 +170,7 @@ class UsersEdit extends Component {
         email: res.email || '',
         password: '',
         defaultPage: res.default_page || '/',
+        disabled: res.disabled === 1 ? 1 : 0,
       });
     }).catch(e => {
       store.dispatch(setErrMsg(e));
@@ -178,6 +190,7 @@ class UsersEdit extends Component {
       email: this.state.email,
       password: this.state.password,
       default_page: this.state.defaultPage || '/',
+      disabled: this.state.disabled || 0,
     }).then(res => {
       if (res.isMe) {
         store.dispatch(setUserData(res));
@@ -318,6 +331,30 @@ class UsersEdit extends Component {
               id: "select-default-page",
               simpleValue: true,
               options: this.state.defaultPages,
+            }
+          }}
+        />
+        <TextField
+          style={styles.formControl}
+          fullWidth
+          value={this.state.disabled}
+          onChange={this.handleChange('disabled')}
+          placeholder="Compte activé ?"
+          name="select-disabled"
+          label="Compte activé ?"
+          autoComplete="new-password"
+          InputLabelProps={{
+            shrink: true
+          }}
+          InputProps={{
+            inputComponent: Select,
+            inputProps: {
+              clearable: false,
+              multi: false,
+              instanceId: "select-disabled",
+              id: "select-disabled",
+              simpleValue: true,
+              options: this.state.active,
             }
           }}
         />

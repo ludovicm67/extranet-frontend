@@ -89,11 +89,8 @@ class PasswordReset extends Component {
     .catch(e => e.response || e)
     .then((res) => {
       res = res.data;
-      if (res.success) {
-        this.setState({ open: true, message: res.message });
-      } else {
-        this.setState({ open: true, message: res.errors[0] });
-      }
+      const msg = res.message || res.errors[0] || 'Une erreur est survenue !';
+      this.setState({ open: true, message: msg});
     });
   };
 
