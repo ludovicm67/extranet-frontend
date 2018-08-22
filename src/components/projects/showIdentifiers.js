@@ -13,7 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 
-import { getApi, deleteApi } from '../../utils';
+import { getApi, deleteApi, hasPermission } from '../../utils';
 
 import { setErrMsg, confirmDelete } from '../../actions/general';
 import store from '../../store';
@@ -140,16 +140,18 @@ class ProjectsShow extends Component {
     return (
       <div>
         <Typography variant="display1" gutterBottom>
-          <Button
-            component={Link}
-            to={`/projects/${this.state.id}/identifiers/new`}
-            variant="contained"
-            color="primary"
-            className={classes.right}
-          >
-            <Icon>add</Icon>
-            Ajouter
-          </Button>
+          {hasPermission('projects', 'edit') && (
+            <Button
+              component={Link}
+              to={`/projects/${this.state.id}/identifiers/new`}
+              variant="contained"
+              color="primary"
+              className={classes.right}
+            >
+              <Icon>add</Icon>
+              Ajouter
+            </Button>
+          )}
           <Button
             component={Link}
             to="/identifiers"
@@ -200,12 +202,16 @@ class ProjectsShow extends Component {
                       {parseInt(n.confidential, 10) ? 'Oui' : 'Non'}
                     </TableCell>
                     <TableCell>
-                      <IconButton component={Link} to={`/project_identifier/${n.id}`}>
-                        <Icon>edit</Icon>
-                      </IconButton>
-                      <IconButton onClick={this.handleDelete.bind(this, `project_identifier/${n.id}`)}>
-                        <Icon>delete</Icon>
-                      </IconButton>
+                      {hasPermission('projects', 'edit') && (
+                        <React.Fragment>
+                          <IconButton component={Link} to={`/project_identifier/${n.id}`}>
+                            <Icon>edit</Icon>
+                          </IconButton>
+                          <IconButton onClick={this.handleDelete.bind(this, `project_identifier/${n.id}`)}>
+                            <Icon>delete</Icon>
+                          </IconButton>
+                        </React.Fragment>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

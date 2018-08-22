@@ -404,7 +404,7 @@ class ProjectsShow extends Component {
             <Icon>import_contacts</Icon>
             Wiki
           </Button>
-          {hasPermission('projects', 'edit', this.props.match.params.projectId) && (
+          {hasPermission('projects', 'edit') && (
             <Button
               component={Link}
               to={`/projects/${this.props.match.params.projectId}/edit`}

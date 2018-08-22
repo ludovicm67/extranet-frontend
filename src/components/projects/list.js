@@ -209,7 +209,7 @@ class ProjectsList extends Component {
                       {n.end_at && this.formatDate(parsedDate)}
                     </TableCell>
                     <TableCell>
-                      {hasPermission('projects', 'edit', n.id) && (
+                      {hasPermission('projects', 'edit') && (
                         <IconButton component={Link} to={`/projects/${n.id}/edit`}>
                           <Icon>edit</Icon>
                         </IconButton>
