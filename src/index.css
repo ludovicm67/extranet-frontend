@@ -19,7 +19,8 @@ a {
 }
 
 .rct-sidebar-header {
-  padding: 20px;
+  padding: 0;
+  position: relative;
 }
 
 .rct-label-group, .rct-sidebar-header, .rct-label.rct-label-only, .rct-item.selected  {
