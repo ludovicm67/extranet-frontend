@@ -245,7 +245,7 @@ class RequestsList extends Component {
                           </IconButton>
                         </div>
                       )}
-                      {hasPermission(n.request_type, 'delete') && (
+                      {hasPermission(n.request_type, 'delete', n.user_id) && (
                       <IconButton onClick={this.handleDelete.bind(this, `${n.request_type}/${n.id}`)}>
                         <Icon>delete</Icon>
                       </IconButton>

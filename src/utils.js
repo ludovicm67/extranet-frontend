@@ -232,6 +232,13 @@ export const hasPermission = (permission, right = 'show', contentId = null) => {
     }
   }
 
+  const userId = store.getState().auth.auth.userData.id;
+  if (right === 'delete' && contentId === userId) {
+    if (permission === 'leave' || permission === 'expenses') {
+      return true;
+    }
+  }
+
   if (!store.getState().auth.auth.userData.role) return false;
   if (!store.getState().auth.auth.userData.role.permissions) return false;
   const p = store.getState().auth.auth.userData.role.permissions.filter(e => {

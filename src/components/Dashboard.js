@@ -200,7 +200,7 @@ class Dashboard extends Component {
                               </IconButton>
                             </React.Fragment>
                           )}
-                          {hasPermission('leave', 'delete') && (
+                          {hasPermission('leave', 'delete', n.user_id) && (
                             <IconButton onClick={this.handleDelete.bind(this, `leave/${n.id}`)}>
                               <Icon>delete</Icon>
                             </IconButton>
@@ -264,7 +264,7 @@ class Dashboard extends Component {
                               </IconButton>
                             </React.Fragment>
                           )}
-                          {hasPermission('expenses', 'delete') && (
+                          {hasPermission('expenses', 'delete', n.user_id) && (
                             <IconButton onClick={this.handleDelete.bind(this, `expenses/${n.id}`)}>
                               <Icon>delete</Icon>
                             </IconButton>
