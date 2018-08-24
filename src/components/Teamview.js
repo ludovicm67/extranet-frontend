@@ -45,6 +45,7 @@ class Teamview extends Component {
         id: 0,
         title: 'Chargement...',
         team: '',
+        disabled: 0,
       }
     ],
     displayedGroups: [
@@ -52,6 +53,7 @@ class Teamview extends Component {
         id: 0,
         title: 'Chargement...',
         team: '',
+        disabled: 0,
       }
     ],
     items: [],
@@ -105,8 +107,9 @@ class Teamview extends Component {
           id: e.id,
           title: `${e.firstname} ${lastname}${team}`,
           team: e.team ? e.team.name : '',
+          disabled: e.disabled,
         }
-      });
+      }).filter(e => !e.disabled);
 
       this.setState({
         groups,
