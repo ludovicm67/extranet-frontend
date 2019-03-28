@@ -7,7 +7,7 @@ import App from './App';
 // import registerServiceWorker from './registerServiceWorker';
 import store from './store';
 import { Provider } from 'react-redux';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import frLocale from 'date-fns/locale/fr';
 import format from 'date-fns/format';
